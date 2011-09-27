@@ -1,0 +1,26 @@
+<?xml version="1.0" ?> 
+<install type="module" version="1.5.0" method="upgrade">
+	<name>WordPress Categories</name> 
+	<creationDate>November 25, 2008</creationDate> 
+	<author>Rafael Corral</author>
+	<copyright>(C) 2009-2010 'corePHP'</copyright>
+	<authorEmail>wp@corephp.com</authorEmail>
+	<authorUrl>www.corephp.com</authorUrl> 
+	<version>2.0</version> 
+	<description>Show WordPress categories</description> 
+	<files>
+		<filename module="mod_wordpress_categories">mod_wordpress_categories.php</filename> 
+	</files>
+	<params>
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		<param name="title_show" type="list" default="0" label="Show Title" description="Show title above list">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+	  	</param>
+		<param name="title" type="text" default="" label="Title Text" description="If show title is on, what text to show? Default is Categories." />
+		<param name="order" type="list" default="ASC" label="Order of categories" description="Which order do you want the categories to display?">
+			<option value="ASC">Ascending</option>
+			<option value="DESC">Descending</option>
+	  	</param>
+	</params>
+</install>

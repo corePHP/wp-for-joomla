@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0" method="upgrade">
+	<name>WordPress</name>
+	<creationDate>August 2011</creationDate>
+	<author>'corePHP'</author>
+	<authorEmail>support@corephp.com</authorEmail>
+	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
+	<authorUrl>www.corePHP.com</authorUrl>
+	<version>3.2.1</version>
+	<description>WordPress Blog for Joomla!</description>
+
+	<installfile>install.wordpress.php</installfile>
+	<uninstallfile>uninstall.wordpress.php</uninstallfile>
+
+	<install>
+		<queries>
+			<query>
+CREATE TABLE IF NOT EXISTS `#__wp_jauthenticate` (
+  `user_id` int(11) NOT NULL,
+  `hash` varchar(32) NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`)
+) CHARSET=utf8 COMMENT='Table used to store authentication actions';
+			</query>
+		</queries>
+	</install>
+
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>log.txt</filename>
+		<filename>router.php</filename>
+    	<filename>wordpress_loader.php</filename>
+    	<filename>wordpress.php</filename>
+
+		<folder>sef_ext</folder>
+		<folder>views</folder>
+		<folder>wp</folder>
+  	</files>
+
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.com_wordpress.ini</language>
+    </languages>
+
+	<administration>
+		<menu link="option=com_wordpress" img='components/com_wordpress/images/wordpress16.gif'>WordPress</menu>
+		<files folder="admin">
+			<filename>admin.wordpress.php</filename>
+			<filename>index.html</filename>
+			<filename>install.html.php</filename>
+			<filename>install.wordpress.php</filename>
+			<filename>license.txt</filename>
+			<filename>uninstall.wordpress.php</filename>
+
+			<folder>images</folder>
+		</files>
+	</administration>
+</install>

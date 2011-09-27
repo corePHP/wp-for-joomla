@@ -1,0 +1,39 @@
+/*
+Theme Name: Every Home
+Theme URI: http://www.corephp.com/
+Description: Theme that displays the latest post site-wide, has added widgets to display the main blog's posts, also a widget for latest updated blogs. Template should only be used for main blog.
+Version: 1.0
+Author: Rafael Corral
+Author URI: http://www.corephp.com/
+Tags: joomla, wordpress, theme
+
+	Kubrick v1.5
+	 http://binarybonsai.com/kubrick/
+
+	This theme was designed and built by Michael Heilemann,
+	whose blog you will find at http://binarybonsai.com/
+
+	The CSS, XHTML and design is released under GPL:
+	http://www.opensource.org/licenses/gpl-license.php
+
+*/
+
+@import url("../twentyten/style.css");
+
+/* Add any extra styles under */
+.pagination{
+	width:100%;
+	text-align:center;
+	font-size:14px;
+}
+.pagination strong{
+	margin: 0 5px;
+}
+img.avatar {
+	float: right;
+	position: relative;
+	top: -13px;
+	left: 0;
+	padding-left: 15px;
+	z-index: 10;
+}
