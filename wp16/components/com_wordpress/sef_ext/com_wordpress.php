@@ -28,11 +28,13 @@ if ( !function_exists( 'getWPTitleAlias' ) ) {
 	function getWPTitleAlias()
 	{
 		static $slug;
-		global $mainframe, $__sh_config;
+		global $__sh_config;
 
 		if ( $slug ) { return $slug; }
-
-		$menu = $mainframe->getMenu();
+		
+		$app =& JFactory::getApplication();
+		
+		$menu = $app->getMenu();
 		if ( is_object( $menu ) ) {
 			foreach ( $menu->getMenu() as $item ) {
 				if ( $item->component == 'com_wordpress' ) {
@@ -55,17 +57,24 @@ if ( !function_exists( 'getWPTitleAlias' ) ) {
 }
 
 // So effing sad that I have to do this, because sh404 doesn't offer a way to get the
-// config that is already cached on a variable.
-global $__sh_config;
-$__sh_config = new shSEFConfig();
+// config that is already cached on a variable. 
+
+if (class_exists('shSEFConfig')){
+	global $__sh_config;
+	$__sh_config = new shSEFConfig();
+} else {
+	$__sh_config = shRouter::shGetConfig();
+}
 
 // Get the itemid for the main blog
 if ( !isset( $Itemid ) || !$Itemid ) {
 	$title[] = getWPTitleAlias();
 } else {
-	global $mainframe;
 
-	$menu = $mainframe->getMenu();
+	jimport( 'joomla.html.parameter' );
+
+	$app =& JFactory::getApplication();
+	$menu = $app->getMenu();
 	$menu_item = $menu->getItem( $Itemid );
 
 	$__params = new JParameter( $menu_item->params );
