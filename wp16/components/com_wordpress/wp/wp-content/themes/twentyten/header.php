@@ -12,6 +12,15 @@
 global $mainframe;
 
 $document =& JFactory::getDocument();
+$menu = $mainframe->getMenu()->getActive();
+
+$title_override = '';
+
+if ( !empty( $menu ) ) {
+	if ( $menu->params->get( 'page_title' ) ) {
+		$title_override = $menu->params->get( 'page_title' );
+	}
+}
 
 // Add all of the head stuff to the head tag
 ob_start();
@@ -70,9 +79,14 @@ $_title = substr( $wp_head_contents,
 	strpos( $wp_head_contents, $title_end )
 		- strpos( $wp_head_contents, $title_start ) - 7);
 $_title = html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' );
-$document->setTitle( $_title );
-$wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
 
+// Title override
+if ( $title_override ) {
+	$_title = $title_override;
+}
+$document->setTitle( $_title );
+
+$wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
 $document->addCustomTag( $wp_head_contents );
 unset( $wp_head_contents );
 
@@ -111,7 +125,17 @@ $j_tt_show_blog_menu         = get_site_option( 'j_tt_show_blog_menu', 1 );
 				if ( $j_tt_show_title_description ) { ?>
 				<<?php echo $heading_tag; ?> id="site-title" class="componentheading">
 					<span>
-						<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+						<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php
+						if ( $menu->params->get( 'show_page_heading' ) ) {
+							if ( $menu->params->get( 'page_heading' ) ) {
+								echo $menu->params->get( 'page_heading' );
+							} else {
+								echo $menu->title;
+							}
+						} else {
+							bloginfo( 'name' );
+						}
+						?></a>
 					</span>
 				</<?php echo $heading_tag; ?>>
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
