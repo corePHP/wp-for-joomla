@@ -1544,7 +1544,7 @@ function wpj_wp_insert_post( $post_id, $post ) {
 		$act->cmd     = 'blog.create';
 		$act->actor   = $post->post_author;
 		$act->target  = 0;
-		$act->title   = str_replace( '|actor|', '{actor}',
+		$act->title   = str_replace( 'actor', '{actor}',
 			JText::sprintf( 'WPJ_NEW_POST' , $link , $title ) );
 		$act->content = $post->post_content;
 		$act->app     = 'wordpress';
@@ -1604,7 +1604,7 @@ function wpj_comment_post( $comment_id, $approved ) {
 		$act->cmd     = 'blog.create';
 		$act->actor   = $comment->user_id;
 		$act->target  = 0;
-		$act->title   = str_replace( '|actor|', '{actor}',
+		$act->title   = str_replace( 'actor', '{actor}',
 			JText::sprintf( 'WPJ_NEW_COMMENT' , $link , $title ) );
 		$act->content = $comment->comment_content;
 		$act->app     = 'wordpress';
