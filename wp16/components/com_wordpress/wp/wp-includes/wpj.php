@@ -304,8 +304,7 @@ function wpj_admin_hook()
 	{
 		$juser = JFactory::getUser();
 		if ( $juser->authorise( 'core.admin', '' ) ) {
-			$links[99] = '| <a href="' . trailingslashit( is_multisite()
-				? get_option( 'site' ) : get_option( 'home' ) )
+			$links[99] = '| <a href="' . trailingslashit( get_option( 'jhome_url' ) )
 				. 'administrator" title="Joomla Admin">Back to Joomla</a>';
 		}
 
