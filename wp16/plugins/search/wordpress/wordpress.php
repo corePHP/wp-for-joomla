@@ -208,7 +208,8 @@ class plgSearchWordPress extends JPlugin
 						$list[$key]->href = get_blog_permalink( $item->blog_id, $item->ID );
 					} else {
 						$list[$key]->href = get_permalink( $item->ID );
-					}				
+					}
+					$list[$key]->title = html_entity_decode($list[$key]->title,ENT_QUOTES,'UTF-8');			
 				}
 			}
 			$rows[] = $list;
