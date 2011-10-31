@@ -24,6 +24,10 @@ class  plgSystemWordPress extends JPlugin
 			return;
 		}
 
+		if ( defined('WP_ADMIN') && WP_ADMIN ) {
+			return;
+		}
+
 		$_wp_url_param = explode( "\n", $this->params->get( 'url_path' ) );
 		$current_url_path = '/';
 

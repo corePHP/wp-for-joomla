@@ -19,6 +19,15 @@ class  plgSystemWordPress extends JPlugin
 	function onAfterInitialise()
 	{
 		global $_wp_url_param;
+
+		if ( $mainframe->isAdmin() ) {
+			return;
+		}
+
+		if ( defined('WP_ADMIN') && WP_ADMIN ) {
+			return;
+		}
+
 		$_wp_url_param = explode( "\n", $this->params->get( 'url_path' ) );
 		$current_url_path = '/';
 		
