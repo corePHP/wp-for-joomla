@@ -422,11 +422,14 @@ function get_option( $option, $default = false ) {
 						if ( ( $itemid = j_get_itemid() ) ) {
 							$menu = $mainframe->getMenu();
 							$item = $menu->getItem( $itemid );
+							// fixed issue with WP sites on homepage - rc_corephp
+							$_is_home = ( 1 == $item->home );
 							// Avoid addint the slug of the menu if we are using sh404sef and
 							// if the blog is set up as the homepage because the slug is on the
 							// permalink structured
-							if ( 1 != $item->home
-								|| !JPluginHelper::importPlugin( 'system', 'shsef' )
+							if ( ( 1 != $item->home
+								|| !JPluginHelper::importPlugin( 'system', 'shsef' ) )
+								&& !$_is_home
 							) {
 								$link .= $item->alias;
 							}
