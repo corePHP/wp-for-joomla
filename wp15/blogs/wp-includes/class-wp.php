@@ -150,7 +150,7 @@ class WP {
 			$self = $_SERVER['PHP_SELF'];
 			$home_path = parse_url(home_url());
 			if ( isset($home_path['path']) )
-				$home_path = $home_path['path'];
+				$home_path = str_replace('.html', '', $home_path['path']);
 			else
 				$home_path = '';
 			$home_path = trim($home_path, '/');
