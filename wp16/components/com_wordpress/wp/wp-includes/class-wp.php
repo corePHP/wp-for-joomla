@@ -150,10 +150,13 @@ class WP {
 			$self = $_SERVER['PHP_SELF'];
 			$home_path = parse_url(home_url());
 			if ( isset($home_path['path']) )
-				$home_path = str_replace('.html', '', $home_path['path']);
+				$home_path = $home_path['path'];
 			else
 				$home_path = '';
 			$home_path = trim($home_path, '/');
+
+			/* rc_corephp - Fix for URLs with .html and installed in sub directory */
+			$home_path = str_replace( '.html', '', $home_path );
 
 			// Trim path info from the end and the leading home path from the
 			// front.  For path info requests, this leaves us with the requesting
