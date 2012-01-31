@@ -351,7 +351,7 @@ endif;
  */
 function twentyten_widgets_init() {
 	$template_company          = get_site_option( 'wpj_template_club', '' );
-	$h_tag_level               = get_site_option( 'wpj_widget_h_tag_level', '' );
+	$h_tag_level               = get_site_option( 'wpj_widget_h_tag_level', '3' );
 	$module_class_suffix       = get_site_option( 'wpj_module_class_suffix', '' );
 	$module_class_suffix_space = get_site_option( 'wpj_module_class_suffix_space', '' );
 	if ($module_class_suffix_space) {
