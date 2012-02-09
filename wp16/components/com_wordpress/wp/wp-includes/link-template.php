@@ -213,9 +213,13 @@ function wp_jroute( $link ) {
 	if ( !empty( $_wp_url_param )
 		&& false === strpos( get_option( 'permalink_structure' ), '.html' )
 	) {
-		$_wp_url_param_new = array_reverse( $_wp_url_param );
-		foreach ( $_wp_url_param_new as $value ) {
-			$link = str_replace( $value . '.html', $value, $link );
+		if ( count( $_wp_url_param ) > 1 ){
+			$_wp_url_param_new = array_reverse( $_wp_url_param );
+			foreach ( $_wp_url_param_new as $value ) {
+				$link = str_replace( $value . '.html', $value, $link );
+			}
+		} else {
+			$link = str_replace( $_wp_url_param . '.html', $_wp_url_param, $link );
 		}
 	}
 
