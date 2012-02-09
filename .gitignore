@@ -1,2 +1,5 @@
 /wp15/build/packages/
 /wp16/build/packages/
+/wp15/blogs/
+/wp16/blogs/
+.DS_Store
