@@ -70,7 +70,20 @@ $_title = substr( $wp_head_contents,
 	strpos( $wp_head_contents, $title_end )
 		- strpos( $wp_head_contents, $title_start ) - 7);
 $_title = html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' );
-$document->setTitle( $_title );
+
+// Check to see if all in one is installed
+if ( class_exists('All_in_One_SEO_Pack') ) {
+	$_temp_title = $document->getTitle();
+	if ( !$_temp_title ) {
+		$document->setTitle( $_title );
+	} else {
+		$document->setTitle( str_replace( array( '&#8216;', '&#8217;', '&#8211;', '&#039;' ),
+			array( '\'', '\'', ' ', "'" ), $_temp_title ) );
+	}
+} else {
+	$document->setTitle( $_title );
+}
+
 $wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
 
 $mainframe->addCustomHeadTag( $wp_head_contents );
