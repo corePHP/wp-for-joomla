@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="WordPress for Joomla" default="build_package" basedir=".">
+<project name="WordPress for Joomla 1.7" default="build" basedir="./src">
+	<property name="joomla_version" value="1.7" />
 	<property name="component.short" value="wordpress" />
 	<property name="component.name" value="com_${component.short}" />
 	<property name="component.site_path" value="components/${component.name}" />
@@ -7,42 +8,41 @@
 	<property name="component.admin_path" value="administrator/components/${component.name}" />
 	<property name="component.admin_language" value="administrator/language/en-GB/en-GB.${component.name}.ini" />
 	<property name="component.admin_language_sys" value="administrator/language/en-GB/en-GB.${component.name}.sys.ini" />
+	<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
 
-	<property name="zip.path" value="./build/packages" />
-	<property name="package.path" value="${zip.path}/${component.name}" />
+	<property name="package.folder" value="../build/packages" />
+	<property name="package.compressed" value="${package.folder}/compressed" />
+	<property name="package.path" value="${package.folder}/${component.name}" />
 
-	<property name="package.name" value="${component.name}.zip" />
+	<property name="package.name" value="${component.name}_v${component.version}_j${joomla_version}.zip" />
 
-	<target name="build_package">
+	<target name="build">
 		<phingcall target="init" />
 		<phingcall target="package_component" />
+		<phingcall target="package_modules" />
+		<phingcall target="package_plugins" />
 	</target>
 
 	<target name="init">
-		<available file="${package.path}" property="package.folder.exists" value="1" />
+		<available file="${package.folder}" property="package.folder.exists" value="1" />
 		<if>
 			<equals arg1="${package.folder.exists}" arg2="1" />
 			<then>
 				<echo message="Deleting existing package folder..." />
-				<delete dir="${package.path}" />
+				<delete dir="${package.folder}" />
 			</then>
 		</if>
 
-		<available file="${zip.path}/${package.name}" property="package.zip.exists" value="1" />
-		<if>
-			<equals arg1="${package.zip.exists}" arg2="1" />
-			<then>
-				<echo message="Deleting existing package zip..." />
-				<delete dir="${zip.path}/${package.name}" />
-			</then>
-		</if>
+		<mkdir dir="${package.folder}" />
+		<mkdir dir="${package.compressed}" />
 	</target>
 
+	<!-- Package component -->
 	<target name="package_component">
 		<echo message="Building component..." />
 		<copy todir="${package.path}/admin">
 			<fileset dir="${component.admin_path}">
-				<exclude name="com_${component.short}.xml" />
+				<exclude name="${component.short}.xml" />
 				<exclude name="script.php" />
 			</fileset>
 		</copy>
@@ -52,7 +52,7 @@
 			</fileset>
 		</copy>
 
-		<copy file="${component.admin_path}/com_${component.short}.xml" todir="${package.path}"/>
+		<copy file="${component.admin_path}/${component.short}.xml" todir="${package.path}"/>
 
 		<copy file="${component.admin_path}/script.php" todir="${package.path}"/>
 
@@ -60,7 +60,103 @@
 		<copy file="${component.site_language}" todir="${package.path}"/>
 		<copy file="${component.admin_language_sys}" todir="${package.path}/admin/language/en-GB"/>
 
-		<zip destfile="${zip.path}/${package.name}" basedir="${package.path}" />
+		<zip destfile="${package.compressed}/${package.name}" basedir="${package.path}" />
 	</target>
 
+	<!-- Package modules -->
+	<target name="package_modules" description="Builds all modules"
+		depends="mod_wp_bloglist,mod_wp_categories,mod_wp_latest,mod_wp_latestblogs,mod_wp_rcomments,mod_wp_searchform,mod_wp_sidebar1,mod_wp_sidebar2">
+		<echo message="Done building modules...." />
+	</target>
+
+	<target name="mod_wp_bloglist">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_bloglist/mod_wordpress_bloglist.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_bloglist_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_bloglist" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_categories">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_categories/mod_wordpress_categories.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_categories_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_categories" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_latest">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latest/mod_wordpress_latest.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_latest_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_latest" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_latestblogs">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latestblogs/mod_wordpress_latestblogs.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_latestblogs_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_latestblogs" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_rcomments">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_rcomments/mod_wordpress_rcomments.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_rcomments_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_rcomments" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_searchform">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_searchform/mod_wordpress_searchform.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_searchform_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_searchform" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_sidebar1">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar1/mod_wordpress_sidebar1.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_sidebar1_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_sidebar1" />
+		</zip>
+	</target>
+
+	<target name="mod_wp_sidebar2">
+		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar2/mod_wordpress_sidebar2.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/mod_wordpress_sidebar2_v${version}_j${joomla_version}.zip">
+			<fileset dir="modules/mod_wordpress_sidebar2" />
+		</zip>
+	</target>
+
+	<!-- Package plugins -->
+	<target name="package_plugins" description="Builds all plugins"
+		depends="plg_auth_wp,plg_search_wp,plg_sys_wp,plg_user_wp">
+		<echo message="Done building plugins...." />
+	</target>
+
+	<target name="plg_auth_wp">
+		<exec command="xmllint --xpath '/extension/version/text()' plugins/authentication/wordpress/wordpress.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/plg_authentication_wordpress_v${version}_j${joomla_version}.zip">
+			<fileset dir="plugins/authentication/wordpress" />
+		</zip>
+	</target>
+
+	<target name="plg_search_wp">
+		<exec command="xmllint --xpath '/extension/version/text()' plugins/search/wordpress/wordpress.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/plg_search_wordpress_v${version}_j${joomla_version}.zip">
+			<fileset dir="plugins/search/wordpress" />
+			<fileset dir="administrator" includes="language/en-GB/en-GB.plg_search_wordpress.ini"/>
+		</zip>
+	</target>
+
+	<target name="plg_sys_wp">
+		<exec command="xmllint --xpath '/extension/version/text()' plugins/system/wordpress/wordpress.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/plg_system_wordpress_v${version}_j${joomla_version}.zip">
+			<fileset dir="plugins/system/wordpress" />
+		</zip>
+	</target>
+
+	<target name="plg_user_wp">
+		<exec command="xmllint --xpath '/extension/version/text()' plugins/user/wordpress/wordpress.xml" outputProperty="version" />
+		<zip destfile="${package.compressed}/plg_user_wordpress_v${version}_j${joomla_version}.zip">
+			<fileset dir="plugins/user/wordpress" />
+		</zip>
+	</target>
 </project>
