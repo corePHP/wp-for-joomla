@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install version="1.5" type="plugin" group="community">
+<install version="1.5" type="plugin" group="community" method="upgrade">
 	<name>WordPress Blogs</name>
 	<author>'corePHP'</author>
 	<creationDate>Sept. 15th 2010</creationDate>

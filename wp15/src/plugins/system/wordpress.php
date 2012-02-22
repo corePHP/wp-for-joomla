@@ -49,7 +49,7 @@ class  plgSystemWordPress extends JPlugin
 		}
 
 		// If blog is not on the homepage
-		if ( !$this->params->get( 'is_homepage', 0 ) && 0 == $pos && false !== $pos ) {
+		if ( !$this->params->get( 'is_homepage', 0 ) && 0 == @$pos && false !== @$pos ) {
 			$_SERVER['WP_REQUEST_URI'] = $_SERVER['REQUEST_URI'];
 			$_SERVER['REQUEST_URI'] = '/' . $current_url_path
 				. $this->params->get( 'request_uri_suffix' );

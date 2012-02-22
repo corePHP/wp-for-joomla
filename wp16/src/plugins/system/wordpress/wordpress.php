@@ -20,7 +20,7 @@ class  plgSystemWordPress extends JPlugin
 	{
 		global $_wp_url_param;
 
-		if ( $mainframe->isAdmin() ) {
+		if ( JFactory::getApplication()->isAdmin() ) {
 			return;
 		}
 

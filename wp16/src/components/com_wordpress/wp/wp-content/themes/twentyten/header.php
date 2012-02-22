@@ -138,7 +138,7 @@ $j_tt_show_blog_menu         = get_site_option( 'j_tt_show_blog_menu', 1 );
 				<<?php echo $heading_tag; ?> id="site-title" class="componentheading">
 					<span>
 						<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php
-						if ( $menu->params->get( 'show_page_heading' ) ) {
+						if ( $menu && $menu->params->get( 'show_page_heading' ) ) {
 							if ( $menu->params->get( 'page_heading' ) ) {
 								echo $menu->params->get( 'page_heading' );
 							} else {
