@@ -208,8 +208,8 @@
 /images/powered_by.png
 /images/sampledata/
 /includes/
-index.php
-joomla.xml
+/index.php
+/joomla.xml
 /language/en-GB/en-GB.com_contact.ini
 /language/en-GB/en-GB.com_content.ini
 /language/en-GB/en-GB.com_mailto.ini
@@ -286,7 +286,7 @@ joomla.xml
 /language/index.html
 /language/overrides/
 /libraries/
-LICENSE.txt
+/LICENSE.txt
 /logs/
 /media/contacts/
 /media/editors/

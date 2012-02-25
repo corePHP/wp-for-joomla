@@ -298,9 +298,9 @@
 /images/unpublish_f2.png
 /images/upload_f2.png
 /includes/
-index.php
-index2.php
-INSTALL.php
+/index.php
+/index2.php
+/INSTALL.php
 /language/en-GB/en-GB.com_contact.ini
 /language/en-GB/en-GB.com_content.ini
 /language/en-GB/en-GB.com_mailto.ini
@@ -403,7 +403,7 @@ INSTALL.php
 /language/index.html
 /language/overrides/
 /libraries/
-LICENSE.txt
+/LICENSE.txt
 /logs/
 /media/contacts/
 /media/editors/
