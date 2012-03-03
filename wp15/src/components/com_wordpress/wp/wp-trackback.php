@@ -5,6 +5,9 @@
  * @package WordPress
  */
 
+//rc_corephp - fixed trackback 404 issues
+global $posts;
+
 if (empty($wp)) {
 	require_once('./wp-load.php');
 	wp( array( 'tb' => '1' ) );
