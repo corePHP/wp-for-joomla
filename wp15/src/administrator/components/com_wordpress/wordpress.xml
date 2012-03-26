@@ -7,7 +7,7 @@
 	<authorEmail>support@corephp.com</authorEmail>
 	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
 	<authorUrl>www.corePHP.com</authorUrl>
-	<version>3.2.1</version>
+	<version>3.3.1</version>
 	<description>WordPress Blog for Joomla!</description>
 
 	<installfile>install.wordpress.php</installfile>
