@@ -99,6 +99,7 @@ if ( class_exists('All_in_One_SEO_Pack') ) {
 }
 
 $wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
+
 $document->addCustomTag( $wp_head_contents );
 unset( $wp_head_contents );
 
