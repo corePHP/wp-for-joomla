@@ -3,3 +3,5 @@
 /wp15/blogs/
 /wp16/blogs/
 .DS_Store
+wp15/src/.htaccess
+wp16/src/.htaccess
