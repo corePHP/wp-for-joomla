@@ -1078,24 +1078,28 @@ function wpj_enable_multisite( $enabled )
 	$multisite_code_line = "define('WP_ALLOW_MULTISITE', true);";
 	$string_to_find = "/* That's all, stop editing! Happy blogging. */";
 
+	ob_start();
+	?>
+	<div style="background-color: red;" class="error fade"><p>
+		Unabled to read wp-config.php file.<br />
+		To <?php echo ( ( $enabled ) ? 'enable' : 'disable' ); ?> multisite you must edit this file: <strong><?php echo $config_file ?></strong><br />
+		You must <?php echo ( ( $enabled ) ? 'add' : 'remove' ); ?> the line that reads the following: <strong><?php echo $multisite_code_line; ?></strong> above where it says <strong>/* That's all, stop editing! Happy blogging. */</strong>.
+		<br />
+		<?php if ( $enabled ) {
+			?>
+			Finally follow step #5 on this page <a href="http://codex.wordpress.org/Create_A_Network#Step_5:_Enabling_the_Network" target="_blank">http://codex.wordpress.org/Create_A_Network</a>
+			<?php
+		}
+		?>
+	</p></div>
+	<?php
+	$error_text = ob_get_clean();
+
 	if ( false === $file_contents
 		&& ( ( !defined( 'WP_ALLOW_MULTISITE' ) && $enabled )
 		|| ( defined( 'WP_ALLOW_MULTISITE' ) && !$enabled ) )
 	) {
-		?>
-		<div style="background-color: red;" class="error fade"><p>
-			Unabled to read wp-config.php file.<br />
-			To <?php echo ( ( $enabled ) ? 'enable' : 'disable' ); ?> multisite you must edit this file: <strong><?php echo $config_file ?></strong><br />
-			You must <?php echo ( ( $enabled ) ? 'add' : 'remove' ); ?> the line that reads the following: <strong><?php echo $multisite_code_line; ?></strong> above where it says <strong>/* That's all, stop editing! Happy blogging. */</strong>.
-			<br />
-			<?php if ( $enabled ) {
-				?>
-				Finally follow step #5 on this page <a href="http://codex.wordpress.org/Create_A_Network#Step_5:_Enabling_the_Network" target="_blank">http://codex.wordpress.org/Create_A_Network</a>
-				<?php
-			}
-			?>
-		</p></div>
-		<?php
+		echo $error_text;
 		return;
 	}
 
@@ -1107,7 +1111,12 @@ function wpj_enable_multisite( $enabled )
 		$file_contents = str_replace( $multisite_code_line, '', $file_contents );
 	}
 
-	JFile::write( $config_file, $file_contents );
+	$wrote = JFile::write( $config_file, $file_contents );
+
+	if ( !$wrote ) {
+		echo $error_text;
+		return;
+	}
 
 	if ( $enabled ) {
 		$mainframe->redirect( 'network.php' );
