@@ -286,7 +286,10 @@ function wpj_admin_hook()
 		&& !isset( $_POST['Filename'] )
 	) {
 		get_currentuserinfo();
-		if ( $current_user->primary_blog && $current_user->primary_blog != $blog_id ) {
+		if ( 1 != $current_user->primary_blog
+			&& $current_user->primary_blog
+			&& $current_user->primary_blog != $blog_id
+		) {
 			wp_redirect( get_admin_url( $current_user->primary_blog ) );
 			die();
 		}
@@ -1247,6 +1250,12 @@ function j_set_itemid()
 
 	$_wp_itemid	= get_option( 'Itemid' );
 	$_j_itemid	= intval( @$_REQUEST['Itemid'] );
+
+	if ( isset( $_REQUEST['WP_ENTRYPOINT'] )
+		&& in_array( $_REQUEST['WP_ENTRYPOINT'], array( 'wp-login.php' ) )
+	) {
+		return;
+	}
 
 	// Lets get the itemid
 	if ( 'com_wordpress' != $option || is_multisite() ) {

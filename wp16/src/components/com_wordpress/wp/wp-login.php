@@ -18,6 +18,7 @@ if ( false === strpos( $_SERVER['REQUEST_URI'], 'components/com_wordpress/wp' ) 
 	$_SERVER['PHP_SELF'] = dirname( dirname(  $_SERVER['PHP_SELF'] ) ) . '/index.php';
 
 	$_REQUEST['option'] = 'com_wordpress';
+	$_REQUEST['WP_ENTRYPOINT'] = 'wp-login.php';
 }
 
 /** Make sure that the WordPress bootstrap has run before continuing. */
