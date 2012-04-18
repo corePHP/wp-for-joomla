@@ -86,6 +86,11 @@ class  plgSystemWordPress extends JPlugin
 		$buffer = str_replace( $this->params->get( 'url_path' ) . '.html',
 			rtrim( $this->params->get( 'url_path' ), '/' ) . '/', $buffer );
 
+		$buffer = str_replace(
+			JURI::root(true) . '/' . ltrim( $this->params->get( 'url_path' ), '/' ) . '" ',
+			JURI::root(true) . '/' . trim( $this->params->get( 'url_path' ), '/' ) . '/" ',
+			$buffer );
+
 		JResponse::setBody( $buffer );
 	}
 }
