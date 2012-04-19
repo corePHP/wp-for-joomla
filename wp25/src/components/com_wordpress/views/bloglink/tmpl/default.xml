@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_WORDPRESS_DEFAULT_LAYOUT_TITLE" option="COM_WORDPRESS_DEFAULT_LAYOUT_OPTION">
+		<help key="JHELP_MENUS_MENU_BLOG_LAYOUT" />
+		<message>
+			<![CDATA[COM_WORDPRESS_VIEW_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>Blog homepage layout</name>
+		<description>Link to blog</description>
+		<params>
+			<param name="blog_path" type="text" label="Path to blog" description="This is only to be used when using WordPress in Multisite mode. Example: /blogs/exampleblog/. You must put the path to the blog as it appears on the Sites menu on WordPress." />
+		</params>
+	</state>
+</metadata>
