@@ -262,6 +262,8 @@ function wpj_admin_hook()
 {
 	global $blog_id, $current_user;
 
+	$juser = JFactory::getUser();
+
 	// Just to make sure we stay on top of our WordPress path, store it again only on dashboard page
 	if ( 1 == $blog_id
 		&& is_multisite()
@@ -302,16 +304,17 @@ function wpj_admin_hook()
 	// 	$role = get_option( 'default_role' );
 	// }
 
-	add_action( 'admin_user_info_links', 'wpj_admin_user_info_links' );
-	function wpj_admin_user_info_links( $links )
+	if ( $juser->authorise( 'core.manage', '' ) ) {
+		add_action( 'admin_bar_menu', 'wp_admin_bar_back_to_joomla', 10 );
+	}
+	function wp_admin_bar_back_to_joomla( $wp_admin_bar )
 	{
-		$juser = JFactory::getUser();
-		if ( $juser->authorise( 'core.admin', '' ) ) {
-			$links[99] = '| <a href="' . trailingslashit( get_option( 'jhome_url' ) )
-				. 'administrator" title="Joomla Admin">Back to Joomla</a>';
-		}
-
-		return $links;
+		$wp_admin_bar->add_menu( array(
+			'parent' => 'user-actions',
+			'id'     => 'joomla',
+			'title'  => 'Back to Joomla!',
+			'href'   => trailingslashit( get_option( 'jhome_url' ) ) . 'administrator',
+		) );
 	}
 
 	// This is changed if we are in multisite
