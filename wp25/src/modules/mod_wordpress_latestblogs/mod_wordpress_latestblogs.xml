@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="1.6" client="site" method="upgrade">
-	<name>WP Multisite Latest</name>
+	<name>WordPress Multisite Latest Posts</name>
 	<author>Rafael Corral</author>
 	<creationDate>2009-12-30</creationDate>
 	<copyright>Copyright (C) 2008-2010 corephp.com. All rights reserved.</copyright>

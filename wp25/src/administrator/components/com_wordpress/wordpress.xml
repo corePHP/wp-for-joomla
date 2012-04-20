@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="1.6" method="upgrade">
+<extension type="component" version="2.5" method="upgrade">
 	<name>COM_WORDPRESS</name>
-	<creationDate>August 2011</creationDate>
+	<creationDate>April 2012</creationDate>
 	<author>'corePHP'</author>
 	<authorEmail>support@corephp.com</authorEmail>
 	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
-	<authorUrl>www.corePHP.com</authorUrl>
+	<authorUrl>www.corephp.com</authorUrl>
 	<version>3.3.1</version>
 	<description>COM_WORDPRESS_DESCRIPTION</description>
 
@@ -35,6 +35,7 @@
 
 	<administration>
 		<menu img="components/com_wordpress/images/wordpress16.gif">COM_WORDPRESS_MENU</menu>
+
 		<files folder="admin">
 			<filename>admin.wordpress.php</filename>
 			<filename>index.html</filename>
