@@ -6,11 +6,14 @@
 			<![CDATA[COM_WORDPRESS_VIEW_DEFAULT_DESC]]>
 		</message>
 	</layout>
-	<state>
-		<name>Blog homepage layout</name>
-		<description>Link to blog</description>
-		<params>
-			<param name="blog_path" type="text" label="Path to blog" description="This is only to be used when using WordPress in Multisite mode. Example: /blogs/exampleblog/. You must put the path to the blog as it appears on the Sites menu on WordPress." />
-		</params>
-	</state>
+	<fields name="params">
+		<fieldset name="basic"
+			label="Blog homepage layout">
+
+			<field name="blog_path"
+				type="text"
+				label="Path to blog"
+				description="This is only to be used when using WordPress in Multisite mode. Example: /blogs/exampleblog/. You must put the path to the blog as it appears on the Sites menu on WordPress." />
+			</fieldset>
+	</fields>
 </metadata>

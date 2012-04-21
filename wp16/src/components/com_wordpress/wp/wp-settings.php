@@ -226,7 +226,8 @@ do_action( 'plugins_loaded' );
 wp_functionality_constants( );
 
 // Add magic quotes and set up $_REQUEST ( $_GET + $_POST )
-wp_magic_quotes();
+// rc_corephp - Removing this magic quotes crap because it fucks with the request, and if that happens then JInput freaks the fuck out.
+// wp_magic_quotes();
 
 do_action( 'sanitize_comment_cookies' );
 
