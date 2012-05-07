@@ -1,0 +1,7 @@
+/*
+This stylesheet will only be added to a page if the WordPress sidebar is displayed on a Joomla page that is not WordPress.
+*/
+
+@import url("../twentyten/style_sidebar.css");
+
+/* Add any extra styles under */
