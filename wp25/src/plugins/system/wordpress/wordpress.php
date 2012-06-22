@@ -28,6 +28,10 @@ class  plgSystemWordPress extends JPlugin
 			return;
 		}
 
+		if ( constant( 'SHORTINIT' ) ) {
+			return;
+		}
+
 		$_wp_url_param = explode( "\n", $this->params->get( 'url_path' ) );
 		$current_url_path = '/';
 		
