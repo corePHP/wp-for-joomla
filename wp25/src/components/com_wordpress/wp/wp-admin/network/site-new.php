@@ -95,7 +95,9 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 	$id = wpmu_create_blog( $newdomain, $path, $title, $user_id , array( 'public' => 1 ), $current_site->id );
 	$wpdb->show_errors();
 	if ( !is_wp_error( $id ) ) {
-		if ( !is_super_admin( $user_id ) && !get_user_option( 'primary_blog', $user_id ) )
+		// rc_corephp - Edied if statement for the primary_blog update
+		$_primary_blog = get_user_option( 'primary_blog', $user_id );
+		if ( !is_super_admin( $user_id ) && ( ( 42 != $user_id && 1 == $_primary_blog ) || !$_primary_blog ) )
 			update_user_option( $user_id, 'primary_blog', $id, true );
 		$content_mail = sprintf( __( "New site created by %1s\n\nAddress: %2s\nName: %3s"), $current_user->user_login , get_site_url( $id ), stripslashes( $title ) );
 		wp_mail( get_site_option('admin_email'), sprintf( __( '[%s] New Site Created' ), $current_site->site_name ), $content_mail, 'From: "Site Admin" <' . get_site_option( 'admin_email' ) . '>' );
