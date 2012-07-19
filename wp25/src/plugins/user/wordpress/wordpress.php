@@ -85,6 +85,15 @@ class plgUserWordPress extends JPlugin
 			wp_delete_user( $user_id );
 		}
 
+		// Make sure the user is GAOUN
+		$db = JFactory::getDBO();
+		$query = "DELETE FROM #__wp_users
+			WHERE `ID` = " . $user_id;
+		$db->setQuery( $query )->query();
+		$query = "DELETE FROM #__wp_usermeta
+			WHERE `user_id` = " . $user_id;
+		$db->setQuery( $query )->query();
+
 		$this->unload_wp();
 	}
 
