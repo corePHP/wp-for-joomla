@@ -149,7 +149,29 @@ if ( $filter_categories[0] != 0 ) {
 
 				// Trim text
 				if ( $toolong ) {
-			    	$text  = substr( $text, 0, $introMaxLength );
+					// Do a different type of replacement if there are html tags,
+					// to avoid counting them
+					if ( '74.113.24.138' == $_SERVER['REMOTE_ADDR'] && strpos( $text, '>' ) ) {
+						$_replacements = array();
+						$_r_counter = 0;
+						preg_match_all( '/<.*>/sim', $text, $matches );
+						// myPrint($matches);
+						foreach ( $matches[0] as $match ) {
+							$text = str_replace( $match, '||' .$_r_counter. '||', $text );
+							$_replacements[$_r_counter] = $match;
+							$_r_counter++;
+						}
+
+						// Replace
+						$text = substr( $text, 0,
+							( $introMaxLength + ( count( $_replacements ) * 5 ) ) );
+
+						foreach ( $_replacements as $_r_counter => $match ) {
+							$text = str_replace( '||' .$_r_counter. '||', $match, $text );
+						}
+					} else {
+						$text  = substr( $text, 0, $introMaxLength );
+					}
 				}
 
 				// Wrap text
