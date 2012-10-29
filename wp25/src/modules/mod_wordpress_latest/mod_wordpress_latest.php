@@ -151,7 +151,7 @@ if ( $filter_categories[0] != 0 ) {
 				if ( $toolong ) {
 					// Do a different type of replacement if there are html tags,
 					// to avoid counting them
-					if ( '74.113.24.138' == $_SERVER['REMOTE_ADDR'] && strpos( $text, '>' ) ) {
+					if ( strpos( $text, '>' ) ) {
 						$_replacements = array();
 						$_r_counter = 0;
 						preg_match_all( '/<.*>/sim', $text, $matches );
