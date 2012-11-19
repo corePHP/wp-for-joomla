@@ -8,3 +8,5 @@
 wp15/src/.htaccess
 wp16/src/.htaccess
 wp25/src/.htaccess
+/wp25/build/export.tar.gz
+/wp25/build/export/
