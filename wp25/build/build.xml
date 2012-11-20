@@ -17,8 +17,8 @@
 	<target name="build">
 		<phingcall target="cleanup" />
 		<phingcall target="export_repo" />
-		<!-- <phingcall target="package_component" /> -->
-		<!-- <phingcall target="package_modules" /> -->
+		<phingcall target="package_component" />
+		<phingcall target="package_modules" />
 		<phingcall target="package_plugins" />
 	</target>
 
@@ -135,58 +135,58 @@
 	</target>
 
 	<target name="mod_wp_bloglist">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_bloglist/mod_wordpress_bloglist.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_bloglist/mod_wordpress_bloglist.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_bloglist_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_bloglist" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_bloglist" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_categories">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_categories/mod_wordpress_categories.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_categories/mod_wordpress_categories.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_categories_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_categories" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_categories" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_latest">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latest/mod_wordpress_latest.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_latest/mod_wordpress_latest.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_latest_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_latest" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_latest" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_latestblogs">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latestblogs/mod_wordpress_latestblogs.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_latestblogs/mod_wordpress_latestblogs.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_latestblogs_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_latestblogs" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_latestblogs" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_rcomments">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_rcomments/mod_wordpress_rcomments.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_rcomments/mod_wordpress_rcomments.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_rcomments_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_rcomments" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_rcomments" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_searchform">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_searchform/mod_wordpress_searchform.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_searchform/mod_wordpress_searchform.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_searchform_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_searchform" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_searchform" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_sidebar1">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar1/mod_wordpress_sidebar1.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_sidebar1/mod_wordpress_sidebar1.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_sidebar1_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_sidebar1" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_sidebar1" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_sidebar2">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar2/mod_wordpress_sidebar2.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_sidebar2/mod_wordpress_sidebar2.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_sidebar2_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_sidebar2" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_sidebar2" />
 		</zip>
 	</target>
 
