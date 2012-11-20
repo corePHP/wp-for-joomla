@@ -9,13 +9,10 @@
 	<property name="component.site_languages" value="${joomla.root}/language/en-GB" />
 	<property name="component.admin_path" value="${joomla.root}/administrator/components/${component.name}" />
 	<property name="component.admin_languages" value="${joomla.root}/administrator/language/en-GB" />
-	<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
 
 	<property name="package.folder" value="build/packages" />
 	<property name="package.compressed" value="${package.folder}/compressed" />
 	<property name="package.path" value="${package.folder}/${component.name}" />
-
-	<property name="package.name" value="${component.name}_v${component.version}_j${joomla_version}.zip" />
 
 	<target name="build">
 		<phingcall target="cleanup" />
@@ -79,7 +76,7 @@
 
 		<!-- plugins -->
 		<copy todir="${package.path}/admin/extensions/plugins">
-			<fileset dir="plugins" />
+			<fileset dir="${joomla.root}/plugins" />
 		</copy>
 		<!-- loop through plugins and and add the language files. uses plugin_folder -->
 		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_folder">
@@ -89,6 +86,10 @@
 			</fileset>
 		</foreach>
 
+		<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
+
+		<property name="package.name" value="${component.name}_v${component.version}_j${joomla_version}.zip" />
+
 		<zip destfile="${package.compressed}/${package.name}" basedir="${package.path}" />
 	</target>
 
@@ -96,8 +97,22 @@
 	<target name="plugins_folder">
 		<echo msg="${plg_abs_path}" />
 		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
-		<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" todir="${plg_abs_path}/language/en-GB" />
-		<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" todir="${plg_abs_path}/language/en-GB" />
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" property="file.exists" value="1" />
+		<if>
+			<equals arg1="${file.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" property="file2.exists" value="1" />
+		<if>
+			<equals arg1="${file2.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
 	</target>
 
 	<!-- Package modules -->
