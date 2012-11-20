@@ -74,23 +74,36 @@
 		<copy file="${component.admin_path}/${component.short}.xml" todir="${package.path}"/>
 		<copy file="${component.admin_path}/script.php" todir="${package.path}"/>
 
+		<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
+
+		<property name="package.name" value="" />
+
+		<!-- Package basic -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-basic.zip" basedir="${package.path}" />
+
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.path}/admin/extensions/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Package full -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-full.zip" basedir="${package.path}" />
+	</target>
+
+	<!-- Setup plugins - can't think of a better name -->
+	<target name="setup_plugins">
 		<!-- plugins -->
-		<copy todir="${package.path}/admin/extensions/plugins">
-			<fileset dir="${joomla.root}/plugins" />
+		<copy todir="${to_dir}">
+			<fileset dir="${from_dir}" />
 		</copy>
 		<!-- loop through plugins and and add the language files. uses plugin_folder -->
 		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_folder">
-			<fileset dir="${package.path}/admin/extensions/plugins">
+			<fileset dir="${to_dir}">
 				<type type="dir" />
 				<depth max="1" min="1" />
 			</fileset>
 		</foreach>
-
-		<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
-
-		<property name="package.name" value="${component.name}_v${component.version}_j${joomla_version}.zip" />
-
-		<zip destfile="${package.compressed}/${package.name}" basedir="${package.path}" />
 	</target>
 
 	<!-- called from foreach loop -->
