@@ -17,9 +17,9 @@
 	<target name="build">
 		<phingcall target="cleanup" />
 		<phingcall target="export_repo" />
-		<phingcall target="package_component" />
+		<!-- <phingcall target="package_component" /> -->
 		<!-- <phingcall target="package_modules" /> -->
-		<!-- <phingcall target="package_plugins" /> -->
+		<phingcall target="package_plugins" />
 	</target>
 
 	<target name="cleanup">
@@ -191,37 +191,30 @@
 	</target>
 
 	<!-- Package plugins -->
-	<target name="package_plugins" description="Builds all plugins"
-		depends="plg_auth_wp,plg_search_wp,plg_sys_wp,plg_user_wp">
-		<echo message="Done building plugins...." />
+	<target name="package_plugins" description="Builds all plugins">
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.folder}/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Loop through plugins and and package them -->
+		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_package">
+			<fileset dir="${package.folder}/plugins">
+				<type type="dir" />
+				<depth max="1" min="1" />
+			</fileset>
+		</foreach>
 	</target>
 
-	<target name="plg_auth_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/authentication/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_authentication_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/authentication/wordpress" />
-		</zip>
-	</target>
+	<target name="plugins_package">
+		<echo msg="${plg_abs_path}" />
+		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
+		<php expression="substr('${plg_path}', strpos('${plg_path}', '/') + 1);" returnProperty="plg_name" />
 
-	<target name="plg_search_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/search/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_search_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/search/wordpress" />
-			<fileset dir="administrator" includes="language/en-GB/en-GB.plg_search_wordpress.ini"/>
-		</zip>
-	</target>
+		<exec command="xmllint --xpath '/extension/version/text()' ${plg_abs_path}/${plg_name}.xml" outputProperty="version" />
 
-	<target name="plg_sys_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/system/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_system_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/system/wordpress" />
-		</zip>
-	</target>
-
-	<target name="plg_user_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/user/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_user_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/user/wordpress" />
-		</zip>
+		<!-- Package plugin -->
+		<zip destfile="${package.compressed}/plg_${plg_lang_name}_v${version}_j${joomla_version}.zip" basedir="${plg_abs_path}" />
 	</target>
 </project>
