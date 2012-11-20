@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="WordPress for Joomla 2.5" default="build" basedir="./src">
+<project name="WordPress for Joomla 2.5" default="build" basedir=".">
+	<property name="branch" value="HEAD" />
 	<property name="joomla_version" value="2.5" />
+	<property name="joomla.root" value="build/export/src" />
 	<property name="component.short" value="wordpress" />
 	<property name="component.name" value="com_${component.short}" />
-	<property name="component.site_path" value="components/${component.name}" />
-	<property name="component.site_language" value="language/en-GB/en-GB.${component.name}.ini" />
-	<property name="component.admin_path" value="administrator/components/${component.name}" />
-	<property name="component.admin_language" value="administrator/language/en-GB/en-GB.${component.name}.ini" />
-	<property name="component.admin_language_sys" value="administrator/language/en-GB/en-GB.${component.name}.sys.ini" />
-	<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
+	<property name="component.site_path" value="${joomla.root}/components/${component.name}" />
+	<property name="component.site_languages" value="${joomla.root}/language/en-GB" />
+	<property name="component.admin_path" value="${joomla.root}/administrator/components/${component.name}" />
+	<property name="component.admin_languages" value="${joomla.root}/administrator/language/en-GB" />
 
-	<property name="package.folder" value="../build/packages" />
+	<property name="package.folder" value="build/packages" />
 	<property name="package.compressed" value="${package.folder}/compressed" />
 	<property name="package.path" value="${package.folder}/${component.name}" />
 
-	<property name="package.name" value="${component.name}_v${component.version}_j${joomla_version}.zip" />
-
 	<target name="build">
-		<phingcall target="init" />
+		<phingcall target="cleanup" />
+		<phingcall target="export_repo" />
 		<phingcall target="package_component" />
 		<phingcall target="package_modules" />
 		<phingcall target="package_plugins" />
 	</target>
 
-	<target name="init">
+	<target name="cleanup">
+		<exec command="rm -rf build/export/" />
+		<exec command="rm -rf build/export.tar.gz" />
+
 		<available file="${package.folder}" property="package.folder.exists" value="1" />
 		<if>
 			<equals arg1="${package.folder.exists}" arg2="1" />
@@ -37,30 +39,93 @@
 		<mkdir dir="${package.compressed}" />
 	</target>
 
+	<!-- Export repo -->
+	<target name="export_repo">
+		<exec command="git archive --format tar --output build/export.tar.gz ${branch}" />
+		<exec command="mkdir build/export" />
+		<exec command="tar -xzf build/export.tar.gz -C build/export" />
+	</target>
+
 	<!-- Package component -->
 	<target name="package_component">
 		<echo message="Building component..." />
+
+		<!-- admin -->
 		<copy todir="${package.path}/admin">
 			<fileset dir="${component.admin_path}">
 				<exclude name="${component.short}.xml" />
 				<exclude name="script.php" />
 			</fileset>
 		</copy>
+
+		<!-- site -->
 		<copy todir="${package.path}/site">
 			<fileset dir="${component.site_path}">
 				<exclude name="jomsocial_rule.xml" />
 			</fileset>
 		</copy>
 
-		<copy file="${component.admin_path}/${component.short}.xml" todir="${package.path}"/>
+		<!-- languages -->
+		<copy file="${component.site_languages}/en-GB.${component.name}.ini" todir="${package.path}/language/en-GB"/>
+		<copy file="${component.site_languages}/en-GB.${component.name}.ini" todir="${package.path}"/>
+		<copy file="${component.admin_languages}/en-GB.${component.name}.sys.ini" todir="${package.path}/admin/language/en-GB"/>
 
+		<!-- root files -->
+		<copy file="${component.admin_path}/${component.short}.xml" todir="${package.path}"/>
 		<copy file="${component.admin_path}/script.php" todir="${package.path}"/>
 
-		<copy file="${component.site_language}" todir="${package.path}/language/en-GB"/>
-		<copy file="${component.site_language}" todir="${package.path}"/>
-		<copy file="${component.admin_language_sys}" todir="${package.path}/admin/language/en-GB"/>
+		<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
 
-		<zip destfile="${package.compressed}/${package.name}" basedir="${package.path}" />
+		<property name="package.name" value="" />
+
+		<!-- Package basic -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-basic.zip" basedir="${package.path}" />
+
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.path}/admin/extensions/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Package full -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-full.zip" basedir="${package.path}" />
+	</target>
+
+	<!-- Setup plugins - can't think of a better name -->
+	<target name="setup_plugins">
+		<!-- plugins -->
+		<copy todir="${to_dir}">
+			<fileset dir="${from_dir}" />
+		</copy>
+		<!-- loop through plugins and and add the language files. uses plugin_folder -->
+		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_folder">
+			<fileset dir="${to_dir}">
+				<type type="dir" />
+				<depth max="1" min="1" />
+			</fileset>
+		</foreach>
+	</target>
+
+	<!-- called from foreach loop -->
+	<target name="plugins_folder">
+		<echo msg="${plg_abs_path}" />
+		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" property="file.exists" value="1" />
+		<if>
+			<equals arg1="${file.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" property="file2.exists" value="1" />
+		<if>
+			<equals arg1="${file2.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
 	</target>
 
 	<!-- Package modules -->
@@ -70,93 +135,86 @@
 	</target>
 
 	<target name="mod_wp_bloglist">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_bloglist/mod_wordpress_bloglist.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_bloglist/mod_wordpress_bloglist.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_bloglist_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_bloglist" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_bloglist" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_categories">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_categories/mod_wordpress_categories.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_categories/mod_wordpress_categories.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_categories_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_categories" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_categories" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_latest">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latest/mod_wordpress_latest.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_latest/mod_wordpress_latest.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_latest_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_latest" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_latest" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_latestblogs">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_latestblogs/mod_wordpress_latestblogs.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_latestblogs/mod_wordpress_latestblogs.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_latestblogs_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_latestblogs" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_latestblogs" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_rcomments">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_rcomments/mod_wordpress_rcomments.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_rcomments/mod_wordpress_rcomments.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_rcomments_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_rcomments" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_rcomments" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_searchform">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_searchform/mod_wordpress_searchform.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_searchform/mod_wordpress_searchform.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_searchform_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_searchform" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_searchform" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_sidebar1">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar1/mod_wordpress_sidebar1.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_sidebar1/mod_wordpress_sidebar1.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_sidebar1_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_sidebar1" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_sidebar1" />
 		</zip>
 	</target>
 
 	<target name="mod_wp_sidebar2">
-		<exec command="xmllint --xpath '/extension/version/text()' modules/mod_wordpress_sidebar2/mod_wordpress_sidebar2.xml" outputProperty="version" />
+		<exec command="xmllint --xpath '/extension/version/text()' ${joomla.root}/modules/mod_wordpress_sidebar2/mod_wordpress_sidebar2.xml" outputProperty="version" />
 		<zip destfile="${package.compressed}/mod_wordpress_sidebar2_v${version}_j${joomla_version}.zip">
-			<fileset dir="modules/mod_wordpress_sidebar2" />
+			<fileset dir="${joomla.root}/modules/mod_wordpress_sidebar2" />
 		</zip>
 	</target>
 
 	<!-- Package plugins -->
-	<target name="package_plugins" description="Builds all plugins"
-		depends="plg_auth_wp,plg_search_wp,plg_sys_wp,plg_user_wp">
-		<echo message="Done building plugins...." />
+	<target name="package_plugins" description="Builds all plugins">
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.folder}/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Loop through plugins and and package them -->
+		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_package">
+			<fileset dir="${package.folder}/plugins">
+				<type type="dir" />
+				<depth max="1" min="1" />
+			</fileset>
+		</foreach>
 	</target>
 
-	<target name="plg_auth_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/authentication/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_authentication_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/authentication/wordpress" />
-		</zip>
-	</target>
+	<target name="plugins_package">
+		<echo msg="${plg_abs_path}" />
+		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
+		<php expression="substr('${plg_path}', strpos('${plg_path}', '/') + 1);" returnProperty="plg_name" />
 
-	<target name="plg_search_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/search/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_search_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/search/wordpress" />
-			<fileset dir="administrator" includes="language/en-GB/en-GB.plg_search_wordpress.ini"/>
-		</zip>
-	</target>
+		<exec command="xmllint --xpath '/extension/version/text()' ${plg_abs_path}/${plg_name}.xml" outputProperty="version" />
 
-	<target name="plg_sys_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/system/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_system_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/system/wordpress" />
-		</zip>
-	</target>
-
-	<target name="plg_user_wp">
-		<exec command="xmllint --xpath '/extension/version/text()' plugins/user/wordpress/wordpress.xml" outputProperty="version" />
-		<zip destfile="${package.compressed}/plg_user_wordpress_v${version}_j${joomla_version}.zip">
-			<fileset dir="plugins/user/wordpress" />
-		</zip>
+		<!-- Package plugin -->
+		<zip destfile="${package.compressed}/plg_${plg_lang_name}_v${version}_j${joomla_version}.zip" basedir="${plg_abs_path}" />
 	</target>
 </project>
