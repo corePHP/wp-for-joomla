@@ -70,10 +70,49 @@ class com_WordPressInstallerScript
 			jimport('joomla.filesystem.file');
 			jimport('joomla.installer.installer');
 
+			if ( !$this->install_modules( $type, $parent ) ) {
+				JError::raiseWarning( 21, JText::_( 'COM_WORDPRESS_ERROR_INSTALLING_MODULES' ) );
+			}
+
 			if ( !$this->install_plugins( $type, $parent ) ) {
 				JError::raiseWarning( 21, JText::_( 'COM_WORDPRESS_ERROR_INSTALLING_PLUGINS' ) );
 			}
 		}
+	}
+
+	function install_modules( $type, $parent )
+	{
+		// Get an installer instance
+		$installer = new JInstaller(); // Cannot use the instance that is already created, no!
+		$app = JFactory::getApplication();
+		$db = JFactory::getDBO();
+		$mlds_path = $parent->getParent()->getPath('source') . '/admin/extensions/modules';
+		$returns = array();
+
+		if ( !JFolder::exists( $mlds_path ) ) {
+			return true;
+		}
+
+		// Loop through modules
+		$modules = JFolder::folders( $mlds_path );
+		foreach ( $modules as $module ) {
+			$m_dir = $mlds_path .'/'. $module .'/';
+
+			// Install the package
+			if ( !$installer->install( $m_dir ) ) {
+				// There was an error installing the package
+				JError::raiseWarning( 21, JTEXT::sprintf(
+					'COM_WORDPRESS_MODULE_INSTALL_ERROR', $module ) );
+				$returns[] = false;
+			} else {
+				// Package installed sucessfully
+				$app->enqueueMessage( JTEXT::sprintf(
+					'COM_WORDPRESS_MODULE_INSTALL_SUCCESS', $module ) );
+				$returns[] = true;
+			}
+		}
+
+		return !in_array( false, $returns, true );
 	}
 
 	function install_plugins( $type, $parent )
@@ -128,8 +167,7 @@ class com_WordPressInstallerScript
 					WHERE ( " . implode( ' OR ', $enable ) . " ) AND `type` = 'plugin'" );
 
 			if ( !$db->query() ) {
-				JError::raiseWarning( 1, JText::_('COM_WORDPRESS_ERROR_ENABLING_PLUGINS') );
-
+				JError::raiseWarning( 1, JText::_( 'COM_WORDPRESS_ERROR_ENABLING_PLUGINS' ) );
 				return false;
 			}
 		}
