@@ -38,9 +38,8 @@ if ( current_user_can( 'update_plugins' ) ) {
 	$menu[20] = array( __('Plugins'), 'manage_network_plugins', 'plugins.php', '', 'menu-top menu-icon-plugins', 'menu-plugins', 'div' );
 }
 $submenu['plugins.php'][5]  = array( __('Installed Plugins'), 'manage_network_plugins', 'plugins.php' );
-$submenu['plugins.php'][10] = array( _x('Add New', 'plugin editor'), 'install_plugins', 'plugin-install.php' );
+$submenu['plugins.php'][10] = array( _x('Add New', 'plugin'), 'install_plugins', 'plugin-install.php' );
 $submenu['plugins.php'][15] = array( _x('Editor', 'plugin editor'), 'edit_plugins', 'plugin-editor.php' );
-
 
 $menu[25] = array(__('Settings'), 'manage_network_options', 'settings.php', '', 'menu-top menu-icon-settings', 'menu-settings', 'div');
 if ( defined( 'MULTISITE' ) && defined( 'WP_ALLOW_MULTISITE' ) && WP_ALLOW_MULTISITE ) {
@@ -56,7 +55,7 @@ if ( $update_data['counts']['total'] ) {
 
 unset($update_data);
 
-$submenu[ 'upgrade.php' ][10] = array( __( 'Available Updates' ), 'update_core',  'update-core.php' );
+$submenu[ 'upgrade.php' ][10] = array( __( 'Available Updates' ), 'update_core', 'update-core.php' );
 $submenu[ 'upgrade.php' ][15] = array( __( 'Update Network' ), 'manage_network', 'upgrade.php' );
 
 /* rc_corephp - Added this new page - For users to update their WordPress install */
@@ -65,5 +64,3 @@ $submenu[ 'upgrade.php' ][35] = array( __('Joomla Update'), 'joomla_manage_netwo
 $menu[99] = array( '', 'read', 'separator-last', '', 'wp-menu-separator-last' );
 
 require_once(ABSPATH . 'wp-admin/includes/menu.php');
-
-?>
