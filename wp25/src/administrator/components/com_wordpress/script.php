@@ -26,7 +26,7 @@ class com_WordPressInstallerScript
 	*/
 	function install( $parent ) 
 	{
-		require ( dirname( __FILE__ ) .DS. 'admin' .DS. 'install.html.php' );
+		@include( dirname( __FILE__ ) .DS. 'admin' .DS. 'install.html.php' );
 	}
 
 	/**
@@ -46,7 +46,7 @@ class com_WordPressInstallerScript
 	 */
 	function update( $parent ) 
 	{
-		require ( dirname( __FILE__ ) .DS. 'admin' .DS. 'install.html.php' );
+		@include( dirname( __FILE__ ) .DS. 'admin' .DS. 'install.html.php' );
 	}
 
 	/**
