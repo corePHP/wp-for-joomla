@@ -29,7 +29,6 @@ get_current_screen()->add_help_tab( array(
 			'<p>' . __('Registration settings can disable/enable public signups. If you let others sign up for a site, install spam plugins. Spaces, not commas, should separate names banned as sites for this network.') . '</p>' .
 			'<p>' . __('New site settings are defaults applied when a new site is created in the network. These include welcome email for when a new site or user account is registered, and what&#8127;s put in the first post, page, comment, comment author, and comment URL.') . '</p>' .
 			'<p>' . __('Upload settings control the size of the uploaded files and the amount of available upload space for each site. You can change the default value for specific sites when you edit a particular site. Allowed file types are also listed (space separated only).') . '</p>' .
-			'<p>' . __('Checkboxes for media upload buttons set which are shown in the visual editor. If unchecked, a generic upload button is still visible; other media types can still be uploaded if on the allowed file types list.') . '</p>' .
 			'<p>' . __('Menu setting enables/disables the plugin menus from appearing for non super admins, so that only super admins, not site admins, have access to activate plugins.') . '</p>' .
 			'<p>' . __('Super admins can no longer be added on the Options screen. You must now go to the list of existing users on Network Admin > Users and click on Username or the Edit action link below that name. This goes to an Edit User page where you can check a box to grant super admin privileges.') . '</p>'
 ) );
@@ -45,53 +44,20 @@ if ( $_POST ) {
 
 	check_admin_referer( 'siteoptions' );
 
-	if ( isset( $_POST['WPLANG'] ) && ( '' === $_POST['WPLANG'] || in_array( $_POST['WPLANG'], get_available_languages() ) ) )
-		update_site_option( 'WPLANG', $_POST['WPLANG'] );
-
-	if ( is_email( $_POST['admin_email'] ) )
-		update_site_option( 'admin_email', $_POST['admin_email'] );
-
-	$illegal_names = split( ' ', $_POST['illegal_names'] );
-	foreach ( (array) $illegal_names as $name ) {
-		$name = trim( $name );
-		if ( $name != '' )
-			$names[] = trim( $name );
-		}
-	update_site_option( 'illegal_names', $names );
-
-	if ( $_POST['limited_email_domains'] != '' ) {
-		$limited_email_domains = str_replace( ' ', "\n", $_POST['limited_email_domains'] );
-		$limited_email_domains = split( "\n", stripslashes( $limited_email_domains ) );
-		$limited_email = array();
-		foreach ( (array) $limited_email_domains as $domain ) {
-			$domain = trim( $domain );
-			if ( ! preg_match( '/(--|\.\.)/', $domain ) && preg_match( '|^([a-zA-Z0-9-\.])+$|', $domain ) )
-				$limited_email[] = trim( $domain );
-		}
-		update_site_option( 'limited_email_domains', $limited_email );
-	} else {
-			update_site_option( 'limited_email_domains', '' );
-	}
-
-	if ( $_POST['banned_email_domains'] != '' ) {
-		$banned_email_domains = split( "\n", stripslashes( $_POST['banned_email_domains'] ) );
-		$banned = array();
-		foreach ( (array) $banned_email_domains as $domain ) {
-			$domain = trim( $domain );
-			if ( ! preg_match( '/(--|\.\.)/', $domain ) && preg_match( '|^([a-zA-Z0-9-\.])+$|', $domain ) )
-				$banned[] = trim( $domain );
-		}
-		update_site_option( 'banned_email_domains', $banned );
-	} else {
-		update_site_option( 'banned_email_domains', '' );
-	}
-
-	$options = array( 'registrationnotification', 'registration', 'add_new_users', 'menu_items', 'upload_space_check_disabled', 'blog_upload_space', 'upload_filetypes', 'site_name', 'first_post', 'first_page', 'first_comment', 'first_comment_url', 'first_comment_author', 'welcome_email', 'welcome_user_email', 'fileupload_maxk', 'global_terms_enabled' );
 	$checked_options = array( 'menu_items' => array(), 'registrationnotification' => 'no', 'upload_space_check_disabled' => 1, 'add_new_users' => 0 );
 	foreach ( $checked_options as $option_name => $option_unchecked_value ) {
 		if ( ! isset( $_POST[$option_name] ) )
 			$_POST[$option_name] = $option_unchecked_value;
 	}
+
+	$options = array(
+		'registrationnotification', 'registration', 'add_new_users', 'menu_items',
+		'upload_space_check_disabled', 'blog_upload_space', 'upload_filetypes', 'site_name',
+		'first_post', 'first_page', 'first_comment', 'first_comment_url', 'first_comment_author',
+		'welcome_email', 'welcome_user_email', 'fileupload_maxk', 'global_terms_enabled',
+		'illegal_names', 'limited_email_domains', 'banned_email_domains', 'WPLANG', 'admin_email',
+	);
+
 	foreach ( $options as $option_name ) {
 		if ( ! isset($_POST[$option_name]) )
 			continue;
@@ -125,7 +91,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<td>
 					<input name="site_name" type="text" id="site_name" class="regular-text" value="<?php echo esc_attr( $current_site->site_name ) ?>" />
 					<br />
-					<?php _e( 'What you would like to call this website.' ) ?>
+					<?php _e( 'What you would like to call this network.' ) ?>
 				</td>
 			</tr>
 
@@ -148,14 +114,13 @@ if ( isset( $_GET['updated'] ) ) {
 				$reg = get_site_option( 'registration' );
 				?>
 				<td>
-					<label><input name="registration" type="radio" id="registration1" value="none"<?php checked( $reg, 'none') ?> /> <?php _e( 'Registration is disabled.' ); ?></label><br />
-					<?php /* rc_corephp - This is not available in Joomla */ /* ?>
+					<?php /* rc_corephp - This is not available in Joomla * / ?>
 					<label><input name="registration" type="radio" id="registration2" value="user"<?php checked( $reg, 'user') ?> /> <?php _e( 'User accounts may be registered.' ); ?></label><br />
-					<?php */ ?>
+					<?php /* */ ?>
 					<label><input name="registration" type="radio" id="registration3" value="blog"<?php checked( $reg, 'blog') ?> /> <?php _e( 'Logged in users may register new sites.' ); ?></label><br />
-					<?php /* rc_corephp - This is not available in Joomla */ /* ?>
+					<?php /* rc_corephp - This is not available in Joomla * / ?>
 					<label><input name="registration" type="radio" id="registration4" value="all"<?php checked( $reg, 'all') ?> /> <?php _e( 'Both sites and user accounts can be registered.' ); ?></label><br />
-					<?php */ ?>
+					<?php /* */ ?>
 					<?php if ( is_subdomain_install() )
 						_e( 'If registration is disabled, please set <code>NOBLOGREDIRECT</code> in <code>wp-config.php</code> to a URL you will redirect visitors to if they visit a non-existent site.' );
 					?>
@@ -173,14 +138,14 @@ if ( isset( $_GET['updated'] ) ) {
 				</td>
 			</tr>
 
-			<?php /* rc_corephp - This is not available in Joomla */ /* ?>
+			<?php /* rc_corephp - This is not available in Joomla * / ?>
 			<tr valign="top" id="addnewusers">
 				<th scope="row"><?php _e( 'Add New Users' ) ?></th>
 				<td>
 					<label><input name="add_new_users" type="checkbox" id="add_new_users" value="1"<?php checked( get_site_option( 'add_new_users' ) ) ?> /> <?php _e( 'Allow site administrators to add new users to their site via the "Users &rarr; Add New" page.' ); ?></label>
 				</td>
 			</tr>
-			<?php */ ?>
+			<?php /* */ ?>
 
 			<tr valign="top">
 				<th scope="row"><label for="illegal_names"><?php _e( 'Banned Names' ) ?></label></th>
@@ -284,7 +249,7 @@ if ( isset( $_GET['updated'] ) ) {
 			<tr valign="top">
 				<th scope="row"><?php _e( 'Site upload space' ) ?></th>
 				<td>
-				<label><input type="checkbox" id="upload_space_check_disabled" name="upload_space_check_disabled" value="0"<?php checked( get_site_option( 'upload_space_check_disabled' ), 0 ) ?>/> <?php printf( __( 'Limit total size of files uploaded to %s MB' ), '</label><label><input name="blog_upload_space" type="text" id="blog_upload_space" value="' . esc_attr( get_site_option('blog_upload_space', 10) ) . '" size="3" />' ); ?></label><br />
+				<label><input type="checkbox" id="upload_space_check_disabled" name="upload_space_check_disabled" value="0"<?php checked( get_site_option( 'upload_space_check_disabled' ), 0 ) ?>/> <?php printf( __( 'Limit total size of files uploaded to %s MB' ), '</label><label><input name="blog_upload_space" type="number" min="0" style="width: 100px" id="blog_upload_space" value="' . esc_attr( get_site_option('blog_upload_space', 100) ) . '" />' ); ?></label><br />
 				</td>
 			</tr>
 
@@ -295,7 +260,7 @@ if ( isset( $_GET['updated'] ) ) {
 
 			<tr valign="top">
 				<th scope="row"><label for="fileupload_maxk"><?php _e( 'Max upload file size' ) ?></label></th>
-				<td><?php printf( _x( '%s KB', 'File size in kilobytes' ), '<input name="fileupload_maxk" type="text" id="fileupload_maxk" value="' . esc_attr( get_site_option( 'fileupload_maxk', 300 ) ) . '" size="5" />' ); ?></td>
+				<td><?php printf( _x( '%s KB', 'File size in kilobytes' ), '<input name="fileupload_maxk" type="number" min="0" style="width: 100px" id="fileupload_maxk" value="' . esc_attr( get_site_option( 'fileupload_maxk', 300 ) ) . '" />' ); ?></td>
 			</tr>
 		</table>
 
@@ -328,7 +293,7 @@ if ( isset( $_GET['updated'] ) ) {
 			$menu_perms = get_site_option( 'menu_items' );
 			$menu_items = apply_filters( 'mu_menu_items', array( 'plugins' => __( 'Plugins' ) ) );
 			foreach ( (array) $menu_items as $key => $val ) {
-				echo "<label><input type='checkbox' name='menu_items[" . $key . "]' value='1'" .  ( isset( $menu_perms[$key] ) ? checked( $menu_perms[$key], '1', false ) : '' ) . " /> " . esc_html( $val ) . "</label><br/>";
+				echo "<label><input type='checkbox' name='menu_items[" . $key . "]' value='1'" . ( isset( $menu_perms[$key] ) ? checked( $menu_perms[$key], '1', false ) : '' ) . " /> " . esc_html( $val ) . "</label><br/>";
 			}
 			?>
 				</td>
@@ -336,7 +301,8 @@ if ( isset( $_GET['updated'] ) ) {
 		</table>
 
 		<?php /* rc_corephp - Add the WordPress Joomla Options here */
-		do_settings_sections('wpj_general_options'); ?>
+		do_settings_sections( 'wpj_general_options' ); ?>
+
 		<?php do_action( 'wpmu_options' ); // Add more options here ?>
 
 		<?php submit_button(); ?>

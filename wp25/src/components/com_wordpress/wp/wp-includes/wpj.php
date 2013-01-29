@@ -864,6 +864,13 @@ function wpj_admin_hook()
 </style>
 		<?php
 	}
+
+	// Dissallow adding users
+	add_filter( 'show_network_site_users_add_new_form', 'wpj_add_new_form', 1 );
+	function wpj_add_new_form( $default )
+	{
+		return false;
+	}
 }
 
 // Commented out until Jonathan decides to use this awesome feature
