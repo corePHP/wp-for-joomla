@@ -3,48 +3,59 @@
 global $mainframe;
 
 // Not through Joomla entrance
-if ( !defined( '_JEXEC' ) ) {
+if (!defined('_JEXEC'))
+{
 	global $option;
 
-	define( '_JEXEC', 1 );
-	define( '_WP_INCLUDED_J', 1 );
-	if ( !defined( 'DS' ) ) {
-		define( 'DS', DIRECTORY_SEPARATOR );
+	define('_JEXEC', 1);
+	define('_WP_INCLUDED_J', 1);
+	if (!defined('DS'))
+	{
+		define('DS', DIRECTORY_SEPARATOR);
 	}
 
 	// If WP Single or multi-site?
-	if ( file_exists( dirname(__FILE__) .DS. '..' .DS. 'configuration.php' ) ) {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..' ) ); // Multi-site
-	} else {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..'.DS.'..'.DS.'..' ) ); // Single
+	if (file_exists(realpath(dirname($_SERVER["SCRIPT_FILENAME"]) . '/../') . 'configuration.php'))
+	{
+		define('JPATH_BASE', realpath(dirname($_SERVER["SCRIPT_FILENAME"]) . '/../')); // Multi-site
+	}
+	else
+	{
+		define('JPATH_BASE', realpath(dirname($_SERVER["SCRIPT_FILENAME"]) . '/../../../../')); // Single
 	}
 
-	require_once ( JPATH_BASE .DS.'includes'.DS.'defines.php' );
-	require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
-	$mainframe	=& JFactory::getApplication( 'site' );
+	require_once(JPATH_BASE . DS . 'includes' . DS . 'defines.php');
+	require_once(JPATH_BASE . DS . 'includes' . DS . 'framework.php');
+	$mainframe = JFactory::getApplication('site');
 	$mainframe->initialise();
-} else {
-	if ( !$mainframe ) {
-		$mainframe = JFactory::getApplication( 'site' );
+}
+else
+{
+	if (!$mainframe)
+	{
+		$mainframe = JFactory::getApplication('site');
 	}
 }
 
-if ( !function_exists( 'myPrint' ) ) :
-/**
- * Function for printing data
- * @return 
- */
-function myPrint( $var, $pre = true )
+if (!function_exists('myPrint'))
 {
-	if ( $pre ) {
-		echo '<pre>';
-	}
-	print_r($var);
-	if ( $pre ) {
-		echo '</pre>';
+	/**
+	 * Function for printing data
+	 * @return
+	 */
+	function myPrint($var, $pre = true)
+	{
+		if ($pre)
+		{
+			echo '<pre>';
+		}
+		print_r($var);
+		if ($pre)
+		{
+			echo '</pre>';
+		}
 	}
 }
-endif;
 
 /**
  * Bootstrap file for setting the ABSPATH constant
@@ -66,48 +77,49 @@ endif;
  */
 
 /** Define ABSPATH as this file's directory */
-define( 'ABSPATH', dirname(__FILE__) . '/' );
+define('ABSPATH', dirname($_SERVER["SCRIPT_FILENAME"]) . '/');
 
-error_reporting( E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR );
+error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR);
 
-if ( file_exists( ABSPATH . 'wp-config.php') ) {
+if (file_exists(ABSPATH . 'wp-config.php'))
+{
 
 	/** The config file resides in ABSPATH */
-	require_once( ABSPATH . 'wp-config.php' );
+	require_once(ABSPATH . 'wp-config.php');
 
 }
 /* rc_corephp No need for these additional checks as we are using Joomla * /
 } elseif ( file_exists( dirname(ABSPATH) . '/wp-config.php' ) && ! file_exists( dirname(ABSPATH) . '/wp-settings.php' ) ) {
 
-	/** The config file resides one level above ABSPATH but is not part of another install * /
-	require_once( dirname(ABSPATH) . '/wp-config.php' );
+    /** The config file resides one level above ABSPATH but is not part of another install * /
+    require_once( dirname(ABSPATH) . '/wp-config.php' );
 
 } else {
 
-	// A config file doesn't exist
+    // A config file doesn't exist
 
-	// Set a path for the link to the installer
-	if ( strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false )
-		$path = 'setup-config.php';
-	else
-		$path = 'wp-admin/setup-config.php';
+    // Set a path for the link to the installer
+    if ( strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false )
+        $path = 'setup-config.php';
+    else
+        $path = 'wp-admin/setup-config.php';
 
-	define( 'WPINC', 'wp-includes' );
-	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-	require_once( ABSPATH . WPINC . '/load.php' );
-	require_once( ABSPATH . WPINC . '/version.php' );
+    define( 'WPINC', 'wp-includes' );
+    define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+    require_once( ABSPATH . WPINC . '/load.php' );
+    require_once( ABSPATH . WPINC . '/version.php' );
 
-	wp_check_php_mysql_versions();
-	wp_load_translations_early();
+    wp_check_php_mysql_versions();
+    wp_load_translations_early();
 
-	require_once( ABSPATH . WPINC . '/functions.php' );
+    require_once( ABSPATH . WPINC . '/functions.php' );
 
-	// Die with an error message
-	$die  = __( "There doesn't seem to be a <code>wp-config.php</code> file. I need this before we can get started." ) . '</p>';
-	$die .= '<p>' . __( "Need more help? <a href='http://codex.wordpress.org/Editing_wp-config.php'>We got it</a>." ) . '</p>';
-	$die .= '<p>' . __( "You can create a <code>wp-config.php</code> file through a web interface, but this doesn't work for all server setups. The safest way is to manually create the file." ) . '</p>';
-	$die .= '<p><a href="' . $path . '" class="button button-large">' . __( "Create a Configuration File" ) . '</a>';
+    // Die with an error message
+    $die  = __( "There doesn't seem to be a <code>wp-config.php</code> file. I need this before we can get started." ) . '</p>';
+    $die .= '<p>' . __( "Need more help? <a href='http://codex.wordpress.org/Editing_wp-config.php'>We got it</a>." ) . '</p>';
+    $die .= '<p>' . __( "You can create a <code>wp-config.php</code> file through a web interface, but this doesn't work for all server setups. The safest way is to manually create the file." ) . '</p>';
+    $die .= '<p><a href="' . $path . '" class="button button-large">' . __( "Create a Configuration File" ) . '</a>';
 
-	wp_die( $die, __( 'WordPress &rsaquo; Error' ) );
+    wp_die( $die, __( 'WordPress &rsaquo; Error' ) );
 }
 /* */
