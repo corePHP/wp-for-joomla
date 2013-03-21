@@ -3,6 +3,11 @@ if (!(defined('_JEXEC')))
 {
 	die('Direct Access to this location is not allowed.');
 }
+
+if(!defined('DS')){
+define('DS', DIRECTORY_SEPARATOR);
+}
+
 /**
  * @version $Id: 1  2008-11-15 19:34 rafael $
  * @package WordPress Integration
