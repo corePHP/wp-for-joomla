@@ -1,5 +1,8 @@
 <?php
-if ( !defined('_JEXEC') ) { die( 'Direct Access to this location is not allowed.' ); }
+if (!defined('_JEXEC'))
+{
+	die('Direct Access to this location is not allowed.');
+}
 /**
  * @version		$Id: wordpress.php 1 2009-10-27 20:56:04Z rafael $
  * @package		WordPress for Joomla!
@@ -27,42 +30,50 @@ class plgUserWordPress extends JPlugin
 	 * @param 	array  $config  An array that holds the plugin configuration
 	 * @since 1.5
 	 */
-	function plgUserWordPress(& $subject, $config)
+	function plgUserWordPress(&$subject, $config)
 	{
 		global $wp_path;
 
 		parent::__construct($subject, $config);
 
-		if ( !$wp_path ) {
-			// Check to see if we are using multisite
+		if (!$wp_path)
+		{
 			$db = JFactory::getDBO();
-			$query = "SELECT option_value
-				FROM #__wp_options
-					WHERE option_name = 'wpj_multisite_path'";
-			$db->setQuery( $query );
-			$wp_path = $db->loadResult();
+			$query = "SELECT option_value FROM #__wp_options WHERE option_name = 'wpj_multisite_path'";
+			$db->setQuery($query);
+			try
+			{
+				$wp_path = $db->loadResult();
+			}
+			catch (EXCEPTION $e)
+			{
+
+			}
 		}
 
 		// Change directory to blog directory if not multisite
-		if ( !$wp_path || 'components'.DS.'com_wordpress'.DS.'wp' == $wp_path ) {
-			$component_abs_path = 'components' .DS. 'com_wordpress' .DS. 'wp';
-		} else { // Is multisite
+		if (!$wp_path || 'components' . DS . 'com_wordpress' . DS . 'wp' == $wp_path)
+		{
+			$component_abs_path = 'components' . DS . 'com_wordpress' . DS . 'wp';
+		}
+		else
+		{ // Is multisite
 			$component_abs_path = $wp_path;
 		}
 
-		$this->path_to_wp = JPATH_ROOT .DS. $component_abs_path;
+		$this->path_to_wp = JPATH_ROOT . DS . $component_abs_path;
 	}
 
 	/**
 	 * Function will create new WordPress user upon the creation of Joomla user
 	 */
-	function onUserAfterSave( $user, $isnew, $success, $msg )
+	function onUserAfterSave($user, $isnew, $success, $msg)
 	{
 		global $mainframe;
 
 		$this->load_wp();
 
-		$user_id = j_create_wp_user( (object) $user );
+		$user_id = j_create_wp_user((object) $user);
 
 		$this->unload_wp();
 	}
@@ -70,29 +81,31 @@ class plgUserWordPress extends JPlugin
 	/**
 	 * Function will delete WordPress user upon deletion of Joomla user
 	 */
-	function onUserAfterDelete( $user, $succes, $msg )
+	function onUserAfterDelete($user, $succes, $msg)
 	{
 		global $mainframe;
 
-		if ( !$this->load_wp() ) {
+		if (!$this->load_wp())
+		{
 			return;
 		}
 
 		$user_id = (int) $user['id'];
-		$user =  new WP_User( $user_id );
-		if ( $user->ID ) {
-			require_once( $this->path_to_wp .DS.'wp-admin'.DS.'includes'.DS.'user.php' );
-			wp_delete_user( $user_id );
+		$user = new WP_User($user_id);
+		if ($user->ID)
+		{
+			require_once($this->path_to_wp . DS . 'wp-admin' . DS . 'includes' . DS . 'user.php');
+			wp_delete_user($user_id);
 		}
 
 		// Make sure the user is GAOUN
 		$db = JFactory::getDBO();
 		$query = "DELETE FROM #__wp_users
 			WHERE `ID` = " . $user_id;
-		$db->setQuery( $query )->query();
+		$db->setQuery($query)->query();
 		$query = "DELETE FROM #__wp_usermeta
 			WHERE `user_id` = " . $user_id;
-		$db->setQuery( $query )->query();
+		$db->setQuery($query)->query();
 
 		$this->unload_wp();
 	}
@@ -100,48 +113,56 @@ class plgUserWordPress extends JPlugin
 	/**
 	 * This function will log user into WordPress when sucessful Joomla login is triggered
 	 */
-	function onUserLogin( $user, $options = array() )
+	function onUserLogin($user, $options = array())
 	{
 		global $mainframe;
 
 		jimport('joomla.user.helper');
 
-		if ( !$this->load_wp() ) {
+		if (!$this->load_wp())
+		{
 			return;
 		}
 
-		if ( $mainframe->isAdmin() ) {
+		if ($mainframe->isAdmin())
+		{
 			// If we are in the admin, then lets update our jhome_url option to keep accurate
-			update_option( 'jhome_url', JURI::root() );
+			update_option('jhome_url', JURI::root());
 
 			return true;
 		}
 
 		// Try to get user_id from joomla, if fail then try and get it from WordPress
-		if ( !( $id = intval( JUserHelper::getUserId( $user['username'] ) ) ) ) {
-			$user = get_userdatabylogin( $user['username'] );
+		if (!($id = intval(JUserHelper::getUserId($user['username']))))
+		{
+			$user = get_userdatabylogin($user['username']);
 			$id = $user->ID;
-		} else {
+		}
+		else
+		{
 			// Lets check that user exists in WP
-			$wp_user = new WP_User( $id );
-			if ( !$wp_user->ID ) {
-				$juser = JFactory::getUser( $id );
-				$user_id = j_create_wp_user( $juser );
+			$wp_user = new WP_User($id);
+			if (!$wp_user->ID)
+			{
+				$juser = JFactory::getUser($id);
+				$user_id = j_create_wp_user($juser);
 
-				if ( is_a( $user_id, 'WP_Error' ) ) {
+				if (is_a($user_id, 'WP_Error'))
+				{
 					return $_var;
 				}
 			}
 		}
 
-		if ( !$id ) {
+		if (!$id)
+		{
 			return true;
 		}
 
 		// Process wp auto-login
-		wp_set_current_user( $id, $user['username'] );
-		wp_set_auth_cookie( $id );
-		do_action( 'wp_login', $user['username'] );
+		wp_set_current_user($id, $user['username']);
+		wp_set_auth_cookie($id);
+		do_action('wp_login', $user['username']);
 
 		$this->unload_wp();
 
@@ -151,22 +172,24 @@ class plgUserWordPress extends JPlugin
 	/**
 	 * Function will logout WordPress user, when Joomla logout is triggered
 	 */
-	function onUserLogout( $user )
+	function onUserLogout($user)
 	{
 		$app = JFactory::getApplication();
 
-		if ( plgUserWordPress::$logout_called || $app->isAdmin() ) {
+		if (plgUserWordPress::$logout_called || $app->isAdmin())
+		{
 			return true;
 		}
 
 		plgUserWordPress::$logout_called = true;
 
-		if ( !$this->load_wp() ) {
+		if (!$this->load_wp())
+		{
 			return;
 		}
 
 		wp_clear_auth_cookie();
-		do_action( 'wp_logout' );
+		do_action('wp_logout');
 
 		$this->unload_wp();
 
@@ -189,28 +212,31 @@ class plgUserWordPress extends JPlugin
 		global $is_lynx, $is_gecko, $is_winIE, $is_macIE, $is_opera, $is_NS4, $is_safari, $is_chrome, $is_iphone, $is_IE, $is_apache, $is_IIS, $is_iis7;
 		global $wp_the_query, $wp_query, $wp_rewrite, $wp_locale;
 
-		if ( !defined( 'WP_MEMORY_LIMIT' ) ) {
-			define( 'WP_MEMORY_LIMIT', '32M' );
+		if (!defined('WP_MEMORY_LIMIT'))
+		{
+			define('WP_MEMORY_LIMIT', '32M');
 		}
 
 		// Change directory to blog directory
 		global $working_directory;
 		$working_directory = getcwd();
-		chdir( $this->path_to_wp );
+		chdir($this->path_to_wp);
 
 		global $mainframe, $option, $task, $component_name, $component_real_name, $admin_comp_url;
-		if ( !isset( $component_name ) ) {
+		if (!isset($component_name))
+		{
 			$component_name = 'com_wordpress';
 		}
 		$component_real_name = 'com_wordpress';
 
-		$path = $this->path_to_wp.DS.'wp-load.php';
+		$path = $this->path_to_wp . DS . 'wp-load.php';
 
-		if ( !file_exists( $this->path_to_wp.DS.'wp-load.php' ) ) {
+		if (!file_exists($this->path_to_wp . DS . 'wp-load.php'))
+		{
 			return false;
 		}
 
-		require_once( $this->path_to_wp.DS.'wp-load.php' );
+		require_once($this->path_to_wp . DS . 'wp-load.php');
 
 		return true;
 	}
@@ -222,6 +248,6 @@ class plgUserWordPress extends JPlugin
 	{
 		global $working_directory;
 		// Return back to the cwd
-		chdir( $working_directory );
+		chdir($working_directory);
 	}
 }
