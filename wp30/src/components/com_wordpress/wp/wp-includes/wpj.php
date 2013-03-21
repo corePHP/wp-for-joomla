@@ -136,7 +136,7 @@ function wp_joomla_run_plugins( $text )
 {
 	global $post;
 	static $front_end;
-	
+
 	jimport( 'joomla.html.parameter' );
 
 	if ( !isset( $front_end ) ) {
@@ -334,7 +334,7 @@ function wpj_admin_hook()
 				'wpj_sub_navigation_hover_background', 'wpj_sub_navigation_hover_text_color',
 				'wpj_navigation_current_background', 'wpj_navigation_current_text_color',
 				'wpj_sub_navigation_current_background', 'wpj_sub_navigation_current_text_color',
-				'wpj_widget_h_tag_level', 'wpj_module_class_suffix', 
+				'wpj_widget_h_tag_level', 'wpj_module_class_suffix',
 				'wpj_module_class_suffix_space',
 				'wpj_title_color', 'wpj_use_joomla_plugins',
 				'wpj_use_wp_sidebar', 'wpj_enable_multisite', 'wpj_redirect_to_primary_blog'
@@ -504,7 +504,7 @@ function wpj_admin_hook()
 			<span class="description">Wrap Posted on ... by ... in small font wrapper. Needed for some templates (ie. JoomlaShack Cascada).</span>
 			<?php
 		}
-		
+
 		add_settings_field( 'wpj_widget_h_tag_level', 'H Tag level of widget titles (ie. H1 - H5)',
 			'wpj_widget_h_tag_level', $general_settings_page_hook, 'tt_theme_settings'
 		);
@@ -1138,7 +1138,7 @@ function wpj_enable_multisite( $enabled )
 
 /**
  * Function to disable multisite
- * 
+ *
  * @return void
  **/
 function wpj_disable_multisite()
@@ -1160,7 +1160,7 @@ function wpj_disable_multisite()
 
 /**
  * Function will create a WordPress user from a given Joomla user
- * 
+ *
  * @param object The instance of a JUser object
  * @return mixed If success the user_id of the WordPress created user
  */
@@ -1176,9 +1176,9 @@ function j_create_wp_user( $juser )
 		VALUES
 		( {$juser->id}, '{$juser->username}', '{$juser->email}', '". gmdate('Y-m-d H:i:s')."' )";
 	$db->setQuery( $query );
-	$db->query();
-
-	if ( $db->getErrorNum() ) {
+	try{
+		$db->query();
+	}catch(EXCEPTION $e){
 		return new WP_Error( 'error', 'Error 74' );
 	}
 
@@ -1215,7 +1215,7 @@ function j_create_wp_user( $juser )
 
 /**
  * Function will return the Itemid for the current blog
- * 
+ *
  * @param bool If true it will echo the itemid
  * @return int The found itemid
  */
@@ -1249,7 +1249,7 @@ function j_get_itemid( $echo = false )
 
 /**
  * Function will set the Itemid for the blog if possible
- * 
+ *
  * @return void
  */
 function j_set_itemid()
@@ -1319,7 +1319,7 @@ j_set_itemid();
 
 /**
  * Function will return the best possible guess of what the site URL is
- * 
+ *
  * @param bool If true will get the true root of the Joomla site
  * @return string The root URL of the site
  */
@@ -1386,10 +1386,10 @@ function j_get_root_uri( $true_root = false )
 
 /**
  * Function will return an array of files that match the $file_type argument.
- * 
+ *
  * Files are return as absolute paths, in an associative array.
  * Files are found recursively through directories starting at base directory
- * 
+ *
  * @param string The base directory to start searching for files
  * @param string The file type, this is simply the extension for files that we are searching
  * @param array (Optional) List of all found files
@@ -1428,7 +1428,7 @@ function wpj_get_files_from_dir( $path, $file_type, &$found_files )
     }
 
     return $found_files;
-} 
+}
 
 /**
  * Used to find the community component installed on the site
@@ -1522,13 +1522,13 @@ function getSocialAvatar( $id_or_email, $size = '96', $alt = false )
 			// Get CUser object
 			$user =& CFactory::getUser( $user_id );
 			$avatar_url = $user->getThumbAvatar();
-			
+
 		?>
 		<a href="<?php echo JRoute::_(
 			"index.php?option=com_community&view=profile&userid={$user_id}" ); ?>">
 			<img alt="<?php echo $safe_alt; ?>" <?php echo $img_attr; ?> src="<?php echo $avatar_url; ?>" /></a>
 	<?php } else {
-		echo get_avatar( $user_id, $size, $alt ); 
+		echo get_avatar( $user_id, $size, $alt );
 	}
 	$avatar = ob_get_clean();
 
