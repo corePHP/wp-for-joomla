@@ -27,8 +27,14 @@ if ( ! WP_NETWORK_ADMIN && ! WP_USER_ADMIN ) {
 if ( isset($_GET['import']) && !defined('WP_LOAD_IMPORTERS') )
 	define('WP_LOAD_IMPORTERS', true);
 
-//require_once(dirname(dirname(__FILE__)) . '/wp-load.php');
-require_once('../wp-load.php');
+if (is_file('../wp-load.php'))
+{
+	require_once('../wp-load.php');
+}
+elseif (is_file(dirname(dirname(__FILE__)).'/wp-load.php'))
+{
+	require_once(dirname(dirname(__FILE__)) . '/wp-load.php');
+}
 
 nocache_headers();
 
