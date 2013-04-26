@@ -12,16 +12,16 @@ if ( !defined( '_JEXEC' ) ) {
 		define( 'DS', DIRECTORY_SEPARATOR );
 	}
 
-	// If WP Single or multi-site?
-	if ( file_exists( dirname(__FILE__) .DS. '..' .DS. 'configuration.php' ) ) {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..' ) ); // Multi-site
-	} else {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..'.DS.'..'.DS.'..' ) ); // Single
+	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components/com_wordpress')){
+		$path = explode('components/com_wordpress',dirname($_SERVER['SCRIPT_FILENAME']));
+		define('JPATH_BASE', $path[0]);
+	} elseif ( !defined('JWP_BASE') ){
+		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).'/../../');
 	}
 
-	require_once ( JPATH_BASE .DS.'includes'.DS.'defines.php' );
-	require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
-	$mainframe	=& JFactory::getApplication( 'site' );
+	require_once ( JPATH_BASE .'includes/defines.php' );
+	require_once ( JPATH_BASE .'includes/framework.php' );
+	$mainframe	= JFactory::getApplication( 'site' );
 	$mainframe->initialise();
 } else {
 	if ( !$mainframe ) {
@@ -32,7 +32,7 @@ if ( !defined( '_JEXEC' ) ) {
 if ( !function_exists( 'myPrint' ) ) :
 /**
  * Function for printing data
- * @return 
+ * @return
  */
 function myPrint( $var, $pre = true )
 {
