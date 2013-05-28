@@ -12,8 +12,8 @@ if ( !defined( '_JEXEC' ) ) {
 		define( 'DS', DIRECTORY_SEPARATOR );
 	}
 
-	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components/com_wordpress')){
-		$path = explode('components/com_wordpress',dirname($_SERVER['SCRIPT_FILENAME']));
+	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components'.DS.'com_wordpress')){
+		$path = explode('components'.DS.'com_wordpress',dirname($_SERVER['SCRIPT_FILENAME']));
 		define('JPATH_BASE', $path[0]);
 	} elseif ( !defined('JWP_BASE') ){
 		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).'/../../');
