@@ -15,8 +15,12 @@ if ( !defined( '_JEXEC' ) ) {
 	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components'.DS.'com_wordpress')){
 		$path = explode('components'.DS.'com_wordpress',dirname($_SERVER['SCRIPT_FILENAME']));
 		define('JPATH_BASE', $path[0]);
-	} elseif ( !defined('JWP_BASE') ){
-		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).'/../../');
+	} elseif ( !defined('JWP_BASE') && FALSE !== strpos($_SERVER['SCRIPT_FILENAME'],'wp-admin/index.php') ){
+		$path = explode('/',$_SERVER['SCRIPT_FILENAME']);
+		preg_match('/(.*)?(?:\/.*?){3}$/',$_SERVER['SCRIPT_FILENAME'],$matches);		
+		define('JPATH_BASE', $matches[1].DS);
+	} else {
+		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).DS);
 	}
 
 	require_once ( JPATH_BASE .'includes/defines.php' );
