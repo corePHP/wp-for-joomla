@@ -31,7 +31,7 @@ class wpj_loader
 	 **/
 	static $component_abs_path;
 
-	function load()
+	public static function load()
 	{
 		static $css_added;
 
@@ -81,7 +81,7 @@ class wpj_loader
 		}
 	}
 
-	function load_wp()
+	public static function load_wp()
 	{
 		/* RC - Declare all variables that are ment to be globals, avoiding errors on some systems, but creating errors in others - fix is at the end of component */
 		global $wp_taxonomies, $_wp_submenu_nopriv, $wp_local_package, $wp_registered_sidebars, $wp_version, $wp_dashboard_sidebars, $wp_user_roles, $wpdb, $wp_scripts;
@@ -98,6 +98,10 @@ class wpj_loader
 		if (!defined('WP_MEMORY_LIMIT'))
 		{
 			define('WP_MEMORY_LIMIT', '32M');
+		}
+
+		if( !defined( 'DS' ) ) {
+			define('DS', DIRECTORY_SEPARATOR);
 		}
 
 		global $mainframe, $option, $task, $component_name, $component_real_name, $wp_path;
