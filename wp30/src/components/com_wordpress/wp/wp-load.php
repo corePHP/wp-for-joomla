@@ -16,8 +16,12 @@ if ( !defined( '_JEXEC' ) ) {
 		$path = explode('components'.DS.'com_wordpress',dirname($_SERVER['SCRIPT_FILENAME']));
 		define('JPATH_BASE', $path[0]);
 	} elseif ( !defined('JWP_BASE') && FALSE !== strpos($_SERVER['SCRIPT_FILENAME'],'wp-admin') ){
+		$path = explode('wp-admin',$_SERVER['SCRIPT_FILENAME']);
+		$path = array_pop($path);
+		$path = trim($path,'/');
+		$count = count(explode('/',$path)) + 2;
 		$path = explode('/',$_SERVER['SCRIPT_FILENAME']);
-		preg_match('/(.*)?(?:\/.*?){3}$/',$_SERVER['SCRIPT_FILENAME'],$matches);		
+		preg_match('/(.*)?(?:\/.*?){'.$count.'}$/',$_SERVER['SCRIPT_FILENAME'],$matches);		
 		define('JPATH_BASE', $matches[1].DS);
 	} else {
 		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).DS);
