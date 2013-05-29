@@ -73,7 +73,7 @@ if (!$wp_path || 'components' . DS . 'com_wordpress' . DS . 'wp' == $wp_path)
 }
 else
 { // Is multisite
-	$component_abs_path = $wp_path;
+	$component_abs_path = trim($wp_path, JPATH_ROOT.DS);
 }
 
 if (!isset($component_name))
