@@ -34,9 +34,9 @@ class JFormFieldCategories extends JFormField
 	 */
 	protected function getInput()
 	{
-		require_once( JPATH_ROOT .DS.'components'.DS.'com_wordpress'.DS.'wordpress_loader.php' );
+		require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
 		wpj_loader::load();
-		require_once( JPATH_ROOT .DS.'modules'.DS.'mod_wordpress_latest'.DS.'helper.php' );
+		require_once( JPATH_ROOT . '/modules/mod_wordpress_latest/helper.php' );
 
 		$cats = $this->wp_dropdown_categories( array(
 			'show_option_all' => 'All Categories',
