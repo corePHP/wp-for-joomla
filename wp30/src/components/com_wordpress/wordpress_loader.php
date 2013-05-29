@@ -100,6 +100,10 @@ class wpj_loader
 			define('WP_MEMORY_LIMIT', '32M');
 		}
 
+		if( !defined( 'DS' ) ) {
+			define('DS', DIRECTORY_SEPARATOR);
+		}
+
 		global $mainframe, $option, $task, $component_name, $component_real_name, $wp_path;
 		if (!isset($component_name))
 		{

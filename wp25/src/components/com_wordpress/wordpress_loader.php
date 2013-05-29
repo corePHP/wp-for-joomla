@@ -8,11 +8,11 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * This version of WordPress has originally been modified by corePHP to work
 * within the Joomla 1.5.x environment.
 * For any support visit: http://www.corephp.com/wordpress/support
-* 
+*
 * http://www.corephp.com
 */
 
@@ -49,7 +49,7 @@ class wpj_loader
 .wp_mod #wp-latest-wrapper .module_post_entry{margin-bottom:12px; padding-bottom:12px; border-bottom:solid 1px #ccc}
 .wp_mod #wp-latest-wrapper li.categories{list-style:none; font-size:120%}
 .wp_mod #wp-latest-wrapper li.categories ul{font-size:80%; padding-left:15%}
-.wp_mod #wp-latest-cats ul:first-child, 
+.wp_mod #wp-latest-cats ul:first-child,
 .wp_mod ul#recentcomments:first-child{padding-left:15%}
 /* @end */
 
@@ -87,6 +87,10 @@ class wpj_loader
 
 		if ( !defined( 'WP_MEMORY_LIMIT' ) ) {
 			define( 'WP_MEMORY_LIMIT', '32M' );
+		}
+
+		if( !defined( 'DS' ) ) {
+			define('DS', DIRECTORY_SEPARATOR);
 		}
 
 		global $mainframe, $option, $task, $component_name, $component_real_name, $wp_path;
