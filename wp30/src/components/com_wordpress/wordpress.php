@@ -82,7 +82,9 @@ if (!isset($component_name))
 }
 $component_real_name = 'com_wordpress';
 
-switch (JRequest::getVar('task'))
+$input = JFactory::getApplication()->input;
+
+switch ($input->get('task', null))
 {
 	case 'wp-signup.php':
 		require(JPATH_ROOT . DS . $component_abs_path . DS . 'wp-signup.php');
