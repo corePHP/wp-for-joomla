@@ -46,7 +46,7 @@ if (!defined('WP_MEMORY_LIMIT'))
 	define('WP_MEMORY_LIMIT', '32M');
 }
 
-global $mainframe, $option, $task, $component_name, $component_real_name, $wp_path;
+global $option, $task, $component_name, $component_real_name, $wp_path;
 
 if (!$wp_path)
 {
