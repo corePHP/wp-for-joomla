@@ -69,9 +69,10 @@ function wp_logout_joomla()
 add_filter( 'auth_redirect_scheme', 'wp_authenticate_joomla_admin', 10 );
 function wp_authenticate_joomla_admin( $_var )
 {
-	global $wpdb, $mainframe;
+	global $wpdb;
 
-	if ( !( $hash = JRequest::getVar( 'h' ) ) ) {
+	$mainframe = JFactory::getApplication();
+	if ( !( $hash = $mainframe->input->getVar( 'h' ) ) ) {
 		return $_var;
 	}
 
@@ -889,9 +890,9 @@ function _color_swatches()
 {
 	// Save the colors
 	if ( !empty( $_POST ) ) {
-		update_option( 'wpj_cs_1', JRequest::getString( 'color_1', '' ) );
-		update_option( 'wpj_cs_2', JRequest::getString( 'color_2', '' ) );
-		update_option( 'wpj_cs_3', JRequest::getString( 'color_3', '' ) );
+		update_option( 'wpj_cs_1', JFactory::getApplication()->input->getString( 'color_1', '' ) );
+		update_option( 'wpj_cs_2', JFactory::getApplication()->input->getString( 'color_2', '' ) );
+		update_option( 'wpj_cs_3', JFactory::getApplication()->input->getString( 'color_3', '' ) );
 	}
 
 	wp_enqueue_script( 'jquery' );
@@ -1256,7 +1257,7 @@ function j_set_itemid()
 {
 	global $mainframe;
 
-	$option = JRequest::getWord( 'option' );
+	$option = JFactory::getApplication()->input->get( 'option' );
 
 	$_wp_itemid	= get_option( 'Itemid' );
 	$_j_itemid	= intval( @$_REQUEST['Itemid'] );
