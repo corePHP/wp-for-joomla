@@ -4,8 +4,9 @@ if (!(defined('_JEXEC')))
 	die('Direct Access to this location is not allowed.');
 }
 
-if(!defined('DS')){
-define('DS', DIRECTORY_SEPARATOR);
+if (!defined('DS'))
+{
+	define('DS', DIRECTORY_SEPARATOR);
 }
 
 /**
@@ -73,7 +74,7 @@ if (!$wp_path || 'components' . DS . 'com_wordpress' . DS . 'wp' == $wp_path)
 }
 else
 { // Is multisite
-	$component_abs_path = trim($wp_path, JPATH_ROOT.DS);
+	$component_abs_path = $wp_path;
 }
 
 if (!isset($component_name))
@@ -99,7 +100,12 @@ if (is_feed())
 	die();
 }
 
-$allowed_themes = array('twentyeleven', 'twentyten', 'everyhome', 'default');
+$allowed_themes = array(
+	'twentyeleven',
+	'twentyten',
+	'everyhome',
+	'default'
+);
 if (!in_array(get_stylesheet(), apply_filters('wpj_allowed_themes', $allowed_themes)))
 {
 	die();
