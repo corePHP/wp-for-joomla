@@ -161,7 +161,7 @@ function network_step1_5()
 	}
 
 	$wp_new_folder_name = trim( @$_POST['move_wp_to'] );
-	$wp_dir = get_site_option( 'jwp_wp_dir' );
+	$wp_dir = preg_replace('/\/{2,}|\\{2,}/', DS, get_site_option( 'jwp_wp_dir' ));
 
 	// If we have not set the new wp_dir and if we are not trying to set it, then ask user
 	if ( !$wp_dir && ( !isset( $_POST['move_wp_to'] ) || empty( $wp_new_folder_name ) ) ) {

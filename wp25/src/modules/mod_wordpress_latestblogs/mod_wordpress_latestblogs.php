@@ -8,13 +8,13 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * For any support visit: http://www.corephp.com/wordpress/support
-* 
+*
 * http://www.corephp.com
 */
 
-require_once( JPATH_ROOT .DS. 'components' .DS. 'com_wordpress' .DS. 'wordpress_loader.php' );
+require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
 wpj_loader::load();
 ?>
 <div class="wp_mod">
@@ -24,7 +24,7 @@ global $id, $post, $more, $page, $pages, $multipage, $preview, $authordata, $wpd
 
 $titleMaxLength = $params->get( 'titleMaxLength', 20 );
 $introMaxLength = $params->get( 'introMaxLength', 50 );
-$wrapIntroText  = $params->get( 'wrapIntro', 0 );	
+$wrapIntroText  = $params->get( 'wrapIntro', 0 );
 $limit          = $params->get( 'numLatestEntries', 5 );
 $show_post_meta = $params->get( 'show_post_meta', 1 );
 $showAvatar     = $params->get( 'showAvatar',0 );
@@ -72,8 +72,8 @@ foreach ( (array) $blogs as $blog ) {
 	$query .= "(
 		SELECT '$blogid' AS blog_id, '$path' AS path, $table.ID, $table.post_author, $table.post_date, $table.post_date_gmt, $table.post_content, $table.post_title, $table.post_excerpt, $table.post_status, $table.comment_status, $table.ping_status, $table.post_password, $table.post_name, $table.to_ping, $table.pinged, $table.post_modified, $table.post_modified_gmt, $table.post_content_filtered, $table.post_parent, $table.guid, $table.menu_order, $table.post_type, $table.post_mime_type, $table.comment_count
 			FROM $table
-				WHERE 1=1 AND 
-				$table.post_type = 'post' AND 
+				WHERE 1=1 AND
+				$table.post_type = 'post' AND
 				($table.post_status = 'publish') AND
 				$table.post_password = ''
 					ORDER BY $table.post_date DESC
@@ -106,7 +106,7 @@ foreach ( (array) $rows as $post ) {
 					$title = substr( $title, 0, $titleMaxLength );
 				}
 
-				echo $title; 
+				echo $title;
 
 				if ( $titlelength > $titleMaxLength ) {
 					echo ' ...';
@@ -136,7 +136,7 @@ foreach ( (array) $rows as $post ) {
 			$text = preg_replace( '[(\[caption)+.+(\[/caption\])]', '', $text );
 
 			if ( $display_images && $resize_images ) {
-				$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/"; 
+				$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
 				$matches   = '';
 				$imageName = '';
 				$imgsmall  = '';

@@ -13,7 +13,7 @@ if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
 }
 
 /** Sets up the WordPress Environment. */
-require( dirname(__FILE__) . '/wp-load.php' );
+require( 'wp-load.php' );
 
 nocache_headers();
 

@@ -33,7 +33,7 @@ if ( false ) {
 define( 'WP_INSTALLING', true );
 
 /** Load WordPress Bootstrap */
-require_once( dirname( dirname( __FILE__ ) ) . '/wp-load.php' );
+require_once( '../wp-load.php' );
 
 /** Load WordPress Administration Upgrade API */
 require_once( dirname( __FILE__ ) . '/includes/upgrade.php' );
@@ -154,7 +154,7 @@ function display_setup_form( $error = null ) {
 /* rc_corephp - Created Joomla login form function */
 /**
  * Function to display Joomlas login form
- * 
+ *
  * @return bool False if bad login or not logged in, true if login success
  */
 function joomla_login_form( $msg = '' )

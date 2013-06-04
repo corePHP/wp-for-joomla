@@ -8,22 +8,22 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * For any support visit: http://www.corephp.com/wordpress/support
-* 
+*
 * http://www.corephp.com
 */
 
 global $id, $post, $more, $page, $pages, $multipage, $preview, $authordata, $wpdb, $blog_id;
 
-require_once( JPATH_ROOT .DS. 'components' .DS. 'com_wordpress' .DS. 'wordpress_loader.php' );
+require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
 wpj_loader::load();
 ?>
 <div class="wp_mod">
 <?php
 
 // Add helper file
-require_once( JPATH_ROOT . DS.'modules'.DS.'mod_wordpress_latest'.DS.'helper.php' );
+require_once( JPATH_ROOT . '/modules/mod_wordpress_latest/helper.php' );
 
 $titleMaxLength    = $params->get( 'titleMaxLength', 20 );
 $introMaxLength    = $params->get( 'introMaxLength', 50 );
@@ -63,6 +63,21 @@ if ( $filter_categories[0] != 0 ) {
 	$filter_categories = '';
 }
 
+function caption_shortcode($attr, $content = null) {
+
+	extract(shortcode_atts(array(
+		'id'	=> '',
+		'align'	=> 'alignnone',
+		'width'	=> '80',
+		'caption' => ''
+	), $attr));
+
+	if ( $id ) $idtag = 'id="' . esc_attr($id) . '" ';
+	$align = 'class="' . esc_attr($align) . '" ';
+
+	return '<figure ' . $idtag . $align . 'aria-describedby="figcaption_' . $id . '" style="width: ' . (10 + (int) $width) . 'px">'
+	. do_shortcode( $content ) . '<figcaption id="figcaption_' . $id . '">' . $caption . '</figcaption></figure>';
+}
 ?>
 <div id="wp-latest-wrapper">
 <?php
@@ -86,7 +101,7 @@ if ( $filter_categories[0] != 0 ) {
 					$title = substr( $title, 0, $titleMaxLength );
 				}
 
-				echo $title; 
+				echo $title;
 
 				if ( $titlelength > $titleMaxLength ) {
 					echo ' ...';
@@ -106,7 +121,14 @@ if ( $filter_categories[0] != 0 ) {
 			 * Introtext
 			 **/
 			if ( $introMaxLength ) {
-				$text = get_the_content();
+				$text = get_post();
+				$text = $text->post_content;
+				$text = apply_filters( 'get_the_content', $text );
+				$text = str_replace(']]>', ']]&gt;', $text);
+
+				// Lets build some caption data to be used later
+				preg_match('/(?:.*)\[caption[^\]]*?\](\<a .*?\<\/a>)\s*(.*?)\[\/caption\]/', $text, $matches);
+				list($all, $link, $caption) = $matches;
 
 				/* Strip unwanted tags */
 				$allowable_tags = '';
@@ -116,10 +138,12 @@ if ( $filter_categories[0] != 0 ) {
 				}
 				$text = strip_tags( $text, $allowable_tags );
 				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
-				$text = preg_replace( '[(\[caption)+.+(\[/caption\])]', '', $text );
+				$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
+										'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
+										$text );
 
 				if ( $display_images && $resize_images ) {
-					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/"; 
+					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
 					$matches   = '';
 					$imageName = '';
 					$imgsmall  = '';
