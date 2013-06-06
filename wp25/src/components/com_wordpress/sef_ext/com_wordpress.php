@@ -4,7 +4,7 @@
  * @copyright	Copyright (C) 2009-2010 'corePHP' / corephp.com. All rights reserved.
  * @version		$Id: com_wordpress.php 1 2008-14 00:14 rafael $
  * @license		GNU/GPL
- * 
+ *
  * Version 1.1.1
  */
 
@@ -31,9 +31,9 @@ if ( !function_exists( 'getWPTitleAlias' ) ) {
 		global $__sh_config;
 
 		if ( $slug ) { return $slug; }
-		
-		$app =& JFactory::getApplication();
-		
+
+		$app = JFactory::getApplication();
+
 		$menu = $app->getMenu();
 		if ( is_object( $menu ) ) {
 			foreach ( $menu->getMenu() as $item ) {
@@ -57,7 +57,7 @@ if ( !function_exists( 'getWPTitleAlias' ) ) {
 }
 
 // So effing sad that I have to do this, because sh404 doesn't offer a way to get the
-// config that is already cached on a variable. 
+// config that is already cached on a variable.
 
 if (class_exists('shSEFConfig')){
 	global $__sh_config;
@@ -71,13 +71,9 @@ if ( !isset( $Itemid ) || !$Itemid ) {
 	$title[] = getWPTitleAlias();
 } else {
 
-	jimport( 'joomla.html.parameter' );
-
-	$app =& JFactory::getApplication();
-	$menu = $app->getMenu();
-	$menu_item = $menu->getItem( $Itemid );
-
-	$__params = new JParameter( $menu_item->params );
+	$app = JFactory::getApplication();
+	$menuitemid = $app->input->getInt( 'Itemid' );
+	$__params = $app->getMenu()->getParams( $menuitemid );
 
 	$blog_path = $__params->get( 'blog_path' );
 

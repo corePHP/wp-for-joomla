@@ -36,7 +36,7 @@
  */
 
 /** Load WordPress Bootstrap */
-require_once(dirname(dirname(__FILE__)).'/wp-load.php');
+require_once('../wp-load.php');
 
 if ( ! function_exists('maybe_create_table') ) :
 /**

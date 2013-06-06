@@ -18,6 +18,11 @@ class  plgSystemWordPress extends JPlugin
 
 	function onAfterInitialise()
 	{
+
+		if(!defined('DS')){
+			define('DS', DIRECTORY_SEPARATOR);
+		}
+
 		global $_wp_url_param;
 
 		if ( JFactory::getApplication()->isAdmin() ) {
@@ -28,13 +33,13 @@ class  plgSystemWordPress extends JPlugin
 			return;
 		}
 
-		if ( constant( 'SHORTINIT' ) ) {
+		if ( defined( 'SHORTINIT' ) ) {
 			return;
 		}
 
 		$_wp_url_param = explode( "\n", $this->params->get( 'url_path' ) );
 		$current_url_path = '/';
-		
+
 		$_wp_url_param_tmp = array_reverse( $_wp_url_param );
 		foreach ( $_wp_url_param_tmp as $tmp_value ) {
 			$pos = strpos( $_SERVER['REQUEST_URI'], '/' . $tmp_value );

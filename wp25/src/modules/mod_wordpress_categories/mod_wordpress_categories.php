@@ -8,13 +8,13 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * For any support visit: http://www.corephp.com/wordpress/support
-* 
+*
 * http://www.corephp.com
 */
 
-require_once( JPATH_ROOT .DS. 'components' .DS. 'com_wordpress' .DS. 'wordpress_loader.php' );
+require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
 wpj_loader::load();
 
 $title_show = $params->get('title_show', 1);
@@ -27,7 +27,7 @@ if($title_show)
 	$args['title_li'] = $title;
 else
 	$args['title_li'] = false;
-	
+
 $args['order'] = $order;
 
 ?>

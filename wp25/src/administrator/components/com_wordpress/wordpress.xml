@@ -6,7 +6,7 @@
 	<authorEmail>support@corephp.com</authorEmail>
 	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
 	<authorUrl>www.corephp.com</authorUrl>
-	<version>3.5</version>
+	<version>3.5.2</version>
 	<description>COM_WORDPRESS_DESCRIPTION</description>
 
 	<scriptfile>script.php</scriptfile>
@@ -18,15 +18,7 @@
 	</install>
 
 	<files folder="site">
-		<filename>index.html</filename>
-		<filename>log.txt</filename>
-		<filename>router.php</filename>
-    	<filename>wordpress_loader.php</filename>
-    	<filename>wordpress.php</filename>
-
-		<folder>sef_ext</folder>
-		<folder>views</folder>
-		<folder>wp</folder>
+		<folder></folder>
   	</files>
 
     <languages folder="language">
@@ -37,13 +29,7 @@
 		<menu img="components/com_wordpress/images/wordpress16.gif">COM_WORDPRESS_MENU</menu>
 
 		<files folder="admin">
-			<filename>admin.wordpress.php</filename>
-			<filename>index.html</filename>
-			<filename>install.html.php</filename>
-			<filename>license.txt</filename>
-
-			<folder>images</folder>
-			<folder>sql</folder>
+			<folder></folder>
 		</files>
 
 	    <languages folder="admin">
