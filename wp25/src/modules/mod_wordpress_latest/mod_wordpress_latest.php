@@ -138,17 +138,11 @@ function caption_shortcode($attr, $content = null) {
 				}
 				$text = strip_tags( $text, $allowable_tags );
 				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
-<<<<<<< HEAD
 				if( stripos( $text, "caption" ) !== false ) {
 					$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
 											'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
 											strip_tags( $text, '<img><p><div>' ) );
 				}
-=======
-				$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
-										'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
-										$text );
->>>>>>> 1e3298ad1894dc5fe70ac96e6c858481d162735e
 
 				if ( $display_images && $resize_images ) {
 					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
