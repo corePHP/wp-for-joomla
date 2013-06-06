@@ -138,9 +138,11 @@ function caption_shortcode($attr, $content = null) {
 				}
 				$text = strip_tags( $text, $allowable_tags );
 				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
-				$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
-										'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
-										$text );
+				if( stripos( $text, "caption" ) !== false ) {
+					$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
+											'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
+											strip_tags( $text, '<img><p><div>' ) );
+				}
 
 				if ( $display_images && $resize_images ) {
 					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
@@ -164,35 +166,21 @@ function caption_shortcode($attr, $content = null) {
 						$replacements = array( "width=\"{$resize_width}\"",
 						 	"height=\"{$resize_height}\"" );
 						$img = preg_replace( $patterns, $replacements, $matches[0][$i] );
-						$text = str_replace( $matches[0][$i], $img, $text );
+						$text = str_replace( $matches[0][$i], '<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $img . '</div>', $text );
 					}
 				}
 
 				// Is text too long? Probably...
-				$toolong = ( strlen( $text ) > $introMaxLength );
+
+				$toolong = ( strlen( $text ) > (int) $introMaxLength );
 
 				// Trim text
 				if ( $toolong ) {
 					// Do a different type of replacement if there are html tags,
 					// to avoid counting them
 					if ( strpos( $text, '>' ) ) {
-						$_replacements = array();
-						$_r_counter = 0;
-						preg_match_all( '/<.*>/sim', $text, $matches );
-						// myPrint($matches);
-						foreach ( $matches[0] as $match ) {
-							$text = str_replace( $match, '||' .$_r_counter. '||', $text );
-							$_replacements[$_r_counter] = $match;
-							$_r_counter++;
-						}
-
-						// Replace
-						$text = substr( $text, 0,
-							( $introMaxLength + ( count( $_replacements ) * 5 ) ) );
-
-						foreach ( $_replacements as $_r_counter => $match ) {
-							$text = str_replace( '||' .$_r_counter. '||', $match, $text );
-						}
+						$count = preg_match('/^(<[^>]*.*<\/[^>]*>)\s*(.*)/s', $text, $matches);
+						$text = $matches[1] . substr($matches[2], 0, ( $introMaxLength ) );
 					} else {
 						$text  = substr( $text, 0, $introMaxLength );
 					}
