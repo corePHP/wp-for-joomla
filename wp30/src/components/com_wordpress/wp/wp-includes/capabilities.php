@@ -1447,6 +1447,7 @@ function get_super_admins() {
  * @return bool True if the user is a site admin.
  */
 function is_super_admin( $user_id = false ) {
+	$user_id = (int) $user_id;
 	if ( ! $user_id || $user_id == get_current_user_id() )
 		$user = wp_get_current_user();
 	else
