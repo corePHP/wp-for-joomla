@@ -278,7 +278,6 @@ function wpj_admin_hook()
 
 		// Once everything is good to go, lets store the WordPress blog path to the db
 		if(0 === strpos($_SERVER['SCRIPT_FILENAME'], JPATH_BASE) ){
-			$count = strlen(JPATH_BASE);
 			$path = substr($_SERVER['SCRIPT_FILENAME'],strlen(JPATH_BASE));
 			$path = current(explode('wp-admin',$path));
 			$path = trim($path,DS);
