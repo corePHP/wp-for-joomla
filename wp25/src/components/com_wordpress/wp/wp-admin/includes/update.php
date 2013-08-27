@@ -100,11 +100,13 @@ function core_update_footer( $msg = '' ) {
 
 	switch ( $cur->response ) {
 	case 'development' :
-		return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), get_bloginfo( 'version', 'display' ), network_admin_url( 'update-core.php' ) );
+		return sprintf( __( 'Version %s' ), get_bloginfo( 'version', 'display' ) );
+		//return sprintf( __( 'You are using a development version (%1$s). Cool! Please <a href="%2$s">stay updated</a>.' ), get_bloginfo( 'version', 'display' ), network_admin_url( 'update-core.php' ) );
 	break;
 
 	case 'upgrade' :
-		return sprintf( '<strong>'.__( '<a href="%1$s">Get Version %2$s</a>' ).'</strong>', network_admin_url( 'update-core.php' ), $cur->current);
+		return sprintf( __( 'Version %s' ), get_bloginfo( 'version', 'display' ) );
+		//return sprintf( '<strong>'.__( '<a href="%1$s">Get Version %2$s</a>' ).'</strong>', network_admin_url( 'update-core.php' ), $cur->current);
 	break;
 
 	case 'latest' :
