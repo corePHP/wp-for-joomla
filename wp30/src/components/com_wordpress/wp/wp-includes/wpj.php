@@ -277,8 +277,15 @@ function wpj_admin_hook()
 		update_option( 'allowedthemes', array( 'everyhome' => 1 ) );
 
 		// Once everything is good to go, lets store the WordPress blog path to the db
-		update_blog_option( 1, 'wpj_multisite_path',
-			str_replace( JPATH_ROOT . DS, '', dirname( dirname( __FILE__ ) ) ) );
+		if(0 === strpos($_SERVER['SCRIPT_FILENAME'], JPATH_BASE) ){
+			$path = substr($_SERVER['SCRIPT_FILENAME'],strlen(JPATH_BASE));
+			$path = current(explode('wp-admin',$path));
+			$path = trim($path,DS);
+		} else {
+			$path = str_replace( JPATH_ROOT . DS, '', dirname( dirname( __FILE__ ) ) );
+		}
+			
+		update_blog_option( 1, 'wpj_multisite_path', $path );
 	}
 
 	// Automatically redirect user to their primary blog
