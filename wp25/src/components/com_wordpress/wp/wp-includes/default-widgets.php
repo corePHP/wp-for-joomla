@@ -486,7 +486,7 @@ class WP_Widget_Categories extends WP_Widget {
 	var dropdown = document.getElementById("cat");
 	function onCatChange() {
 		if ( dropdown.options[dropdown.selectedIndex].value > 0 ) {
-			location.href = "<?php echo home_url(); ?>/?cat="+dropdown.options[dropdown.selectedIndex].value;
+			location.href = "<?php echo home_url(); ?>&cat="+dropdown.options[dropdown.selectedIndex].value;
 		}
 	}
 	dropdown.onchange = onCatChange;

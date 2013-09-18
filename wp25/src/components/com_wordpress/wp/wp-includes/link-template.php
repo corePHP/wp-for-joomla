@@ -200,7 +200,7 @@ function wp_jroute( $link ) {
 
 		// Add the Itemid
 		if ( ( $itemid = j_get_itemid() ) ) {
-			$link .= '&Itemid=' . $itemid;
+			$link .= '&amp;Itemid=' . $itemid;
 		}
 
 		if ( false === strpos( $link, '?' ) ) {
