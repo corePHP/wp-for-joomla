@@ -101,6 +101,7 @@ if (is_feed())
 }
 
 $allowed_themes = array(
+	'twentytwelve',
 	'twentyeleven',
 	'twentyten',
 	'everyhome',
