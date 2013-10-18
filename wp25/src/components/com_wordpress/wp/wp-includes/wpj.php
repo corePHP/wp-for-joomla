@@ -1437,7 +1437,7 @@ function wpj_get_files_from_dir( $path, $file_type, &$found_files )
  */
 function findCommunityComponent()
 {
-	$community = array( 'iscomprofiler' => false, 'isjomsocial' => false, 'iseasysocial' => false
+	$community = array( 'iscomprofiler' => false, 'isjomsocial' => false, 'iseasysocial' => false,
 		'isbuddypress' => false, 'nocommunity' => false );
 
 	if( file_exists( JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php' ) ) {
