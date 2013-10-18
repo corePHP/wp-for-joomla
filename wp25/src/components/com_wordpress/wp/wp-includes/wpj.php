@@ -1437,10 +1437,12 @@ function wpj_get_files_from_dir( $path, $file_type, &$found_files )
  */
 function findCommunityComponent()
 {
-	$community = array( 'iscomprofiler' => false, 'isjomsocial' => false,
+	$community = array( 'iscomprofiler' => false, 'isjomsocial' => false, 'iseasysocial' => false
 		'isbuddypress' => false, 'nocommunity' => false );
 
-	if ( file_exists( JPATH_ROOT . '/components/com_community/community.php' ) ) {
+	if( file_exists( JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php' ) ) {
+		$community[ 'iseasysocial' ] = true;
+	} elseif ( file_exists( JPATH_ROOT . '/components/com_community/community.php' ) ) {
 		$community['isjomsocial'] = true;
 	} elseif ( file_exists( JPATH_ROOT . '/components/com_comprofiler/comprofiler.php' ) ) {
 		$community['iscomprofiler'] = true;
@@ -1503,7 +1505,17 @@ function getSocialAvatar( $id_or_email, $size = '96', $alt = false )
 	$img_attr = 'class="avatar avatar-'.$size.' photo alignright" height="'.$size.'" width="'.$size.'"';
 
 	ob_start();
-	if ( $iscomprofiler ) {
+
+	if ( $iseasysocial ) {
+		include_once( JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php' );
+
+		$avatar_url 	= Foundry::user( $user_id )->getAvatar( SOCIAL_AVATAR_LARGE );	
+		?>
+		<a href="<?php echo FRoute::profile( array( 'id' => $user_id , 'layout' => 'profile' ) );?>">
+			<img alt="<?php echo $safe_alt; ?>" <?php echo $img_attr; ?> src="<?php echo $avatar_url; ?>" /></a>
+	<?php
+	}
+	else if ( $iscomprofiler ) {
 		if ( $row->avatarapproved && $row->thumbnail ) {
 			$thumb = JURI::root(true) . '/images/comprofiler/tn' . $row->thumbnail;
 		} else {
