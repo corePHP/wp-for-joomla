@@ -98,6 +98,7 @@ if ( class_exists('All_in_One_SEO_Pack') ) {
 	$document->setTitle( $_title );
 }
 
+$wp_head_contents = str_replace( '&#8211;', '–', $wp_head_contents ); // For some reason WP convers - to ASCII
 $wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
 
 $document->addCustomTag( $wp_head_contents );
