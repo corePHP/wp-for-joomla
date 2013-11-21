@@ -144,6 +144,23 @@ function caption_shortcode($attr, $content = null) {
 											strip_tags( $text, '<img><p><div>' ) );
 				}
 
+				if( !$resize_images ) {
+					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
+					$matches   = '';
+					$imageName = '';
+					$imgsmall  = '';
+					$imgbig    = '';
+					$matches   = "";
+					
+					preg_match_all( $pattern, $text, $matches );
+
+					// Remove all unessesary images
+					for ( $i = $images_count; $i < count( $matches[0] ); $i++ ) {
+						$text = str_replace( $matches[0][$i], '', $text );
+						unset( $matches[0][$i] );
+					}
+				}
+
 				if ( $display_images && $resize_images ) {
 					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
 					$matches   = '';
@@ -172,15 +189,17 @@ function caption_shortcode($attr, $content = null) {
 
 				// Is text too long? Probably...
 
-				$toolong = ( strlen( $text ) > (int) $introMaxLength );
+				$toolong = ( strlen( strip_tags( $text ) ) > (int) $introMaxLength );
 
 				// Trim text
 				if ( $toolong ) {
 					// Do a different type of replacement if there are html tags,
 					// to avoid counting them
 					if ( strpos( $text, '>' ) ) {
-						$count = preg_match('/^(<[^>]*.*<\/[^>]*>)\s*(.*)/s', $text, $matches);
-						$text = $matches[1] . substr($matches[2], 0, ( $introMaxLength ) );
+						//$count = preg_match('/^(<[^>]*.*<\/[^>]*>)\s*(.*)/s', $text, $matches);
+						$count = preg_match('/(<a[^>*?].*?>.*?<\/a>)(.*)/s', $text, $matches);
+						$text = substr( $matches[2], 0, ( $introMaxLength ) );
+						$text = $matches[1] . $text;
 					} else {
 						$text  = substr( $text, 0, $introMaxLength );
 					}
