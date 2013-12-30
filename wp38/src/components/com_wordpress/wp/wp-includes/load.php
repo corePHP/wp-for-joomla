@@ -565,8 +565,11 @@ function wp_magic_quotes() {
 	$_COOKIE = add_magic_quotes( $_COOKIE );
 	$_SERVER = add_magic_quotes( $_SERVER );
 
+	/* rc_corephp - SMH -bur
 	// Force REQUEST to be GET + POST.
 	$_REQUEST = array_merge( $_GET, $_POST );
+	*/
+	$_REQUEST = array_merge( $_REQUEST, $_GET, $_POST );
 }
 
 /**

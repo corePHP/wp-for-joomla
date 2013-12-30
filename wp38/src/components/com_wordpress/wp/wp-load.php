@@ -1,4 +1,46 @@
 <?php
+
+global $mainframe;
+
+// Not through Joomla entrance
+/* rc_corephp */
+if ( !defined( '_JEXEC' ) ) {
+	global $option;
+
+	define( '_JEXEC', 1 );
+	define( '_WP_INCLUDED_J', 1 );
+	if ( !defined( 'DS' ) ) {
+		define( 'DS', DIRECTORY_SEPARATOR );
+	}
+
+	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components'.DS.'com_wordpress')){
+		$path = explode('components'.DS.'com_wordpress',dirname($_SERVER['SCRIPT_FILENAME'])); // single
+		define('JPATH_BASE', $path[0]);
+	} elseif (!is_link($_SERVER['SCRIPT_FILENAME'])) {
+		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..' ).DS ); // multi no sym
+	} elseif ( !defined('JWP_BASE') && FALSE !== strpos($_SERVER['SCRIPT_FILENAME'],'wp-admin') ){
+		$path = explode('wp-admin',$_SERVER['SCRIPT_FILENAME']);
+		$path = array_pop($path);
+		$path = trim($path,'/');
+		$count = count(explode('/',$path)) + 2;
+		$path = explode('/',$_SERVER['SCRIPT_FILENAME']);
+		preg_match('/(.*)?(?:\/.*?){'.$count.'}$/',$_SERVER['SCRIPT_FILENAME'],$matches);
+		define('JPATH_BASE', $matches[1].DS);
+	} else {
+		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).DS);
+	}
+
+	require_once ( JPATH_BASE .'includes/defines.php' );
+	require_once ( JPATH_BASE .'includes/framework.php' );
+	$mainframe	= JFactory::getApplication( 'site' );
+	$mainframe->initialise();
+} else {
+	if ( !$mainframe ) {
+		$mainframe = JFactory::getApplication( 'site' );
+	}
+}
+/* rc_corephp end */
+
 /**
  * Bootstrap file for setting the ABSPATH constant
  * and loading the wp-config.php file. The wp-config.php
@@ -28,14 +70,22 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 	/** The config file resides in ABSPATH */
 	require_once( ABSPATH . 'wp-config.php' );
 
+}
+/* rc_corephp No need for these additional checks as we are using Joomla * /
 } elseif ( file_exists( dirname(ABSPATH) . '/wp-config.php' ) && ! file_exists( dirname(ABSPATH) . '/wp-settings.php' ) ) {
 
-	/** The config file resides one level above ABSPATH but is not part of another install */
+	/** The config file resides one level above ABSPATH but is not part of another install * /
 	require_once( dirname(ABSPATH) . '/wp-config.php' );
 
 } else {
 
 	// A config file doesn't exist
+
+	// Set a path for the link to the installer
+	if ( strpos($_SERVER['PHP_SELF'], 'wp-admin') !== false )
+		$path = 'setup-config.php';
+	else
+		$path = 'wp-admin/setup-config.php';
 
 	define( 'WPINC', 'wp-includes' );
 	define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
@@ -60,3 +110,4 @@ if ( file_exists( ABSPATH . 'wp-config.php') ) {
 
 	wp_die( $die, __( 'WordPress &rsaquo; Error' ) );
 }
+/* */
