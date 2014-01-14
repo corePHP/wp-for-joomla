@@ -294,6 +294,9 @@ function list_plugin_updates() {
 }
 
 function list_theme_updates() {
+/* rc_corephp We do not want people updating themes */
+return;
+
 	$themes = get_theme_updates();
 	if ( empty( $themes ) ) {
 		echo '<h3>' . __( 'Themes' ) . '</h3>';
