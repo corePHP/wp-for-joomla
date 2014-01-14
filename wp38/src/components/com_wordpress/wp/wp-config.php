@@ -67,6 +67,9 @@ define('NONCE_SALT',       'A[@tzT:X|e]?`1E+g{NdWe;GnNG4i_R(:Nf9~0i#|FWh>aWnh]~9
 /* rc_corephp - This constant is used at a later point, do not delete */
 define( 'WPJ_DB_PREFIX', 'wp_' );
 $table_prefix  = $JOOMLA_CONFIG->dbprefix . constant( 'WPJ_DB_PREFIX' ) ;
+// No auto updates
+define( 'WP_AUTO_UPDATE_CORE', false );
+/* end rc_corephp */
 
 /**
  * WordPress Localized Language, defaults to English.
