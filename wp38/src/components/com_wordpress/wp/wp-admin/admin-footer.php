@@ -32,7 +32,15 @@ if ( !defined('ABSPATH') )
 		 * @since 2.8.0
 		 * @param string The content that will be printed.
 		 */
-		echo apply_filters( 'admin_footer_text', '<span id="footer-thankyou">' . __( 'Thank you for creating with <a href="http://wordpress.org/">WordPress</a>.' ) . '</span>' );
+
+		/* rc_corephp */
+		$footer_text = array(
+            '<span id="footer-thankyou">' . __( 'Thank you for creating with <a href="http://wordpress.org/">WordPress</a>.' ) . '</span>',
+            __('<a href="https://www.corephp.com/members/submitticket.php">Feedback</a>'),
+            __('<a href="http://www.corephp.com/" target="_blank">Integrated by \' corePHP \'</a>')
+		);
+		echo apply_filters( 'admin_footer_text', implode( ' &bull; ', $footer_text ) );
+		/* end rc_corephp */
 		?>
 	</p>
 	<p id="footer-upgrade" class="alignright">
