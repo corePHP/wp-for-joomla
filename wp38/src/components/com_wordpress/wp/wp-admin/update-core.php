@@ -74,31 +74,33 @@ function list_core_update( $update ) {
 		$download = sprintf(__('Download %s'), $version_string);
 	}
 
-	echo '<p>';
-	echo $message;
-	echo '</p>';
-	echo '<form method="post" action="' . $form_action . '" name="upgrade" class="upgrade">';
-	wp_nonce_field('upgrade-core');
-	echo '<p>';
-	echo '<input name="version" value="'. esc_attr($update->current) .'" type="hidden"/>';
-	echo '<input name="locale" value="'. esc_attr($update->locale) .'" type="hidden"/>';
-	if ( $show_buttons ) {
-		if ( $first_pass ) {
+
+	/* rc_corephp No need for update button */
+	//echo '<p>';
+	//echo $message;
+	//echo '</p>';
+	//echo '<form method="post" action="' . $form_action . '" name="upgrade" class="upgrade">';
+	//wp_nonce_field('upgrade-core');
+	//echo '<p>';
+	//echo '<input name="version" value="'. esc_attr($update->current) .'" type="hidden"/>';
+	//echo '<input name="locale" value="'. esc_attr($update->locale) .'" type="hidden"/>';
+	//if ( $show_buttons ) {
+	//	if ( $first_pass ) {
 			/* rc_corephp - We only need one button as we don't update automatically */
 			// submit_button( $submit, $current ? 'button' : 'primary regular', 'upgrade', false );
-			$first_pass = false;
-		} else {
+	//		$first_pass = false;
+	//	} else {
 			/* rc_corephp - We only need one button as we don't update automatically */
 			// submit_button( $submit, 'button', 'upgrade', false );
-		}
-		echo '&nbsp;<a href="' . esc_url( $update->download ) . '" class="button">' . $download . '</a>&nbsp;';
-	}
-	if ( 'en_US' != $update->locale )
-		if ( !isset( $update->dismissed ) || !$update->dismissed )
-			submit_button( __('Hide this update'), 'button', 'dismiss', false );
-		else
-			submit_button( __('Bring back this update'), 'button', 'undismiss', false );
-	echo '</p>';
+	//	}
+	//	echo '&nbsp;<a href="' . esc_url( $update->download ) . '" class="button">' . $download . '</a>&nbsp;';
+	//}
+	//if ( 'en_US' != $update->locale )
+	//	if ( !isset( $update->dismissed ) || !$update->dismissed )
+	//		submit_button( __('Hide this update'), 'button', 'dismiss', false );
+	//	else
+	//		submit_button( __('Bring back this update'), 'button', 'undismiss', false );
+	//echo '</p>';
 	/* rc_corephp - We don't show this as our update will be an upgrade and will not remove their current language settings */
 	//if ( 'en_US' != $update->locale && ( !isset($wp_local_package) || $wp_local_package != $update->locale ) )
 	    //echo '<p class="hint">'.__('This localized version contains both the translation and various other localization fixes. You can skip upgrading if you want to keep your current translation.').'</p>';
@@ -106,7 +108,8 @@ function list_core_update( $update ) {
 	//elseif ( 'en_US' == $update->locale && get_locale() != 'en_US' && ( ! $update->packages->partial && $wp_version == $update->partial_version ) ) {
 	    //echo '<p class="hint">'.sprintf( __('You are about to install WordPress %s <strong>in English (US).</strong> There is a chance this update will break your translation. You may prefer to wait for the localized version to be released.'), $update->response != 'development' ? $update->current : '' ).'</p>';
 	//}
-	echo '</form>';
+	//echo '</form>';
+	/* end rc_corephp */
 
 }
 
@@ -515,11 +518,13 @@ if ( 'upgrade-core' == $action ) {
 		echo '</p></div>';
 	}
 
-	echo '<p>';
+	/* rc_corephp no updates via wordpress */
+	//echo '<p>';
 	/* translators: %1 date, %2 time. */
-	printf( __('Last checked on %1$s at %2$s.'), date_i18n( get_option( 'date_format' ) ), date_i18n( get_option( 'time_format' ) ) );
-	echo ' &nbsp; <a class="button" href="' . esc_url( self_admin_url('update-core.php?force-check=1') ) . '">' . __( 'Check Again' ) . '</a>';
-	echo '</p>';
+	//printf( __('Last checked on %1$s at %2$s.'), date_i18n( get_option( 'date_format' ) ), date_i18n( get_option( 'time_format' ) ) );
+	//echo ' &nbsp; <a class="button" href="' . esc_url( self_admin_url('update-core.php?force-check=1') ) . '">' . __( 'Check Again' ) . '</a>';
+	//echo '</p>';
+	/* end rc_corephp */
 
 	if ( $core = current_user_can( 'update_core' ) )
 		core_upgrade_preamble();
