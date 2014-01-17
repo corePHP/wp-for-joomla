@@ -11,7 +11,7 @@
 
 global $mainframe;
 
-$document =& JFactory::getDocument();
+$document = JFactory::getDocument();
 $menu = $mainframe->getMenu()->getActive();
 
 $title_override = '';
@@ -26,6 +26,7 @@ if ( !empty( $menu ) ) {
 ob_start();
 ?>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
+<?php if ( !class_exists('All_in_One_SEO_Pack') ) { ?>
 <title><?php
 	/*
 	 * Print the <title> tag based on what is being viewed.
@@ -47,6 +48,7 @@ ob_start();
 		echo ' | ' . sprintf( __( 'Page %s', 'twentyten' ), max( $paged, $page ) );
 
 	?></title>
+<?php } ?>
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>" />
 <style type="text/css">
@@ -98,14 +100,13 @@ if ( class_exists('All_in_One_SEO_Pack') ) {
 	$document->setTitle( $_title );
 }
 
-$wp_head_contents = str_replace( '&#8211;', '–', $wp_head_contents ); // For some reason WP convers - to ASCII
 $wp_head_contents = str_replace( $title_start . $_title . $title_end, '', $wp_head_contents );
 
 $document->addCustomTag( $wp_head_contents );
 unset( $wp_head_contents );
 
 //Add pathway a.k.a. breadcrumbs
-$pathway	= &$mainframe->getPathway();
+$pathway	= $mainframe->getPathway();
 if(!is_home()){
 	/* More specific * /
 	if(is_tag())
