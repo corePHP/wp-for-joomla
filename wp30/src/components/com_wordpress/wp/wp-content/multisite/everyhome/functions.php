@@ -122,12 +122,35 @@ function wpmu_get_pagination_home( $total = 0, $start = 0, $limit = 0 )
  */
 function removeEveryHomeCache()
 {
-	$cache =& JCache::getInstance();
+	$cache = JCache::getInstance();
 	$cache->setLifeTime( 3600 );
 	$content = $cache->remove( 1, 'wpmu_everyhome' );
 
 	return true;
 }
 
+if ( ! function_exists( 'everyhome_posted_on' ) ) :
+/**
+ * Prints HTML with meta information for the current post—date/time and author.
+ *
+ * @since Twenty Ten 1.0
+ */
+function everyhome_posted_on() {
+	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'twentyten' ),
+		'meta-prep meta-prep-author',
+		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date createdate">%3$s</span></a>',
+			get_permalink(),
+			esc_attr( get_the_time() ),
+			get_the_date()
+		),
+		sprintf( '<span class="author createby vcard"><a class="url fn n" href="%1$s" title="%2$s">%3$s</a></span>',
+			get_author_posts_url( get_the_author_meta( 'ID' ) ),
+			esc_attr( sprintf( __( 'View all posts by %s', 'twentyten' ), get_the_author() ) ),
+			get_the_author()
+		)
+	);
+}
+endif;
+
 // Include twentyten functions.php file
-require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'functions.php' );
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentytwelve'.DS.'functions.php' );

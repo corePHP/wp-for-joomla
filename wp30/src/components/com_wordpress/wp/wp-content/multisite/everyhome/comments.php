@@ -23,4 +23,4 @@ global $component_name, $current_user, $blog_id;
  * @subpackage Home_Theme
  */
 
-require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'comments.php' );
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentytwelve'.DS.'comments.php' );

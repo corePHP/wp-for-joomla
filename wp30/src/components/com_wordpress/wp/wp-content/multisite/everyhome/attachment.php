@@ -7,4 +7,4 @@
  * @since Twenty Ten 1.0
  */
 
-require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'attachment.php' );
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentytwelve'.DS.'attachment.php' );

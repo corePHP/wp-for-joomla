@@ -21,7 +21,7 @@ jimport( 'joomla.html.pagination' );
 global $component_name, $current_user, $wpdb, $mainframe, $blog_id;
 
 jimport( 'joomla.cache.cache' );
-$cache =& JCache::getInstance();
+$cache = JCache::getInstance();
 $cache->setLifeTime( $mainframe->getCfg( 'cachetime' ) * 60 );
 
 /**
@@ -61,7 +61,7 @@ get_header();
 ?>
 <div id="wp-container">
 	<div id="<?php echo $template_wrapper; ?>">
-	<div id="wp-content" class="inside" role="main">
+	<div id="primary" class="site-content" role="main">
 	<?php
 	if ( get_site_option( 'registration' ) == 'blog'
 		&& $current_user->ID
@@ -138,55 +138,64 @@ if ( empty( $content ) || !$mainframe->getCfg( 'caching' ) ) {
 		$pages[0] = $post->post_content;
 
 		?>
-		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+		<?php if ( is_sticky() && is_home() && ! is_paged() ) : ?>
+		<div class="featured-post">
+			<?php _e( 'Featured post', 'twentytwelve' ); ?>
+		</div>
+		<?php endif; ?>
+		<header class="entry-header">
+			<?php the_post_thumbnail(); ?>
+			<?php if ( is_single() ) : ?>
+			<h1 class="entry-title"><?php the_title(); ?></h1>
+			<?php else : ?>
+			<h1 class="entry-title">
+				<a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+			</h1>
+			<?php endif; // is_single() ?>
+			<?php if ( comments_open() ) : ?>
+				<div class="comments-link">
+					<?php comments_popup_link( '<span class="leave-reply">' . __( 'Leave a reply', 'twentytwelve' ) . '</span>', __( '1 Reply', 'twentytwelve' ), __( '% Replies', 'twentytwelve' ) ); ?>
+				</div><!-- .comments-link -->
+			<?php endif; // comments_open() ?>
+		</header><!-- .entry-header -->
 
-			<?php // Display community avatar
-			if ( $showavatar != 'blank' ) {
-				echo getSocialAvatar( $post->post_author, 56 );
-			} ?>
+		<?php if ( is_search() ) : // Only display Excerpts for Search ?>
+		<div class="entry-summary">
+			<?php the_excerpt(); ?>
+		</div><!-- .entry-summary -->
+		<?php else : ?>
+		<div class="entry-content">
+			<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'twentytwelve' ) ); ?>
+			<?php wp_link_pages( array( 'before' => '<div class="page-links">' . __( 'Pages:', 'twentytwelve' ), 'after' => '</div>' ) ); ?>
+		</div><!-- .entry-content -->
+		<?php endif; ?>
 
-			<div class="articleheading">
-				<div class="title_wrapper">
-					<h2 class="entry-title contentheading"><span><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></span></h2>
-				</div>
-			</div>
-
-			<div class="contentpaneopen">
-				<div class="article-info-surround <?php echo $modifydate;?>">
-					<div class="entry-meta article-tools article-info-surround2">
-						<p class="articleinfo <?php echo $small;?>">
-							<?php twentyten_posted_on(); ?>
-						</p>
-					</div><!-- .entry-meta -->
-				</div><!-- .article-info-surround -->
-
-				<div class="entry-content">
-					<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?>
-					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'twentyten' ), 'after' => '</div>' ) ); ?>
-				</div><!-- .entry-content -->
-			</div>
-
-			<div class="articlefooter"></div>
-			<div class="entry-utility">
-				<?php if ( count( get_the_category() ) ) : ?>
-					<span class="cat-links">
-						<?php printf( __( '<span class="%1$s">Posted in</span> %2$s', 'twentyten' ), 'entry-utility-prep entry-utility-prep-cat-links', get_the_category_list( ', ' ) ); ?>
-					</span>
-					<span class="meta-sep">|</span>
-				<?php endif; ?>
-				<?php
-					$tags_list = get_the_tag_list( '', ', ' );
-					if ( $tags_list ):
-				?>
-					<span class="tag-links">
-						<?php printf( __( '<span class="%1$s">Tagged</span> %2$s', 'twentyten' ), 'entry-utility-prep entry-utility-prep-tag-links', $tags_list ); ?>
-					</span>
-					<span class="meta-sep">|</span>
-				<?php endif; ?>
-				<span class="comments-link"><?php comments_popup_link( __( 'Leave a comment', 'twentyten' ), __( '1 Comment', 'twentyten' ), __( '% Comments', 'twentyten' ) ); ?></span>
-				<?php edit_post_link( __( 'Edit', 'twentyten' ), '<span class="meta-sep">|</span> <span class="edit-link">', '</span>' ); ?>
-			</div><!-- .entry-utility -->
-		</div><!-- #post-## -->
+		<footer class="entry-meta">
+			<?php twentytwelve_entry_meta(); ?>
+			<?php edit_post_link( __( 'Edit', 'twentytwelve' ), '<span class="edit-link">', '</span>' ); ?>
+			<?php if ( is_singular() && get_the_author_meta( 'description' ) && is_multi_author() ) : // If a user has filled out their description and this is a multi-author blog, show a bio on their entries. ?>
+				<div class="author-info">
+					<div class="author-avatar">
+						<?php
+						/** This filter is documented in author.php */
+						$author_bio_avatar_size = apply_filters( 'twentytwelve_author_bio_avatar_size', 68 );
+						echo get_avatar( get_the_author_meta( 'user_email' ), $author_bio_avatar_size );
+						?>
+					</div><!-- .author-avatar -->
+					<div class="author-description">
+						<h2><?php printf( __( 'About %s', 'twentytwelve' ), get_the_author() ); ?></h2>
+						<p><?php the_author_meta( 'description' ); ?></p>
+						<div class="author-link">
+							<a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" rel="author">
+								<?php printf( __( 'View all posts by %s <span class="meta-nav">&rarr;</span>', 'twentytwelve' ), get_the_author() ); ?>
+							</a>
+						</div><!-- .author-link	-->
+					</div><!-- .author-description -->
+				</div><!-- .author-info -->
+			<?php endif; ?>
+		</footer><!-- .entry-meta -->
+	</article><!-- #post -->
 
 		<?php comments_template( '', true ); ?>
 	<?php

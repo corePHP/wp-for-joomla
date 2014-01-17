@@ -19,4 +19,4 @@
  */
 
 
-require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'loop.php' );
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentytwelve'.DS.'loop.php' );

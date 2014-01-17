@@ -21,4 +21,4 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
  * @subpackage Home_Theme
  */
 
-require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'search.php' );
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentytwelve'.DS.'search.php' );
