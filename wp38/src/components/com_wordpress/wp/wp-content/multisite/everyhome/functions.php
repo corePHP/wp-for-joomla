@@ -138,7 +138,7 @@ if ( ! function_exists( 'everyhome_posted_on' ) ) :
 function everyhome_posted_on() {
 	printf( __( '<span class="%1$s">Posted on</span> %2$s <span class="meta-sep">by</span> %3$s', 'twentyten' ),
 		'meta-prep meta-prep-author',
-		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date createdate">%3$s</span></a>',
+		sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="entry-date createdate updated">%3$s</span></a>',
 			get_permalink(),
 			esc_attr( get_the_time() ),
 			get_the_date()
