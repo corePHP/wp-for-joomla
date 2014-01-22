@@ -18,6 +18,39 @@ class  plgSystemWordPress extends JPlugin
 
 	function onAfterInitialise()
 	{
+	    $app = JFactory::getApplication();
+	    $input = JFactory::getApplication()->input;
+
+	    // Run menu creation through our own component
+	    if ( $app->isAdmin()
+	           && $input->get('option') == 'com_menus'
+	           && $input->get('id') === '0'
+	           && false !== stripos($input->get('jform',array(),'ARRAY'), 'option=com_wordpress' )
+	           && in_array( $input->get('task'), array('item.apply', 'item.save', 'item.save2new') ) ) {
+	        $input->set('option', 'com_wordpress', 'item.save2new');
+	    }
+
+	    $menuItems = jfactory::getapplication()->getmenu()->getItems();
+
+	    foreach ( $menuItems as $item ) {
+            if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
+                $isHomePage = (bool)$item->home;
+                $alias = $item->alias;
+            }
+	    }
+
+	    // Add to other WP menus route
+	    foreach ( $menuItems as $item ) {
+	        if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && isset($item->query['layout']) ) {
+	            $item->route = '';
+
+	            if( !$isHomePage ) {
+	                $item->route = "{$alias}/";
+	            }
+
+	            $item->route .= "{$item->query['layout']}/{$item->query[$item->query['layout']]}/";
+	        }
+	    }
 
 		if(!defined('DS')){
 			define('DS', DIRECTORY_SEPARATOR);
@@ -82,6 +115,21 @@ class  plgSystemWordPress extends JPlugin
 				 	'', $_SERVER['WP_REQUEST_URI'] );
 			}
 		}
+	}
+
+	function onAfterRoute()
+	{
+	    $app = JFactory::getApplication();
+
+	    if($app->input->get('option') !== 'com_wordpress' && $app->input->get('view') !== 'bloglink' || $app->isAdmin()){
+	        return;
+	    }
+
+		switch ( JFactory::getApplication()->input->get('layout') ) {
+		    case 'category' :
+		       $_SERVER['WP_REQUEST_URI'] .= "/category/". JFactory::getApplication()->input->get('cat').'/';
+		}
+
 	}
 
 	function onAfterRender()

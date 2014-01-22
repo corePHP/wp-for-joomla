@@ -8,11 +8,11 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * This version of WordPress has originally been modified by corePHP to work
 * within the Joomla 1.5.x environment.
 * For any support visit: http://www.corephp.com/wordpress/support
-* 
+*
 * http://www.corephp.com
 */
 
@@ -20,25 +20,28 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
  * @param	array
  * @return	array
  */
-function wordpressBuildRoute( &$query )
+function wordpressBuildRoute (&$query)
 {
-	$segments = array();
+    $segments = array();
 
-	if (isset($query['view'])) {
-		unset( $query['view'] );
-	}
+    if (isset($query['view'])) {
+        unset($query['view']);
+    }
 
-	return $segments;
+    if (isset($query['layout'])) {
+        unset($query['layout']);
+    }
+
+    return $segments;
 }
 
 /**
  * @param	array
  * @return	array
  */
-function wordpressParseRoute( $segments )
+function wordpressParseRoute ($segments)
 {
-	$vars = array();	
+    $vars = array();
 
-	return $vars;
+    return $vars;
 }
-?>
