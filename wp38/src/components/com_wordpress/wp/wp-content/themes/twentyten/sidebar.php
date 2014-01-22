@@ -1,0 +1,77 @@
+<?php
+/**
+ * The Sidebar containing the primary and secondary widget areas.
+ *
+ * @package WordPress
+ * @subpackage Twenty_Ten
+ * @since Twenty Ten 1.0
+ */
+
+/* rc_corephp */
+// If we don't want the sidebar to show
+if ( !get_site_option( 'wpj_use_wp_sidebar', 1 ) ) {
+	return;
+}
+
+$template_company = get_site_option( 'wpj_template_club', '' );
+
+if( 'rockettheme' == $template_company ) {
+	$right_column_name      = 'rightcol';
+	$module_wrap            = 'side-mod';
+} elseif( 'joomlart' == $template_company ) {
+	$right_column_name      = 'rightcol';
+	$module_wrap            = 'module';
+} else {
+	$right_column_name      = 'right';
+	$module_wrap            = 'module';
+}
+?>
+
+	<div id="<?php echo $right_column_name; ?>">
+		<div id="primary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+
+<?php
+	/* When we call the dynamic_sidebar() function, it'll spit out
+	 * the widgets for that widget area. If it instead returns false,
+	 * then the sidebar simply doesn't exist, so we'll hard-code in
+	 * some default sidebar stuff just in case.
+	 */
+	if ( ! dynamic_sidebar( 'primary-widget-area' ) ) : ?>
+	
+			<li id="search" class="widget-container <?php echo $module_wrap; ?> widget_search">
+				<?php get_search_form(); ?>
+			</li>
+
+			<li id="archives" class="widget-container <?php echo $module_wrap; ?>">
+				<h3 class="widget-title module-title"><?php _e( 'Archives', 'twentyten' ); ?></h3>
+				<ul>
+					<?php wp_get_archives( 'type=monthly' ); ?>
+				</ul>
+			</li>
+
+			<li id="meta" class="widget-container <?php echo $module_wrap; ?>">
+				<h3 class="widget-title module-title"><?php _e( 'Meta', 'twentyten' ); ?></h3>
+				<ul>
+					<?php wp_register(); ?>
+					<li><?php wp_loginout(); ?></li>
+					<?php wp_meta(); ?>
+				</ul>
+			</li>
+
+		<?php endif; // end primary widget area ?>
+			</ul>
+		</div><!-- #primary .widget-area -->
+	</div><!-- #rightcol -->
+
+<?php
+	// A second sidebar for widgets, just because.
+	if ( is_active_sidebar( 'secondary-widget-area' ) ) : ?>
+
+		<div id="secondary" class="widget-area" role="complementary">
+			<ul class="xoxo">
+				<?php dynamic_sidebar( 'secondary-widget-area' ); ?>
+			</ul>
+		</div><!-- #secondary .widget-area -->
+
+<?php endif; ?>
