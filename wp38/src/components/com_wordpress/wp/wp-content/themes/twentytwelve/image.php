@@ -18,7 +18,7 @@ get_header(); ?>
 
 				<article id="post-<?php the_ID(); ?>" <?php post_class( 'image-attachment' ); ?>>
 					<header class="entry-header">
-						<h1 class="entry-title"><?php the_title(); ?></h1>
+						<h2 class="entry-title"><?php the_title(); ?></h2>
 
 						<footer class="entry-meta">
 							<?php

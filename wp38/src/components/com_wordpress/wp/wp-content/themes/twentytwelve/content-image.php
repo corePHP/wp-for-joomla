@@ -15,7 +15,7 @@
 
 		<footer class="entry-meta">
 			<a href="<?php the_permalink(); ?>" rel="bookmark">
-				<h1><?php the_title(); ?></h1>
+				<h2><?php the_title(); ?></h2>
 				<h2><time class="entry-date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo get_the_date(); ?></time></h2>
 			</a>
 			<?php if ( comments_open() ) : ?>

@@ -378,7 +378,7 @@ function twentytwelve_entry_meta() {
 	// Translators: used between list items, there is a space after the comma.
 	$tag_list = get_the_tag_list( '', __( ', ', 'twentytwelve' ) );
 
-	$date = sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><span class="updated"><time class="entry-date" datetime="%3$s">%4$s</time></span></a>',
+	$date = sprintf( '<a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s">%4$s</time></a>',
 		esc_url( get_permalink() ),
 		esc_attr( get_the_time() ),
 		esc_attr( get_the_date( 'c' ) ),
@@ -508,3 +508,12 @@ function twentytwelve_customize_preview_js() {
 	wp_enqueue_script( 'twentytwelve-customizer', get_template_directory_uri() . '/js/theme-customizer.js', array( 'customize-preview' ), '20130301', true );
 }
 add_action( 'customize_preview_init', 'twentytwelve_customize_preview_js' );
+
+function twentytwelve_theme_fixes() {
+	if( JFactory::getApplication()->getTemplate() == 'purity_iii' && is_user_logged_in() ) { ?>
+		<script type='text/javascript'>
+			jQuery( 'body' ).addClass( 'purity_iii_header_fix' );
+		</script>
+	<?php
+	}
+}
