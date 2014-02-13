@@ -176,6 +176,96 @@ function wp_joomla_run_plugins( $text )
 	return $item->text;
 }
 
+add_action( 'publish_post', 'wp_joomla_run_finderplugin' );
+function wp_joomla_run_finderplugin( $post_id )
+{
+	global $post;
+	static $front_end;
+
+	if(count($post)>0 && $post->post_status =='publish')
+	{
+		$post_title = get_the_title( $post_id );
+
+		jimport( 'joomla.html.parameter' );
+
+		if ( !isset( $front_end ) ) 
+		{
+			$japplication = JFactory::getApplication();
+			$front_end    = $japplication->isSite();
+		}
+
+		JPluginHelper::importPlugin('content');
+		$dispatcher	= JDispatcher::getInstance();
+
+		$item = (object) array(
+			'id'			=> $post->ID,
+			'title'			=> $post_title,
+			'alias'			=> $post->post_name,
+			'introtext'		=> $post_title,
+			'fulltext'		=> $post_title,
+			'text'			=> $post_title,
+			'state'			=> 1,
+			'created'		=> $post->post_date,
+			'created_by'	=> $post->post_author,
+			'publish_up'	=> $post->post_date,
+			'modified'		=> $post->post_modified,
+			'access'		=> 1
+		);
+		
+		$params	= new JRegistry( array() );
+
+		$results = $dispatcher->trigger( 'onContentAfterSave', array( 'com_wordpress.wordpress_blog', &$item,
+		 	&$params, 0 ) );
+
+		return $item->text;
+	}	
+}
+
+add_action( 'trashed_post', 'wp_joomla_run_finderplugin_delete' );
+add_action( 'deleted_post', 'wp_joomla_run_finderplugin_delete' );
+function wp_joomla_run_finderplugin_delete( $post_id )
+{
+	global $post;
+	static $front_end;
+
+	if(count($post)>0 && $post->post_status =='publish')
+	{
+		$post_title = get_the_title( $post_id );
+		
+		jimport( 'joomla.html.parameter' );
+
+		if ( !isset( $front_end ) ) {
+			$japplication = JFactory::getApplication();
+			$front_end    = $japplication->isSite();
+		}
+
+		JPluginHelper::importPlugin('content');
+		$dispatcher	= JDispatcher::getInstance();
+
+		$item = (object) array(
+			'id'			=> $post->ID,
+			'title'			=> $post_title,
+			'alias'			=> $post->post_name,
+			'introtext'		=> $post_title,
+			'fulltext'		=> $post_title,
+			'text'			=> $post_title,
+			'state'			=> 1,
+			'created'		=> $post->post_date,
+			'created_by'	=> $post->post_author,
+			'publish_up'	=> $post->post_date,
+			'modified'		=> $post->post_modified,
+			'access'		=> 1
+		);
+		
+		$params	= new JRegistry( array() );
+
+		$results = $dispatcher->trigger( 'onContentAfterDelete', array( 'com_wordpress.wordpress_blog', &$item,
+		 	&$params, 0 ) );
+
+		return $item->text;
+	}	
+}
+
 /**
  * This function will allow us to change the default width of the WordPress page,
  * which is normally 940px
