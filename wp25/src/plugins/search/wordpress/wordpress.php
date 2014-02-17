@@ -67,7 +67,7 @@ class plgSearchWordPress extends JPlugin
 		// Lets pull some date functions - we may or may not use these
 		$nullDate      = $db->getNullDate();
 		$date          = & JFactory::getDate();
-		$now           = $date->toMySQL();
+		$now           = $date->toSQL();
 
 		$text = trim( $text );
 		if ($text == '') {
