@@ -9,6 +9,7 @@ class WordpressControllerItem extends JControllerForm
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		JFactory::getLanguage()->load('com_menus');
 
 		$app      = JFactory::getApplication();
 		$model    = $this->getModel('Item', '', array());
