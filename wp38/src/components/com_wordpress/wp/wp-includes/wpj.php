@@ -188,7 +188,7 @@ function wp_joomla_run_finderplugin( $post_id )
 
 		jimport( 'joomla.html.parameter' );
 
-		if ( !isset( $front_end ) ) 
+		if ( !isset( $front_end ) )
 		{
 			$japplication = JFactory::getApplication();
 			$front_end    = $japplication->isSite();
@@ -211,14 +211,14 @@ function wp_joomla_run_finderplugin( $post_id )
 			'modified'		=> $post->post_modified,
 			'access'		=> 1
 		);
-		
+
 		$params	= new JRegistry( array() );
 
 		$results = $dispatcher->trigger( 'onContentAfterSave', array( 'com_wordpress.wordpress_blog', &$item,
 		 	&$params, 0 ) );
 
 		return $item->text;
-	}	
+	}
 }
 
 add_action( 'trashed_post', 'wp_joomla_run_finderplugin_delete' );
@@ -231,7 +231,7 @@ function wp_joomla_run_finderplugin_delete( $post_id )
 	if(count($post)>0 && $post->post_status =='publish')
 	{
 		$post_title = get_the_title( $post_id );
-		
+
 		jimport( 'joomla.html.parameter' );
 
 		if ( !isset( $front_end ) ) {
@@ -256,14 +256,14 @@ function wp_joomla_run_finderplugin_delete( $post_id )
 			'modified'		=> $post->post_modified,
 			'access'		=> 1
 		);
-		
+
 		$params	= new JRegistry( array() );
 
 		$results = $dispatcher->trigger( 'onContentAfterDelete', array( 'com_wordpress.wordpress_blog', &$item,
 		 	&$params, 0 ) );
 
 		return $item->text;
-	}	
+	}
 }
 
 /**
@@ -374,7 +374,7 @@ function wpj_admin_hook()
 		} else {
 			$path = str_replace( JPATH_ROOT . DS, '', dirname( dirname( __FILE__ ) ) );
 		}
-			
+
 		update_blog_option( 1, 'wpj_multisite_path', $path );
 	}
 
@@ -1426,7 +1426,7 @@ function j_get_root_uri( $true_root = false )
 	global $JOOMLA_CONFIG;
 	static $site_url;
 
-	if ( $site_url && !$true_root ) {
+	if ( $site_url && !$true_root && !MULTISITE ) {
 		return $site_url;
 	}
 
@@ -1606,7 +1606,7 @@ function getSocialAvatar( $id_or_email, $size = '96', $alt = false )
 	if ( $iseasysocial ) {
 		include_once( JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php' );
 
-		$avatar_url 	= Foundry::user( $user_id )->getAvatar( SOCIAL_AVATAR_LARGE );	
+		$avatar_url 	= Foundry::user( $user_id )->getAvatar( SOCIAL_AVATAR_LARGE );
 		?>
 		<a href="<?php echo FRoute::profile( array( 'id' => $user_id , 'layout' => 'profile' ) );?>">
 			<img alt="<?php echo $safe_alt; ?>" <?php echo $img_attr; ?> src="<?php echo $avatar_url; ?>" /></a>
