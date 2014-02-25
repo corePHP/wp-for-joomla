@@ -24,7 +24,7 @@ class  plgSystemWordPress extends JPlugin
 	    // Run menu creation through our own component
 	    if ( $app->isAdmin()
 	           && $input->get('option') == 'com_menus'
-	           && $input->get('id') === '0'
+	           //&& $input->get('id') === '0'
 	           && false !== stripos($input->get('jform',array(),'ARRAY'), 'option=com_wordpress' )
 	           && in_array( $input->get('task'), array('item.apply', 'item.save', 'item.save2new') ) ) {
 	        $input->set('option', 'com_wordpress', 'item.save2new');
