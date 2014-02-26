@@ -326,6 +326,11 @@ switch($step) {
 <p class="step"><a href="../wp-login.php" class="button button-large"><?php _e( 'Log In' ); ?></a></p>
 
 <?php
+// Set default template to twentyfourteen
+$db = JFactory::getDbo();
+$query = "UPDATE #__wp_options SET option_value='twentytwelve' WHERE option_name='stylesheet' || option_name='template'";
+$db->setQuery($query);
+$db->execute();
 		}
 		break;
 }
