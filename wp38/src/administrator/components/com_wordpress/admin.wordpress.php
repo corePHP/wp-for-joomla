@@ -35,13 +35,36 @@ $query = "REPLACE INTO #__wp_jauthenticate
 $db->setQuery( $query );
 $db->query();
 
-// Find path to WordPress folder
-$db = JFactory::getDBO();
-$query = "SELECT option_value
-	FROM #__wp_options
-		WHERE option_name = 'wpj_multisite_path'";
+// Check if table exists
+$query = $db->getQuery( true );
+$query
+	->select( '*' )
+	->from( 'information_schema.TABLES' )
+	->where( 'TABLE_SCHEMA = ' . $db->quote( $mainframe->getCfg( 'db' ) ) )
+	->where( 'TABLE_NAME = ' . $db->quote( str_replace( '#__', $mainframe->getCfg( 'dbprefix' ), '#__wp_options') ) );
 $db->setQuery( $query );
-$wp_path = $db->loadResult();
+$table_found = $db->loadResult();
+try
+{
+	$table_found = $db->loadResult();
+}
+catch (EXCEPTION $e)
+{
+	$table_found = null;
+}
+
+if( !is_null( $table_found ) ) {
+	// Find path to WordPress folder
+	$query = $db->getQuery( true );
+	$query
+		->select( 'option_value' )
+		->from( $db->quoteName( '#__wp_options' ) )
+		->where( 'option_name = ' . $db->quote( 'wpj_multisite_path' ) );
+	$db->setQuery( $query );
+	$wp_path = $db->loadResult();
+} else {
+	$wp_path = '';
+}
 
 // Check to see if we are in multisite or not
 if ( !$wp_path ) {
