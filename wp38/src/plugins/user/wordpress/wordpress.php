@@ -37,6 +37,11 @@ class plgUserWordPress extends JPlugin
 	 */
 	function plgUserWordPress(&$subject, $config)
 	{
+		if (!$this->load_wp())
+		{
+			return;
+		}
+		
 		global $wp_path;
 
 		parent::__construct($subject, $config);
@@ -67,6 +72,8 @@ class plgUserWordPress extends JPlugin
 		}
 
 		$this->path_to_wp = JPATH_ROOT . DS . $component_abs_path;
+		
+		$this->unload_wp();
 	}
 
 	/**
