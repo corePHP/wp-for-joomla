@@ -71,7 +71,7 @@ $_title = substr( $wp_head_contents,
 $_title = html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' );
 
 // Title override
-if ( $title_override ) {
+if ( $title_override && is_home() || is_front_page() ) {
 	$_title = $title_override;
 }
 
