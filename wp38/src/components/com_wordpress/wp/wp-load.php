@@ -30,8 +30,8 @@ if ( !defined( '_JEXEC' ) ) {
 		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).DS);
 	}
 
-	require_once ( JPATH_BASE .'includes/defines.php' );
-	require_once ( JPATH_BASE .'includes/framework.php' );
+	require_once ( JPATH_BASE .'includes'.DS.'defines.php' );
+	require_once ( JPATH_BASE .'includes'.DS.'framework.php' );
 	$mainframe	= JFactory::getApplication( 'site' );
 	$mainframe->initialise();
 } else {
