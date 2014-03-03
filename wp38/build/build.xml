@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="WordPress for Joomla 3.8" default="build" basedir=".">
 	<property name="branch" value="HEAD" />
-	<property name="joomla_version" value="3.2" />
+	<property name="joomla_version" value="j2.5_j3.x" />
 	<property name="joomla.root" value="build/export/src" />
 	<property name="component.short" value="wordpress" />
 	<property name="component.name" value="com_${component.short}" />
@@ -224,6 +224,6 @@
 		<exec command="xmllint --xpath '/extension/version/text()' ${plg_abs_path}/${plg_name}.xml" outputProperty="version" />
 
 		<!-- Package plugin -->
-		<zip destfile="${package.compressed}/plg_${plg_lang_name}_v${version}_j${joomla_version}.zip" basedir="${plg_abs_path}" />
+		<zip destfile="${package.compressed}/plg_${plg_lang_name}_v${version}_${joomla_version}.zip" basedir="${plg_abs_path}" />
 	</target>
 </project>
