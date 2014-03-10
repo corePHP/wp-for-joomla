@@ -1290,7 +1290,7 @@ function j_create_wp_user( $juser )
 	$wp_user = get_userdata( $juser->id );
 
 	// Insert new user
-	require_once( ABSPATH . WPINC . '/registration.php' );
+	//require_once( ABSPATH . WPINC . '/registration.php' );
 	$_user = array(
 		'ID' => $juser->id,
 		'user_login' => $juser->username,
