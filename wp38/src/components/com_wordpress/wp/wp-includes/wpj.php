@@ -1284,7 +1284,7 @@ function j_create_wp_user( $juser )
 	if ( is_callable( array( $juser, 'authorise' ) ) && $juser->authorise( 'core.admin', '' ) ) {
 		$role = 'administrator';
 	} else {
-		$role = get_site_option( 'default_role' );
+		$role = get_site_option( 'default_role', 'subscriber' );
 	}
 
 	$wp_user = get_userdata( $juser->id );
