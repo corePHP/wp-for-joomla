@@ -1368,7 +1368,7 @@ function j_set_itemid()
 	// Lets get the itemid
 	if ( 'com_wordpress' != $option || is_multisite() ) {
 		if ( is_multisite() ) {
-			$menu = &$mainframe->getMenu();
+			$menu = $mainframe->getMenu();
 			$items = $menu->getItems( 'component', 'com_wordpress' );
 			$menu->setActive( $items[0]->id );
 		}
