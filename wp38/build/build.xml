@@ -79,7 +79,7 @@
 		<property name="package.name" value="" />
 
 		<!-- Package basic -->
-		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-basic.zip" basedir="${package.path}" />
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_${joomla_version}-basic.zip" basedir="${package.path}" />
 
 		<!-- Setup modules -->
 		<phingcall target="setup_modules">
@@ -94,7 +94,7 @@
 		</phingcall>
 
 		<!-- Package full -->
-		<zip destfile="${package.compressed}/${component.name}_v${component.version}_j${joomla_version}-full.zip" basedir="${package.path}" />
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_${joomla_version}-full.zip" basedir="${package.path}" />
 	</target>
 
 	<!-- Setup modules - can't think of a better name -->
