@@ -281,6 +281,9 @@ Password: %3\$s
 
 We hope you enjoy your new site. Thanks!
 
+--'corePHP'
+http://www.corephp.com
+  And
 --The WordPress Team
 http://wordpress.org/
 "), $blog_url, $name, $password);
