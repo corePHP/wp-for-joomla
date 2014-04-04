@@ -54,7 +54,7 @@ function wp_dashboard_setup() {
 	}
 
 	// WordPress News
-	wp_add_dashboard_widget( 'dashboard_primary', __( 'WordPress News' ), 'wp_dashboard_primary' );
+	wp_add_dashboard_widget( 'dashboard_primary', __( "'corePHP'" ), 'wp_dashboard_primary' ); // rc_corephp
 
 	// Hook to register new widgets
 	// Filter widget order
@@ -827,14 +827,16 @@ function wp_dashboard_rss_control( $widget_id, $form_inputs = array() ) {
 function wp_dashboard_primary() {
 	$feeds = array(
 		'news'   => array(
-			'link'         => apply_filters( 'dashboard_primary_link', __( 'http://wordpress.org/news/' ) ),
-			'url'          => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
-			'title'        => apply_filters( 'dashboard_primary_title', __( 'WordPress Blog' ) ),
-			'items'        => 1,
+			'link'         => apply_filters( 'dashboard_primary_link', __( 'http://www.corephp.com/blog/' ) ), // rc_corephp
+			'url'          => apply_filters( 'dashboard_primary_feed', __( 'http://www.corephp.com/blog/feed/' ) ), // rc_corephp
+			'title'        => apply_filters( 'dashboard_primary_title', __( '\'corePHP\' Blog' ) ), // rc_corephp
+			'items'        => 5,
 			'show_summary' => 1,
 			'show_author'  => 0,
 			'show_date'    => 1,
 		),
+
+		/* rc_corephp
 		'planet' => array(
 			'link'         => apply_filters( 'dashboard_secondary_link', __( 'http://planet.wordpress.org/' ) ),
 			'url'          => apply_filters( 'dashboard_secondary_feed', __( 'http://planet.wordpress.org/feed/' ) ),
@@ -843,7 +845,7 @@ function wp_dashboard_primary() {
 			'show_summary' => 0,
 			'show_author'  => 0,
 			'show_date'    => 0,
-		)
+		) */
 	);
 
 	if ( ( ! is_multisite() && is_blog_admin() && current_user_can( 'install_plugins' ) ) || ( is_network_admin() && current_user_can( 'manage_network_plugins' ) && current_user_can( 'install_plugins' ) ) ) {
