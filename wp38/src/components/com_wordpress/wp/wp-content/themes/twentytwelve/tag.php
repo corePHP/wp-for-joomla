@@ -13,7 +13,7 @@
 
 get_header(); ?>
 
-	<section id="primary" class="site-content">
+	<section id="primary" class="site-content <?php if( !get_site_option( 'wpj_use_wp_sidebar', 1 ) ) { echo 'full'; } ?> ">
 		<div id="content" role="main">
 
 		<?php if ( have_posts() ) : ?>
