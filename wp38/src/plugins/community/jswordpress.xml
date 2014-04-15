@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="community" method="upgrade">
+	<name>WordPress Blogs</name>
+	<author>'corePHP'</author>
+	<creationDate>Feb 18th 2011</creationDate>
+	<copyright>Copyright (C) 2010-2011 'corePHP'. All rights reserved.</copyright>
+	<license>http://www.corephp.com</license>
+	<authorEmail>support@corephp.com</authorEmail>
+	<authorUrl>www.corephp.com</authorUrl>
+	<version>4.0</version>
+	<isapplication>true</isapplication>
+	<description>
+		Wordpress 3.0 for Joomla! JomSocial Plugin
+	</description>
+	<files>
+		<file plugin="jswordpress">jswordpress.php</file>
+	</files>	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field  name="coreapp" type="list" default="0" label="Core Application" description="Causes this application to not appear in the users applications list but it will allow this application to appear in the user profile automatically if selected.">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="cache" type="list" default="1" label="Caching" description="Select whether to cache the content of this plugin">
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				</field>
+				<field name="count" type="text" default="5" label="Count" description="The number of blogs to display (default is 5)" />
+				<field name="order_by" type="list" default="post_date_gmt" label="Order By" description="Order the entried by either date or Joomla's content ordering.">
+					<option value="post_date_gmt">Date</option>
+					<option value="ID">Order</option>
+					<option value="post_title">Title</option>
+				</field>		
+				<field name="order" type="list" default="DESC" label="Order" description="Changes the ordering method of WPMU entry">
+					<option value="DESC">Descending</option>
+					<option value="ASC">Ascending</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

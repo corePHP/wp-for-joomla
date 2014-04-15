@@ -63,20 +63,22 @@ if ( $filter_categories[0] != 0 ) {
 	$filter_categories = '';
 }
 
-function caption_shortcode($attr, $content = null) {
-
-	extract(shortcode_atts(array(
-		'id'	=> '',
-		'align'	=> 'alignnone',
-		'width'	=> '80',
-		'caption' => ''
-	), $attr));
-
-	if ( $id ) $idtag = 'id="' . esc_attr($id) . '" ';
-	$align = 'class="' . esc_attr($align) . '" ';
-
-	return '<figure ' . $idtag . $align . 'aria-describedby="figcaption_' . $id . '" style="width: ' . (10 + (int) $width) . 'px">'
-	. do_shortcode( $content ) . '<figcaption id="figcaption_' . $id . '">' . $caption . '</figcaption></figure>';
+if (!function_exists('caption_shortcode')) {
+	function caption_shortcode($attr, $content = null) {
+	
+		extract(shortcode_atts(array(
+			'id'	=> '',
+			'align'	=> 'alignnone',
+			'width'	=> '80',
+			'caption' => ''
+		), $attr));
+	
+		if ( $id ) $idtag = 'id="' . esc_attr($id) . '" ';
+		$align = 'class="' . esc_attr($align) . '" ';
+	
+		return '<figure ' . $idtag . $align . 'aria-describedby="figcaption_' . $id . '" style="width: ' . (10 + (int) $width) . 'px">'
+		. do_shortcode( $content ) . '<figcaption id="figcaption_' . $id . '">' . $caption . '</figcaption></figure>';
+	}
 }
 ?>
 <div id="wp-latest-wrapper">

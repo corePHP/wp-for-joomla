@@ -91,7 +91,7 @@ function wp_install( $blog_title, $user_name, $user_email, $public, $deprecated 
 	flush_rewrite_rules();
 
 	/* rc_corephp - Edited the $guessurl to contain the path to the new blog */
-	wp_new_blog_notification($blog_title, $guessurl . 'index.php?option=com_wordpress' , $user_id, ($email_password ? $user_password : __('The password you chose during the install.') ) );
+	wp_new_blog_notification($blog_title, $guessurl . '/index.php?option=com_wordpress' , $user_id, ($email_password ? $user_password : __('The password you chose during the install.') ) );
 
 	wp_cache_flush();
 
@@ -281,6 +281,9 @@ Password: %3\$s
 
 We hope you enjoy your new site. Thanks!
 
+--'corePHP'
+http://www.corephp.com
+  And
 --The WordPress Team
 http://wordpress.org/
 "), $blog_url, $name, $password);

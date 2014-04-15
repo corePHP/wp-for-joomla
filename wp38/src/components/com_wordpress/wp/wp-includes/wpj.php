@@ -188,7 +188,7 @@ function wp_joomla_run_finderplugin( $post_id )
 
 		jimport( 'joomla.html.parameter' );
 
-		if ( !isset( $front_end ) ) 
+		if ( !isset( $front_end ) )
 		{
 			$japplication = JFactory::getApplication();
 			$front_end    = $japplication->isSite();
@@ -211,14 +211,14 @@ function wp_joomla_run_finderplugin( $post_id )
 			'modified'		=> $post->post_modified,
 			'access'		=> 1
 		);
-		
+
 		$params	= new JRegistry( array() );
 
 		$results = $dispatcher->trigger( 'onContentAfterSave', array( 'com_wordpress.wordpress_blog', &$item,
 		 	&$params, 0 ) );
 
 		return $item->text;
-	}	
+	}
 }
 
 add_action( 'trashed_post', 'wp_joomla_run_finderplugin_delete' );
@@ -231,7 +231,7 @@ function wp_joomla_run_finderplugin_delete( $post_id )
 	if(count($post)>0 && $post->post_status =='publish')
 	{
 		$post_title = get_the_title( $post_id );
-		
+
 		jimport( 'joomla.html.parameter' );
 
 		if ( !isset( $front_end ) ) {
@@ -256,14 +256,14 @@ function wp_joomla_run_finderplugin_delete( $post_id )
 			'modified'		=> $post->post_modified,
 			'access'		=> 1
 		);
-		
+
 		$params	= new JRegistry( array() );
 
 		$results = $dispatcher->trigger( 'onContentAfterDelete', array( 'com_wordpress.wordpress_blog', &$item,
 		 	&$params, 0 ) );
 
 		return $item->text;
-	}	
+	}
 }
 
 /**
@@ -374,7 +374,7 @@ function wpj_admin_hook()
 		} else {
 			$path = str_replace( JPATH_ROOT . DS, '', dirname( dirname( __FILE__ ) ) );
 		}
-			
+
 		update_blog_option( 1, 'wpj_multisite_path', $path );
 	}
 
@@ -1284,13 +1284,13 @@ function j_create_wp_user( $juser )
 	if ( is_callable( array( $juser, 'authorise' ) ) && $juser->authorise( 'core.admin', '' ) ) {
 		$role = 'administrator';
 	} else {
-		$role = get_site_option( 'default_role' );
+		$role = get_site_option( 'default_role', 'subscriber' );
 	}
 
 	$wp_user = get_userdata( $juser->id );
 
 	// Insert new user
-	require_once( ABSPATH . WPINC . '/registration.php' );
+	//require_once( ABSPATH . WPINC . '/registration.php' );
 	$_user = array(
 		'ID' => $juser->id,
 		'user_login' => $juser->username,
@@ -1368,7 +1368,7 @@ function j_set_itemid()
 	// Lets get the itemid
 	if ( 'com_wordpress' != $option || is_multisite() ) {
 		if ( is_multisite() ) {
-			$menu = &$mainframe->getMenu();
+			$menu = $mainframe->getMenu();
 			$items = $menu->getItems( 'component', 'com_wordpress' );
 			$menu->setActive( $items[0]->id );
 		}
@@ -1426,7 +1426,7 @@ function j_get_root_uri( $true_root = false )
 	global $JOOMLA_CONFIG;
 	static $site_url;
 
-	if ( $site_url && !$true_root ) {
+	if ( $site_url && !$true_root && !MULTISITE ) {
 		return $site_url;
 	}
 
@@ -1606,7 +1606,7 @@ function getSocialAvatar( $id_or_email, $size = '96', $alt = false )
 	if ( $iseasysocial ) {
 		include_once( JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php' );
 
-		$avatar_url 	= Foundry::user( $user_id )->getAvatar( SOCIAL_AVATAR_LARGE );	
+		$avatar_url 	= Foundry::user( $user_id )->getAvatar( SOCIAL_AVATAR_LARGE );
 		?>
 		<a href="<?php echo FRoute::profile( array( 'id' => $user_id , 'layout' => 'profile' ) );?>">
 			<img alt="<?php echo $safe_alt; ?>" <?php echo $img_attr; ?> src="<?php echo $avatar_url; ?>" /></a>

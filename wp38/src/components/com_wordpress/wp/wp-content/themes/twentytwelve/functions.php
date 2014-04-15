@@ -517,3 +517,6 @@ function twentytwelve_theme_fixes() {
 	<?php
 	}
 }
+
+// Include twentyten functions.php file
+require_once( WP_CONTENT_DIR .DS.'themes'.DS.'twentyten'.DS.'functions.php' );
