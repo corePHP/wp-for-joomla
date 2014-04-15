@@ -79,7 +79,7 @@ class plgSearchWordPress extends JPlugin
 		switch ( $phrase ) 
 		{
 			case 'exact':
-				$text		= $db->Quote( '%'.$db->getEscaped( $text, true ).'%', false );
+				$text		= $db->Quote( '%'.$db->escape( $text, true ).'%', false );
 				$wheres2 	= array();
 				$wheres2[] 	= 'a.post_title LIKE '.$text;
 				$wheres2[] 	= 'a.post_content LIKE '.$text;
@@ -95,7 +95,7 @@ class plgSearchWordPress extends JPlugin
 				$wheres = array();
 				foreach ( $words as $word ) 
 				{
-					$word		= $db->Quote( '%'.$db->getEscaped( $word, true ).'%', false );
+					$word		= $db->Quote( '%'.$db->escape( $word, true ).'%', false );
 					$wheres2 	= array();
 					$wheres2[] 	= 'a.post_title LIKE '.$word;
 					$wheres2[] 	= 'a.post_content LIKE '.$word;
