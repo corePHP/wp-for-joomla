@@ -1532,6 +1532,9 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 		float: left;
 		width: 65.104166667%;
 	}
+	#wp-page .site-content.full {
+		width: 100%;
+	}
 	#wp-page body.template-front-page .site-content,
 	#wp-page body.attachment .site-content,
 	#wp-page body.full-width .site-content {
