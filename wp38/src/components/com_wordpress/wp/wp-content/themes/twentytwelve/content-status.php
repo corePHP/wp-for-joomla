@@ -23,7 +23,7 @@
 			 * @param int $size The height and width of the avatar in pixels.
 			 */
 			$status_avatar = apply_filters( 'twentytwelve_status_avatar', 48 );
-			echo get_avatar( get_the_author_meta( 'ID' ), $status_avatar );
+			echo getSocialAvatar( get_the_author_meta( 'ID' ), $status_avatar ); // rc_corephp
 			?>
 		</div><!-- .entry-header -->
 
