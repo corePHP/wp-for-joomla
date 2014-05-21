@@ -76,10 +76,12 @@ class JFormFieldCategories extends JFormField
 			$tab_index_attribute = " tabindex=\"$tab_index\"";
 
 		$categories = get_categories( $r );
+		preg_match_all('/(\w*)/', $name, $id);
+		$id = implode('_', array_filter($id[0]));
 
 		$output = '';
 		if ( ! empty( $categories ) ) {
-			$output = "<select name='$name' id='$name' class='$class' $tab_index_attribute multiple='multiple' size='7'>\n";
+		    $output = '<select name="'.$name.'" id="'.$id.'" class="'.$class.'" '.$tab_index_attribute.' multiple="multiple" size="7">'."\n";
 
 			if ( $show_option_all ) {
 				$show_option_all = apply_filters( 'list_cats', $show_option_all );
