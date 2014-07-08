@@ -1,6 +1,7 @@
 <?php
 
-$postQuery = " SELECT * FROM `#__k2_items`";
+$postQuery = "SELECT * FROM `#__k2_items`";
+$catQuery = "SELECT * FROM `#__k2_categories`";
 
 foreach ( $postQuery as $post ) {
 
@@ -16,26 +17,32 @@ foreach ( $postQuery as $post ) {
      * Categories
      */
     $wpTerms = array (
-        'term_id',
+        'term_id' => 0,
         'name' => $k2Categories['name'],
         'slug' => $k2Categories['alias'],
-        'term_group'
-    );
-
-    $wpTermRelationships = array (
-    	'object_id',
-        'term_taxonomy_id',
-        'term_order'
+        'term_group' => 0
     );
 
     $wpTermTaxonomy = array (
-        'term_taxonomy_id',
-        'term_id',
-        'taxonomy',
-        'description',
-        'parent',
-        'count'
+        'term_taxonomy_id' => 0,
+        'term_id' => $wpTerms['term_id'],
+        'taxonomy' => 'category',
+        'description' => '',
+        'parent', // term_taxonomy_id parent id
+        'count' => 0 // posts in cat init as 0. @TODO recalc after insert
     );
+
+    /*
+     * This matches up posts and cats
+    */
+    $wpTermRelationships = array (
+        'object_id',
+        'term_taxonomy_id' => $wpTermTaxonomy['term_taxonomy_id'],
+        'term_order'
+    );
+
+    // Save old to move them to new id
+    $oldCatId[$k2Categories] = $wpTerms['term_id'];
 
     $k2Items = array();
 
@@ -65,7 +72,7 @@ foreach ( $postQuery as $post ) {
         'menu_order' => 0,
         'post_type' => 'post',
         'post_mime_type' => '',
-        'comment_count' // #__k2_comments
+        'comment_count' // count #__k2_comments
     );
 
     $k2Comments = array();
