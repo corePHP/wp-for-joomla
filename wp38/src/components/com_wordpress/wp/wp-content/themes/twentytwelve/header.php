@@ -13,6 +13,12 @@ $mainframe = JFactory::getApplication();
 $document  = JFactory::getDocument();
 $menu      = $mainframe->getMenu()->getActive();
 
+foreach ( $document->_links as $k => $array ) {
+	if ( $array['relation'] == 'canonical' ) {
+		unset($document->_links[$k]);
+	}
+}
+
 $title_override = '';
 
 if ( !empty( $menu ) ) {
