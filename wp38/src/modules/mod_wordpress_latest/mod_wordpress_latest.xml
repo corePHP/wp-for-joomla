@@ -7,7 +7,7 @@
 	<authorEmail>wp@corephp.com</authorEmail>
 	<authorUrl>www.corephp.com</authorUrl>
 	<license>GNU/GPL</license>
-	<version>2.0</version>
+	<version>2.0.1</version>
 	<description>Show latest WordPress posts</description>
 
 	<files>
@@ -68,7 +68,7 @@
 					<option value="0">No caching</option>
 				</field>
 				<field name="cache_time" type="text" default="900" label="Cache Time" description="The time before the module is recached" />
-			</fieldset>	
+			</fieldset>
 		</fields>
 	</config>
 </extension>
