@@ -65,17 +65,17 @@ if ( $filter_categories[0] != 0 ) {
 
 if (!function_exists('caption_shortcode')) {
 	function caption_shortcode($attr, $content = null) {
-	
+
 		extract(shortcode_atts(array(
 			'id'	=> '',
 			'align'	=> 'alignnone',
 			'width'	=> '80',
 			'caption' => ''
 		), $attr));
-	
+
 		if ( $id ) $idtag = 'id="' . esc_attr($id) . '" ';
 		$align = 'class="' . esc_attr($align) . '" ';
-	
+
 		return '<figure ' . $idtag . $align . 'aria-describedby="figcaption_' . $id . '" style="width: ' . (10 + (int) $width) . 'px">'
 		. do_shortcode( $content ) . '<figcaption id="figcaption_' . $id . '">' . $caption . '</figcaption></figure>';
 	}
@@ -138,8 +138,10 @@ if (!function_exists('caption_shortcode')) {
 				if ( $display_images ) {
 					$allowable_tags = '<img><a>';
 				}
-				$text = strip_tags( $text, $allowable_tags );
-				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
+				$text_img = strip_tags( $text, $allowable_tags );
+				$text_clone = strip_tags( $text );
+
+				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text_img );
 				if( stripos( $text, "caption" ) !== false ) {
 					$text = preg_replace( '[(\[caption)+.+(\[/caption\])]',
 											'<div class="wp-caption alignnone" id="attachment_' . get_the_ID() . '">' . $link . '<p class="wp-caption-text">' . $caption .'</p></div>',
@@ -153,8 +155,8 @@ if (!function_exists('caption_shortcode')) {
 					$imgsmall  = '';
 					$imgbig    = '';
 					$matches   = "";
-					
-					preg_match_all( $pattern, $text, $matches );
+
+					preg_match_all( $pattern, $text_img, $matches );
 
 					// Remove all unessesary images
 					for ( $i = $images_count; $i < count( $matches[0] ); $i++ ) {
@@ -162,6 +164,8 @@ if (!function_exists('caption_shortcode')) {
 						unset( $matches[0][$i] );
 					}
 				}
+
+
 
 				if ( $display_images && $resize_images ) {
 					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
@@ -191,31 +195,34 @@ if (!function_exists('caption_shortcode')) {
 
 				// Is text too long? Probably...
 
-				$toolong = ( strlen( strip_tags( $text ) ) > (int) $introMaxLength );
+				$toolong = ( strlen( strip_tags( $text_clone ) ) > (int) $introMaxLength );
 
 				// Trim text
 				if ( $toolong ) {
 					// Do a different type of replacement if there are html tags,
 					// to avoid counting them
-					if ( strpos( $text, '>' ) ) {
+					if ( strpos( $text_clone, '>' ) ) {
 						//$count = preg_match('/^(<[^>]*.*<\/[^>]*>)\s*(.*)/s', $text, $matches);
-						$count = preg_match('/(<a[^>*?].*?>.*?<\/a>)(.*)/s', $text, $matches);
+						$count = preg_match('/(<a[^>*?].*?>.*?<\/a>)(.*)/s', $text_clone, $matches);
 						$text = substr( $matches[2], 0, ( $introMaxLength ) );
-						$text = $matches[1] . $text;
+						$text = $matches[1] . $text_clone;
 					} else {
-						$text  = substr( $text, 0, $introMaxLength );
+						$text  = substr( $text_clone, 0, $introMaxLength );
 					}
 				}
 
 				// Wrap text
 				if ( $wrapIntroText ) {
-					$text   = wordwrap( $text, $wrapIntroText, '<br />' );
+					$text   = wordwrap( $text_clone, $wrapIntroText, '<br />' );
 				}
 
 				if ( $toolong ) {
 					$text .= ' ...';
 				}
 
+				if( $matches[0][0] ) {
+					echo $matches[0][0];
+				}
 				echo '<div class="wp-latest-introtext">'.$text.'</div>';
 
 				// Only show readmore if the text is too long
