@@ -1473,7 +1473,10 @@ function j_get_root_uri( $true_root = false )
 		if ( $dir ) {
 			$jurl = str_replace( JURI::root(true), $dir, $jurl );
 		}
-		$jurl .= ltrim( str_replace( JPATH_ROOT, '', ABSPATH ), DS );
+		
+		if( !is_admin() ) {
+			$jurl .= ltrim( str_replace( JPATH_ROOT, '', ABSPATH ), DS );
+		}
 	}
 
 	// Remove wp-admin segment if it exists
