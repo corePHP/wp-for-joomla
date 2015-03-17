@@ -69,6 +69,7 @@ define( 'WPJ_DB_PREFIX', 'wp_' );
 $table_prefix  = $JOOMLA_CONFIG->dbprefix . constant( 'WPJ_DB_PREFIX' ) ;
 // No auto updates
 define( 'WP_AUTO_UPDATE_CORE', false );
+define( 'WP_DEFAULT_THEME', 'twentytwelve' );
 /* end rc_corephp */
 
 /**
