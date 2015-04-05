@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="search" method="upgrade">
+	<name>Search - Wordpress</name>
+	<author>'corePHP'</author>
+	<creationDate>Feb 2011</creationDate>
+	<copyright>Copyright (C) 2010 'corePHP' LLC. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>support@corephp.com</authorEmail>
+	<authorUrl>http://www.corephp.com</authorUrl>
+	<version>2.0.1</version>
+	<description>Allows for searching Wordpress Article</description>
+
+	<files>
+		<filename plugin="wordpress">wordpress.php</filename>
+	</files>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_search_wordpress.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="search_limit" type="text" size="5" default="50" label="Search Limit" description="Number of Search items to return"/>
+				<field name="@spacer" type="spacer" default="" label="" description="" />
+				<field name="search_blogs" type="radio" default="1" label="Search Blogs?" description="Search Blogs?">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+				<field name="search_pages" type="radio" default="0" label="Search Pages?" description="Search Pages?">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>		
+				<field name="search_unpublished" type="radio" default="0" label="Unpublished Blogs" description="Search Unpublished Blogs?">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>	
+			</fieldset>
+		</fields>
+	</config>
+</extension>
