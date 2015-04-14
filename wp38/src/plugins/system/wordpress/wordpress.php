@@ -32,7 +32,7 @@ class  plgSystemWordPress extends JPlugin
 
 	    $menuItems = jfactory::getapplication()->getmenu()->getItems();
 
-	   foreach ( $menuItems as $item ) {
+	   foreach ( $menuItems as &$item ) {
             if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
                 $isHomePage = (bool)$item->home;
                 $item->route = $item->params->get('blog_path',$item->route);
