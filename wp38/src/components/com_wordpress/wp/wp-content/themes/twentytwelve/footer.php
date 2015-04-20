@@ -20,5 +20,3 @@
 
 <?php wp_footer(); ?>
 <?php twentytwelve_theme_fixes(); ?>
-</body>
-</html>
