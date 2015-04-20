@@ -32,7 +32,7 @@ class  plgSystemWordPress extends JPlugin
 
 	    $menuItems = jfactory::getapplication()->getmenu()->getItems();
 
-	   foreach ( $menuItems as $item ) {
+	   foreach ( $menuItems as &$item ) {
             if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
                 $isHomePage = (bool)$item->home;
                 $item->route = $item->params->get('blog_path',$item->route);
@@ -125,6 +125,16 @@ class  plgSystemWordPress extends JPlugin
 		       $_SERVER['WP_REQUEST_URI'] .= "/category/". JFactory::getApplication()->input->get('cat').'/';
 		}
 
+	}
+
+	function onBeforeRender()
+	{
+		$app = JFactory::getApplication();
+
+		if($app->input->get('option') === 'com_wordpress' && $app->input->get('view') === 'bloglink' || $app->isSite()){
+			var_dump($app->input->get('Itemid'));
+			$app->getMenu()->setActive( $app->input->get('Itemid') );
+		}
 	}
 
 	function onAfterRender()
