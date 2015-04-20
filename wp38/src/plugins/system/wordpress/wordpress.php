@@ -127,6 +127,16 @@ class  plgSystemWordPress extends JPlugin
 
 	}
 
+	function onBeforeRender()
+	{
+		$app = JFactory::getApplication();
+
+		if($app->input->get('option') === 'com_wordpress' && $app->input->get('view') === 'bloglink' || $app->isSite()){
+			var_dump($app->input->get('Itemid'));
+			$app->getMenu()->setActive( $app->input->get('Itemid') );
+		}
+	}
+
 	function onAfterRender()
 	{
 		if ( !$this->params->get( 'url_path' ) ) {
