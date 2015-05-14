@@ -11,11 +11,6 @@ jimport('joomla.plugin.plugin');
 
 class  plgSystemWordPress extends JPlugin
 {
-	function plgSystemShsef( &$subject, $config )
-	{
-		parent::__construct( $subject, $config );
-	}
-
 	function onAfterInitialise()
 	{
 	    $app = JFactory::getApplication();
