@@ -13,11 +13,11 @@ if ( !defined( '_JEXEC' ) ) {
 		define( 'DS', DIRECTORY_SEPARATOR );
 	}
 
-	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components'.DS.'com_wordpress')){
-		$path = explode('components'.DS.'com_wordpress',dirname($_SERVER['SCRIPT_FILENAME'])); // single
+	if(!defined('JWP_BASE') && FALSE !== strpos(dirname($_SERVER['SCRIPT_FILENAME']), 'components/com_wordpress')){
+		$path = explode('components/com_wordpress',dirname($_SERVER['SCRIPT_FILENAME'])); // single
 		define('JPATH_BASE', $path[0]);
 	} elseif (!is_link($_SERVER['SCRIPT_FILENAME'])) {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . DS.'..' ).DS ); // multi no sym
+		define( 'JPATH_BASE', realpath( dirname(__FILE__) . '/../' ) ); // multi no sym
 	} elseif ( !defined('JWP_BASE') && FALSE !== strpos($_SERVER['SCRIPT_FILENAME'],'wp-admin') ){
 		$path = explode('wp-admin',$_SERVER['SCRIPT_FILENAME']);
 		$path = array_pop($path);
@@ -25,13 +25,13 @@ if ( !defined( '_JEXEC' ) ) {
 		$count = count(explode('/',$path)) + 2;
 		$path = explode('/',$_SERVER['SCRIPT_FILENAME']);
 		preg_match('/(.*)?(?:\/.*?){'.$count.'}$/',$_SERVER['SCRIPT_FILENAME'],$matches);
-		define('JPATH_BASE', $matches[1].DS);
+		define('JPATH_BASE', $matches[1].'/');
 	} else {
-		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).DS);
+		define('JPATH_BASE', dirname($_SERVER['SCRIPT_FILENAME']).'/');
 	}
 
-	require_once ( JPATH_BASE .'includes'.DS.'defines.php' );
-	require_once ( JPATH_BASE .'includes'.DS.'framework.php' );
+	require_once ( JPATH_BASE .'includes/defines.php' );
+	require_once ( JPATH_BASE .'includes/framework.php' );
 	$mainframe	= JFactory::getApplication( 'site' );
 	$mainframe->initialise();
 } else {
