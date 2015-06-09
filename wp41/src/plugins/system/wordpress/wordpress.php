@@ -30,7 +30,7 @@ class  plgSystemWordPress extends JPlugin
 	   foreach ( $menuItems as &$item ) {
             if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
                 $isHomePage = (bool)$item->home;
-                $item->route = $item->params->get('blog_path',$item->route);
+                $item->route = trim($item->params->get('blog_path',$item->route),'/');
             } elseif ( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && isset($item->query['layout']) ) {
 	            $item->route = '';
 
