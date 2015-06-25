@@ -13,34 +13,44 @@ class  plgSystemWordPress extends JPlugin
 {
 	function onAfterInitialise()
 	{
-	    $app = JFactory::getApplication();
-	    $input = JFactory::getApplication()->input;
+		$app = JFactory::getApplication();
+		$input = JFactory::getApplication()->input;
 
-	    // Run menu creation through our own component
-	    if ( $app->isAdmin()
-	           && $input->get('option') == 'com_menus'
-	           //&& $input->get('id') === '0'
-	           && false !== stripos($input->get('jform',array(),'ARRAY'), 'option=com_wordpress' )
-	           && in_array( $input->get('task'), array('item.apply', 'item.save', 'item.save2new') ) ) {
-	        $input->set('option', 'com_wordpress', 'item.save2new');
-	    }
+		if( $app->isAdmin() &&
+			( $input->get( 'jform', array(), 'ARRAY')['type'] === 'alias' ||
+			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'url' ||
+			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'heading' ||
+			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'separator'
+			)
+		) {
+			return;
+		}
 
-	    $menuItems = jfactory::getapplication()->getmenu()->getItems();
+		// Run menu creation through our own component
+		if ( $app->isAdmin()
+			   && $input->get('option') == 'com_menus'
+			   //&& $input->get('id') === '0'
+			   && false !== stripos($input->get('jform',array(),'ARRAY'), 'option=com_wordpress' )
+			   && in_array( $input->get('task'), array('item.apply', 'item.save', 'item.save2new') ) ) {
+			$input->set('option', 'com_wordpress', 'item.save2new');
+		}
+
+		$menuItems = jfactory::getapplication()->getmenu()->getItems();
 
 	   foreach ( $menuItems as &$item ) {
-            if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
-                $isHomePage = (bool)$item->home;
-                $item->route = trim($item->params->get('blog_path',$item->route),'/');
-            } elseif ( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && isset($item->query['layout']) ) {
-	            $item->route = '';
+			if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
+				$isHomePage = (bool)$item->home;
+				$item->route = $item->params->get('blog_path',$item->route);
+			} elseif ( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && isset($item->query['layout']) ) {
+				$item->route = '';
 
-	            if( !$isHomePage ) {
-	                $item->route = "{$alias}/";
-	            }
+				if( !$isHomePage ) {
+					$item->route = "{$alias}/";
+				}
 
-	            $item->route .= "{$item->query['layout']}/{$item->query[$item->query['layout']]}/";
-	        }
-	    }
+				$item->route .= "{$item->query['layout']}/{$item->query[$item->query['layout']]}/";
+			}
+		}
 
 		if(!defined('DS')){
 			define('DS', DIRECTORY_SEPARATOR);
@@ -102,22 +112,22 @@ class  plgSystemWordPress extends JPlugin
 				'/' . $this->params->get( 'menu_slug' ) . '/feed' )
 			) {
 				$_SERVER['WP_REQUEST_URI'] = str_replace( '/' . $this->params->get( 'menu_slug' ),
-				 	'', $_SERVER['WP_REQUEST_URI'] );
+					'', $_SERVER['WP_REQUEST_URI'] );
 			}
 		}
 	}
 
 	function onAfterRoute()
 	{
-	    $app = JFactory::getApplication();
+		$app = JFactory::getApplication();
 
-	    if($app->input->get('option') !== 'com_wordpress' && $app->input->get('view') !== 'bloglink' || $app->isAdmin()){
-	        return;
-	    }
+		if($app->input->get('option') !== 'com_wordpress' && $app->input->get('view') !== 'bloglink' || $app->isAdmin()){
+			return;
+		}
 
 		switch ( JFactory::getApplication()->input->get('layout') ) {
-		    case 'category' :
-		       $_SERVER['WP_REQUEST_URI'] .= "/category/". JFactory::getApplication()->input->get('cat').'/';
+			case 'category' :
+			   $_SERVER['WP_REQUEST_URI'] .= "/category/". JFactory::getApplication()->input->get('cat').'/';
 		}
 
 	}
@@ -126,8 +136,8 @@ class  plgSystemWordPress extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if( $app->input->get( 'option ') === 'com_wordpress' && $app->input->get( 'view' ) === 'bloglink' || $app->isSite() ) {
-			$app->getMenu()->setActive( $app->input->get( 'Itemid' ) );
+		if($app->input->get('option') === 'com_wordpress' && $app->input->get('view') === 'bloglink' || $app->isSite()){
+			$app->getMenu()->setActive( $app->input->get('Itemid') );
 		}
 	}
 
