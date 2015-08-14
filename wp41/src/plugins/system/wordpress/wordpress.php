@@ -16,14 +16,11 @@ class  plgSystemWordPress extends JPlugin
 		$app = JFactory::getApplication();
 		$input = JFactory::getApplication()->input;
 
-		if( $app->isAdmin() &&
-			( $input->get( 'jform', array(), 'ARRAY')['type'] === 'alias' ||
-			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'url' ||
-			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'heading' ||
-			  $input->get( 'jform', array(), 'ARRAY')['type'] === 'separator'
-			)
-		) {
-			return;
+		if($app->isAdmin()){
+		    $form = $input->get( 'jform', array(), 'ARRAY');
+		    if (in_array($form['type'], array('alias','url','heading','separator'))){
+		        return;
+		    }
 		}
 
 		// Run menu creation through our own component
@@ -35,7 +32,7 @@ class  plgSystemWordPress extends JPlugin
 			$input->set('option', 'com_wordpress', 'item.save2new');
 		}
 
-		$menuItems = jfactory::getapplication()->getmenu()->getItems();
+		$menuItems = jfactory::getapplication()->getmenu()->getItems('component', 'com_wordpress');
 
 	   foreach ( $menuItems as &$item ) {
 			if( $item->component === 'com_wordpress' && $item->query['view'] == 'bloglink' && !isset($item->query['layout']) ) {
