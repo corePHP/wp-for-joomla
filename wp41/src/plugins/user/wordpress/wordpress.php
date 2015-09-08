@@ -135,41 +135,15 @@ class plgUserWordPress extends JPlugin
 		{
 			// If we are in the admin, then lets update our jhome_url option to keep accurate
 			update_option('jhome_url', JURI::root());
-
-			return true;
 		}
 
-		// Try to get user_id from joomla, if fail then try and get it from WordPress
-		if (!($id = intval(JUserHelper::getUserId($user['username']))))
-		{
-			$user = get_userdatabylogin($user['username']);
-			$id = $user->ID;
-		}
-		else
-		{
-			// Lets check that user exists in WP
-			$wp_user = new WP_User($id);
-			if (!$wp_user->ID)
-			{
-				$juser = JFactory::getUser($id);
-				$user_id = j_create_wp_user($juser);
-
-				if (is_a($user_id, 'WP_Error'))
-				{
-					return $_var;
-				}
-			}
-		}
-
-		if (!$id)
-		{
-			return true;
-		}
+		$user = get_user_by('login', $user['username']);
+		$user_id = $user->ID;
 
 		// Process wp auto-login
-		wp_set_current_user($id, $user['username']);
-		wp_set_auth_cookie($id);
-		do_action('wp_login', $user['username']);
+		wp_set_current_user($user_id, $user->user_login);
+		wp_set_auth_cookie($user_id);
+		do_action('wp_login', $user->user_login);
 
 		$this->unload_wp();
 
