@@ -1473,7 +1473,7 @@ function j_get_root_uri( $true_root = false )
 		if ( $dir ) {
 			$jurl = str_replace( JURI::root(true), $dir, $jurl );
 		}
-		
+
 		if( !is_admin() ) {
 			$jurl .= ltrim( str_replace( JPATH_ROOT, '', ABSPATH ), DS );
 		}
@@ -1663,15 +1663,16 @@ function wpj_wp_insert_post( $post_id, $post ) {
 		return true;
 	}
 
-	$path = JPATH_ROOT .DS. 'components' .DS. 'com_community' .DS. 'libraries'
-		.DS. 'userpoints.php';
+	$path = JPATH_ROOT . '/components/com_community/libraries/userpoints.php';
 
 	if ( file_exists( $path ) ) {
 		jimport( 'joomla.utilities.string' );
 		jimport( 'joomla.filesystem.folder' );
 
+		include_once(JPATH_ROOT . '/components/com_community/libraries/core.php');
+
 		// Load language file
-		$language =& JFactory::getLanguage();
+		$language = JFactory::getLanguage();
 		$language->load( 'com_wordpress' );
 
 		include_once( $path );
