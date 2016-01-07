@@ -181,6 +181,8 @@ function wp_joomla_run_finderplugin( $post_id )
 {
 	global $post;
 	static $front_end;
+	
+	if ( !get_site_option( 'wpj_use_joomla_plugins', 0 ) ) { return $text; }
 
 	if(count($post)>0 && $post->post_status =='publish')
 	{
@@ -227,6 +229,8 @@ function wp_joomla_run_finderplugin_delete( $post_id )
 {
 	global $post;
 	static $front_end;
+	
+	if ( !get_site_option( 'wpj_use_joomla_plugins', 0 ) ) { return $text; }
 
 	if(count($post)>0 && $post->post_status =='publish')
 	{
