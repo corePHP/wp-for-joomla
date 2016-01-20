@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="WordPress for Joomla 3.8" default="build" basedir=".">
+	<property name="branch" value="HEAD" />
+	<property name="joomla_version" value="j2.5_j3.x" />
+	<property name="joomla.root" value="build/export/src" />
+	<property name="component.short" value="wordpress" />
+	<property name="component.name" value="com_${component.short}" />
+	<property name="component.site_path" value="${joomla.root}/components/${component.name}" />
+	<property name="component.site_languages" value="${joomla.root}/language/en-GB" />
+	<property name="component.admin_path" value="${joomla.root}/administrator/components/${component.name}" />
+	<property name="component.admin_languages" value="${joomla.root}/administrator/language/en-GB" />
+
+	<property name="package.folder" value="build/packages" />
+	<property name="package.compressed" value="${package.folder}/compressed" />
+	<property name="package.path" value="${package.folder}/${component.name}" />
+
+	<target name="build">
+		<phingcall target="cleanup" />
+		<phingcall target="export_repo" />
+		<phingcall target="package_component" />
+		<phingcall target="package_modules" />
+		<phingcall target="package_plugins" />
+	</target>
+
+	<target name="cleanup">
+		<exec command="rm -rf build/export/" />
+		<exec command="rm -rf build/export.tar.gz" />
+
+		<available file="${package.folder}" property="package.folder.exists" value="1" />
+		<if>
+			<equals arg1="${package.folder.exists}" arg2="1" />
+			<then>
+				<echo message="Deleting existing package folder..." />
+				<delete dir="${package.folder}" />
+			</then>
+		</if>
+
+		<mkdir dir="${package.folder}" />
+		<mkdir dir="${package.compressed}" />
+	</target>
+
+	<!-- Export repo -->
+	<target name="export_repo">
+		<exec command="git archive --format tar --output build/export.tar.gz ${branch}" />
+		<exec command="mkdir build/export" />
+		<exec command="tar -xzf build/export.tar.gz -C build/export" />
+	</target>
+
+	<!-- Package component -->
+	<target name="package_component">
+		<echo message="Building component..." />
+
+		<!-- admin -->
+		<copy todir="${package.path}/admin">
+			<fileset dir="${component.admin_path}">
+				<exclude name="${component.short}.xml" />
+				<exclude name="script.php" />
+			</fileset>
+		</copy>
+
+		<!-- site -->
+		<copy todir="${package.path}/site">
+			<fileset dir="${component.site_path}">
+				<exclude name="jomsocial_rule.xml" />
+			</fileset>
+		</copy>
+
+		<!-- languages -->
+		<copy file="${component.site_languages}/en-GB.${component.name}.ini" todir="${package.path}/language/en-GB"/>
+		<copy file="${component.site_languages}/en-GB.${component.name}.ini" todir="${package.path}"/>
+		<copy file="${component.admin_languages}/en-GB.${component.name}.sys.ini" todir="${package.path}/admin/language/en-GB"/>
+
+		<!-- root files -->
+		<copy file="${component.admin_path}/${component.short}.xml" todir="${package.path}"/>
+		<copy file="${component.admin_path}/script.php" todir="${package.path}"/>
+
+		<exec command="xmllint --xpath '/extension/version/text()' ${component.admin_path}/${component.short}.xml" outputProperty="component.version" />
+
+		<property name="package.name" value="" />
+
+		<!-- Package basic -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_${joomla_version}-basic.zip" basedir="${package.path}" />
+
+		<!-- Setup modules -->
+		<phingcall target="setup_modules">
+			<property name="to_dir" value="${package.path}/admin/extensions/modules" />
+			<property name="from_dir" value="${joomla.root}/modules" />
+		</phingcall>
+
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.path}/admin/extensions/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Package full -->
+		<zip destfile="${package.compressed}/${component.name}_v${component.version}_${joomla_version}-full.zip" basedir="${package.path}" />
+	</target>
+
+	<!-- Setup modules - can't think of a better name -->
+	<target name="setup_modules">
+		<!-- Copy Modules -->
+		<copy todir="${to_dir}">
+			<fileset dir="${from_dir}" />
+		</copy>
+		<!-- Loop through modules and and add the language files. Uses module_folder -->
+		<foreach param="mdl_path" absparam="mdl_abs_path" target="modules_folder">
+			<fileset dir="${to_dir}">
+				<type type="dir" />
+				<depth max="0" min="0" />
+			</fileset>
+		</foreach>
+	</target>
+
+	<!-- Called from foreach loop - Gets plugin language files -->
+	<target name="modules_folder">
+		<echo msg="${mdl_abs_path}" />
+		<property name="mdl_lang_name" value="${mdl_path}" />
+
+		<available file="${component.site_languages}/en-GB.${mdl_lang_name}.ini" property="file.exists" value="1" />
+		<if>
+			<equals arg1="${file.exists}" arg2="1" />
+			<then>
+				<copy file="${component.site_languages}/en-GB.${mdl_lang_name}.ini" todir="${mdl_abs_path}/language/en-GB" />
+			</then>
+		</if>
+
+		<available file="${component.site_languages}/en-GB.${mdl_lang_name}.sys.ini" property="file2.exists" value="1" />
+		<if>
+			<equals arg1="${file2.exists}" arg2="1" />
+			<then>
+				<copy file="${component.site_languages}/en-GB.${mdl_lang_name}.sys.ini" todir="${mdl_abs_path}/language/en-GB" />
+			</then>
+		</if>
+	</target>
+
+	<!-- Setup plugins - can't think of a better name -->
+	<target name="setup_plugins">
+		<!-- plugins -->
+		<copy todir="${to_dir}">
+			<fileset dir="${from_dir}" />
+		</copy>
+		<!-- loop through plugins and and add the language files. uses plugin_folder -->
+		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_folder">
+			<fileset dir="${to_dir}">
+				<type type="dir" />
+				<depth max="1" min="1" />
+			</fileset>
+		</foreach>
+	</target>
+
+	<!-- called from foreach loop - Gets plugin language files -->
+	<target name="plugins_folder">
+		<echo msg="${plg_abs_path}" />
+		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" property="file.exists" value="1" />
+		<if>
+			<equals arg1="${file.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
+
+		<available file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" property="file2.exists" value="1" />
+		<if>
+			<equals arg1="${file2.exists}" arg2="1" />
+			<then>
+				<copy file="${component.admin_languages}/en-GB.plg_${plg_lang_name}.sys.ini" todir="${plg_abs_path}/language/en-GB" />
+			</then>
+		</if>
+	</target>
+
+	<!-- Package Modules -->
+	<target name="package_modules" description="Builds all modules">
+		<!-- Setup modules -->
+		<phingcall target="setup_modules">
+			<property name="to_dir" value="${package.folder}/modules" />
+			<property name="from_dir" value="${joomla.root}/modules" />
+		</phingcall>
+
+		<!-- Loop through modules and and package them -->
+		<foreach param="mdl_path" absparam="mdl_abs_path" target="modules_package">
+			<fileset dir="${package.folder}/modules">
+				<type type="dir" />
+				<depth max="0" min="0" />
+			</fileset>
+		</foreach>
+	</target>
+
+	<target name="modules_package">
+		<echo msg="${mdl_abs_path}" />
+		<property name="mdl_name" value="${mdl_path}" />
+		<property name="mdl_lang_name" value="${mdl_path}" />
+
+		<exec command="xmllint --xpath '/extension/version/text()' ${mdl_abs_path}/${mdl_name}.xml" outputProperty="version" />
+
+		<!-- Package module -->
+		<zip destfile="${package.compressed}/${mdl_lang_name}_v${version}_j${joomla_version}.zip" basedir="${mdl_abs_path}" />
+	</target>
+
+	<!-- Package plugins -->
+	<target name="package_plugins" description="Builds all plugins">
+		<!-- Setup plugins -->
+		<phingcall target="setup_plugins">
+			<property name="to_dir" value="${package.folder}/plugins" />
+			<property name="from_dir" value="${joomla.root}/plugins" />
+		</phingcall>
+
+		<!-- Loop through plugins and and package them -->
+		<foreach param="plg_path" absparam="plg_abs_path" target="plugins_package">
+			<fileset dir="${package.folder}/plugins">
+				<type type="dir" />
+				<depth max="1" min="1" />
+			</fileset>
+		</foreach>
+	</target>
+
+	<target name="plugins_package">
+		<echo msg="${plg_abs_path}" />
+		<php expression="str_replace('/', '_', '${plg_path}');" returnProperty="plg_lang_name" />
+		<php expression="substr('${plg_path}', strpos('${plg_path}', '/') + 1);" returnProperty="plg_name" />
+
+		<exec command="xmllint --xpath '/extension/version/text()' ${plg_abs_path}/${plg_name}.xml" outputProperty="version" />
+
+		<!-- Package plugin -->
+		<zip destfile="${package.compressed}/plg_${plg_lang_name}_v${version}_${joomla_version}.zip" basedir="${plg_abs_path}" />
+	</target>
+</project>
