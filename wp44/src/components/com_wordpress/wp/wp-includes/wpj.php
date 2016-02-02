@@ -1045,7 +1045,7 @@ function _color_swatches()
 }
 
 // Function to modify new activated plugin to work inside Joomla
-add_action( 'activated_plugin', 'wpj_modify_activated_plugin' );
+//add_action( 'activated_plugin', 'wpj_modify_activated_plugin' );
 function wpj_modify_activated_plugin( $path )
 {
 	jimport( 'joomla.filesystem.file' );
