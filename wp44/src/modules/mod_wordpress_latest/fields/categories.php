@@ -75,7 +75,7 @@ class JFormFieldCategories extends JFormField
 		if ( (int) $tab_index > 0 )
 			$tab_index_attribute = " tabindex=\"$tab_index\"";
 
-		$categories = get_categories( $r );
+		$categories = get_categories( );
 		preg_match_all('/(\w*)/', $name, $id);
 		$id = implode('_', array_filter($id[0]));
 
