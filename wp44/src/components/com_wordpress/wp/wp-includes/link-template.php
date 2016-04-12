@@ -2177,7 +2177,14 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 		$request = preg_replace( '|^' . preg_quote( $wp_rewrite->index, '|' ) . '|i', '', $request);
 		$request = ltrim($request, '/');
 
-		$base = trailingslashit( get_bloginfo( 'url' ) );
+		/* rc_corephp */
+		$enabled = JPluginHelper::isEnabled('system', 'wordpress');
+		if( $enabled ) {
+			$base = trailingslashit( JURI::base() );
+		} else {
+			$base = trailingslashit( get_bloginfo( 'url' ) );
+		}
+		/* end rc_corephp */
 
 		if ( $wp_rewrite->using_index_permalinks() && ( $pagenum > 1 || '' != $request ) )
 			$base .= $wp_rewrite->index . '/';
