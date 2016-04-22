@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jomsocial>
+	<component>com_wordpress</component>
+	<rules>
+		<rule>
+			<name>Create new blog entry</name>
+			<description>Add points when a user creates a new blog entry</description>
+			<action_string>wordpress.post.add</action_string>
+			<publish>true</publish>
+			<points>2</points>
+			<access_level>1</access_level>
+		</rule>
+		<rule>
+			<name>Remove blog entry</name>
+			<description>Deduct points when user deletes a blog entry</description>
+			<action_string>wordpress.post.remove</action_string>
+			<publish>true</publish>
+			<points>-2</points>
+			<access_level>1</access_level>
+		</rule>
+	</rules>
+</jomsocial>
