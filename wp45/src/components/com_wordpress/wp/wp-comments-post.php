@@ -51,5 +51,7 @@ $location = empty( $_POST['redirect_to'] ) ? get_comment_link( $comment ) : $_PO
  */
 $location = apply_filters( 'comment_post_redirect', $location, $comment );
 
-wp_safe_redirect( $location );
+// rc_corephp - Added string replace for the &amp;
+wp_redirect( str_replace( array( '&amp;', '&#038;' ), '&', $location ) );
+//wp_safe_redirect( $location );
 exit;

@@ -63,6 +63,20 @@ include_once(ABSPATH . 'wp-admin/includes/admin.php');
 include_once(ABSPATH . WPINC . '/class-IXR.php');
 include_once(ABSPATH . WPINC . '/class-wp-xmlrpc-server.php');
 
+/* rc_corephp - Moving the above code down here, as Joomla (it seems to remove the global) */
+// Also need to globalize a few other things
+global $xmlrpc_logging, $HTTP_RAW_POST_DATA, $post_default_title;
+// A bug in PHP < 5.2.2 makes $HTTP_RAW_POST_DATA not set by default,
+// but we can do it ourself.
+if ( !isset( $HTTP_RAW_POST_DATA ) ) {
+  $HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
+
+  // fix for mozBlog and other cases where '<?xml' isn't on the very first line
+  if ( isset($HTTP_RAW_POST_DATA) )
+    $HTTP_RAW_POST_DATA = trim($HTTP_RAW_POST_DATA);
+}
+
+
 /**
  * Posts submitted via the XML-RPC interface get that title
  * @name post_default_title

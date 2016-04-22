@@ -69,6 +69,16 @@ timer_start();
 // Check if we're in WP_DEBUG mode.
 wp_debug_mode();
 
+/* Set error reporting back to what Joomla has - rc_corephp */
+if ( $JOOMLA_CONFIG ) {
+    if ( @intval( $JOOMLA_CONFIG->error_reporting ) === 0 ) {
+        error_reporting( 0 );
+    } else if ( @intval( $JOOMLA_CONFIG->error_reporting ) > 0 ) {
+        error_reporting( $JOOMLA_CONFIG->error_reporting );
+        ini_set( 'display_errors', 1 );
+    }
+}
+
 // For an advanced caching plugin to use. Uses a static drop-in because you would only want one.
 if ( WP_CACHE )
 	WP_DEBUG ? include( WP_CONTENT_DIR . '/advanced-cache.php' ) : @include( WP_CONTENT_DIR . '/advanced-cache.php' );
@@ -201,6 +211,9 @@ if ( is_multisite() ) {
 	require( ABSPATH . WPINC . '/ms-deprecated.php' );
 }
 
+
+// Add all hooks to make wp work in J! rc_corephp
+require( ABSPATH . WPINC . '/wpj.php' );
 // Define constants that rely on the API to obtain the default value.
 // Define must-use plugin directory constants, which may be overridden in the sunrise.php drop-in.
 wp_plugin_directory_constants();
