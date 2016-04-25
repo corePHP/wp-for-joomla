@@ -173,7 +173,7 @@ $j_tt_show_blog_menu         = get_site_option( 'j_tt_show_blog_menu', 1 );
 			<?php } ?>
 
 			<?php /* rc_corephp - This is one of the theme specific settings that we set up */
-			if ( $j_tt_show_blog_menu ) { ?>
+			if ( $j_tt_show_blog_menu ) {  ?>
 			<div id="wp-access" role="navigation">
 			  <?php /*  Allow screen readers / text browsers to skip the navigation menu and get right to the good stuff */ ?>
 				<div class="skip-link screen-reader-text"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'twentyten' ); ?>"><?php _e( 'Skip to content', 'twentyten' ); ?></a></div>

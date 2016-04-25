@@ -9,7 +9,7 @@
 
 /* rc_corephp */
 // If we don't want the sidebar to show
-if ( !get_site_option( 'wpj_use_wp_sidebar', 1 ) ) {
+if ( !get_site_option('wpj_use_wp_sidebar', 1)) {
 	return;
 }
 
