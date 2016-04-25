@@ -613,9 +613,6 @@ EOF;
 <?php
 	}
 }
-
-
-<?php
 if ( $_POST ) {
 
 	check_admin_referer( 'install-network-1' );
