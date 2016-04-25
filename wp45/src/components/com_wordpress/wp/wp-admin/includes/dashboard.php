@@ -52,8 +52,9 @@ function wp_dashboard_setup() {
 		wp_add_dashboard_widget( 'dashboard_quick_press', $quick_draft_title, 'wp_dashboard_quick_press' );
 	}
 
-	// WordPress News
-	wp_add_dashboard_widget( 'dashboard_primary', __( 'WordPress News' ), 'wp_dashboard_primary' );
+	//// WordPress News
+	wp_add_dashboard_widget( 'dashboard_primary', __( "'corePHP'" ), 'wp_dashboard_primary' ); // rc_corephp
+	//wp_add_dashboard_widget( 'dashboard_primary', __( 'WordPress News' ), 'wp_dashboard_primary' );
 
 	if ( is_network_admin() ) {
 
@@ -1072,7 +1073,8 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's primary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
+			//'link' => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
+			'link'         => apply_filters( 'dashboard_primary_link', __( 'http://www.corephp.com/blog/' ) ), // rc_corephp
 
 			/**
 			 * Filter the primary feed URL for the 'WordPress News' dashboard widget.
@@ -1081,7 +1083,8 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's primary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
+			//'url' => apply_filters( 'dashboard_primary_feed', __( 'http://wordpress.org/news/feed/' ) ),
+			'url'          => apply_filters( 'dashboard_primary_feed', __( 'http://www.corephp.com/blog/feed/' ) ), // rc_corephp
 
 			/**
 			 * Filter the primary link title for the 'WordPress News' dashboard widget.
@@ -1090,12 +1093,13 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $title Title attribute for the widget's primary link.
 			 */
-			'title'        => apply_filters( 'dashboard_primary_title', __( 'WordPress Blog' ) ),
+			//'title'        => apply_filters( 'dashboard_primary_title', __( 'WordPress Blog' ) ),
+			'title'        => apply_filters( 'dashboard_primary_title', __( '\'corePHP\' Blog' ) ), // rc_corephp
 			'items'        => 1,
 			'show_summary' => 1,
 			'show_author'  => 0,
 			'show_date'    => 1,
-		),
+		),/* rc_corephp
 		'planet' => array(
 
 			/**
@@ -1105,7 +1109,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $link The widget's secondary link URL.
 			 */
-			'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
+			//'link' => apply_filters( 'dashboard_secondary_link', __( 'https://planet.wordpress.org/' ) ),
 
 			/**
 			 * Filter the secondary feed URL for the 'WordPress News' dashboard widget.
@@ -1114,7 +1118,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $url The widget's secondary feed URL.
 			 */
-			'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
+			//'url' => apply_filters( 'dashboard_secondary_feed', __( 'https://planet.wordpress.org/feed/' ) ),
 
 			/**
 			 * Filter the secondary link title for the 'WordPress News' dashboard widget.
@@ -1123,7 +1127,7 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $title Title attribute for the widget's secondary link.
 			 */
-			'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other WordPress News' ) ),
+			//'title'        => apply_filters( 'dashboard_secondary_title', __( 'Other WordPress News' ) ),
 
 			/**
 			 * Filter the number of secondary link items for the 'WordPress News' dashboard widget.
@@ -1132,11 +1136,11 @@ function wp_dashboard_primary() {
 			 *
 			 * @param string $items How many items to show in the secondary feed.
 			 */
-			'items'        => apply_filters( 'dashboard_secondary_items', 3 ),
+			/*'items'        => apply_filters( 'dashboard_secondary_items', 3 ),
 			'show_summary' => 0,
 			'show_author'  => 0,
 			'show_date'    => 0,
-		)
+		)*/
 	);
 
 	if ( ( ! is_multisite() && is_blog_admin() && current_user_can( 'install_plugins' ) ) || ( is_network_admin() && current_user_can( 'manage_network_plugins' ) && current_user_can( 'install_plugins' ) ) ) {

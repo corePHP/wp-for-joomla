@@ -194,6 +194,11 @@ function insert_with_markers( $filename, $marker, $insertion ) {
  * @global WP_Rewrite $wp_rewrite
  */
 function save_mod_rewrite_rules() {
+
+/* rc_corephp - We don't want WordPress adding anything to our joomla htaccess */
+	return; // ALWAYS!
+
+
 	if ( is_multisite() )
 		return;
 

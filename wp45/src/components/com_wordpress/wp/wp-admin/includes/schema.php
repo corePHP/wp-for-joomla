@@ -1067,7 +1067,9 @@ We hope you enjoy your new site. Thanks!
 		if ( $subdomain_install )
 			$wp_rewrite->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
 		else
-			$wp_rewrite->set_permalink_structure( '/blog/%year%/%monthnum%/%day%/%postname%/' );
+			/* rc_corephp - Removed the blog prefix as we do not need this in Joomla */
+			$wp_rewrite->set_permalink_structure( '/%year%/%monthnum%/%day%/%postname%/' );
+			//$wp_rewrite->set_permalink_structure( '/blog/%year%/%monthnum%/%day%/%postname%/' );
 
 		flush_rewrite_rules();
 
