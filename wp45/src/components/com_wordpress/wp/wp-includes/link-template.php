@@ -234,6 +234,101 @@ function get_permalink( $post = 0, $leavename = false ) {
 	 */
 	return apply_filters( 'post_link', $permalink, $post, $leavename );
 }
+/**
+ * Will build urls for Joomla to route
+ * @return
+ * @param $link Object
+ * @since corePHP
+ * rc_corephp
+ */
+function wp_jroute( $link ) {
+	// static $japplication;
+	// static $option;
+	global $component_real_name, $mainframe, $_wp_url_param;
+
+	// if ( !$japplication ) { $japplication =& JFactory::getApplication(); }
+	// if ( !$option ) {      $option       = JRequest::getVar( 'option' ); }
+
+	if ( empty( $link ) ) { return $link; }
+
+	if ( !$component_real_name ) {
+		$component_real_name = 'com_wordpress';
+	}
+
+	$permalink = get_option( 'permalink_structure' );
+
+	// URL already SEFed by WP
+	if ( '' != $permalink ) {
+		/* I know... no block comments inside functions but... */
+		/* The SEF URL is actually generated when the 'home' option is requested */
+		/* @see functions.php get_option() */
+	} else { // Non SEFed URL
+		// Add component name
+		if ( false === strpos( $link, $component_real_name ) ) {
+			$link .= "&option={$component_real_name}";
+		}
+
+		// Add the Itemid
+		if ( ( $itemid = j_get_itemid() ) ) {
+			$link .= '&amp;Itemid=' . $itemid;
+		}
+
+		if ( false === strpos( $link, '?' ) ) {
+			$link = preg_replace( '/&/', '?', $link, 1 );
+		}
+
+		$link = untrailingslashit( $link );
+
+		$link = JRoute::_( $link );
+	}
+
+	if ( !empty( $_wp_url_param )
+		&& false === strpos( get_option( 'permalink_structure' ), '.html' )
+	) {
+		if ( count( $_wp_url_param ) > 1 ){
+			$_wp_url_param_new = array_reverse( $_wp_url_param );
+			foreach ( $_wp_url_param_new as $value ) {
+				$link = str_replace( $value . '.html', $value, $link );
+			}
+		} else {
+			$link = str_replace( $_wp_url_param . '.html', $_wp_url_param, $link );
+		}
+	}
+
+	return apply_filters( 'wp_jroute', $link );
+}
+// add_filter('post_link', 'wp_jroute');
+// add_filter('category_link', 'wp_jroute');
+// add_filter('page_link', 'wp_jroute');
+// add_filter('feed_link', 'wp_jroute');
+// add_filter('post_comments_feed_link', 'wp_jroute');
+// add_filter('get_post_comments_feed_link', 'wp_jroute');
+// add_filter('trackback_url', 'wp_jroute');
+// add_filter('attachment_link', 'wp_jroute');
+// add_filter('day_link', 'wp_jroute');
+// add_filter('month_link', 'wp_jroute');
+// add_filter('year_link', 'wp_jroute');
+// add_filter('author_feed_link', 'wp_jroute');
+// add_filter('category_feed_link', 'wp_jroute');
+// add_filter('search_feed_link', 'wp_jroute');
+// add_filter('author_link', 'wp_jroute');
+// add_filter('get_pagenum_link', 'wp_jroute');
+// add_filter('search_link', 'wp_jroute');
+// add_filter('taxonomy_feed_link', 'wp_jroute');
+// add_filter('post_type_link', 'wp_jroute');
+// add_filter('term_link', 'wp_jroute');
+add_filter('home_url', 'wp_jroute');
+add_filter('tag_link', 'wp_jroute');
+// Replace chars
+if ( !is_admin() ) {
+	add_filter('the_permalink', 'convert_chars');
+	add_filter('wp_jroute', 'convert_chars');
+	add_filter('the_permalink_rss', 'convert_chars');
+	add_filter('get_the_guid', 'convert_chars');
+	add_filter('bloginfo_url', 'convert_chars');
+	add_filter('bloginfo', 'convert_chars');
+}
+
 
 /**
  * Retrieve the permalink for a post with a custom post type.
@@ -2094,6 +2189,15 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 		$request = preg_replace( "|$wp_rewrite->pagination_base/\d+/?$|", '', $request);
 		$request = preg_replace( '|^' . preg_quote( $wp_rewrite->index, '|' ) . '|i', '', $request);
 		$request = ltrim($request, '/');
+		
+		/* rc_corephp */
+		$enabled = JPluginHelper::isEnabled('system', 'wordpress');
+		if( $enabled ) {
+			$base = trailingslashit( JURI::base() );
+		} else {
+			$base = trailingslashit( get_bloginfo( 'url' ) );
+		}
+		/* end rc_corephp */
 
 		$base = trailingslashit( get_bloginfo( 'url' ) );
 

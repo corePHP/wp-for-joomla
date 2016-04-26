@@ -949,7 +949,35 @@ if ( !function_exists('is_user_logged_in') ) :
 function is_user_logged_in() {
 	$user = wp_get_current_user();
 
-	return $user->exists();
+	
+	/**
+	 * rc_corephp - If user is not logged in, then we check to see if user is logged into Joomla
+	 * if user is logged into Joomla we log then into WordPress
+	 */
+	if ( ! $user->exists() ){
+		$juser = JFactory::getUser();
+		if ( !$juser->id ) {
+			return false;
+		}
+
+		// Check to see if WP user exists
+		$user = new WP_User( $juser->id );
+		if ( !$user->ID ) {
+			$user_id = j_create_wp_user( $juser );
+
+			if ( is_a( $user_id, 'WP_Error' ) ) {
+				return false;
+			}
+		}
+
+		// Process WordPress auto login
+		$user = new WP_User( $juser->id );
+		wp_set_current_user( $user->ID, $user->user_login );
+		wp_set_auth_cookie( $user->ID );
+		do_action( 'wp_login', @$user->username );
+	}
+
+	return true;
 }
 endif;
 

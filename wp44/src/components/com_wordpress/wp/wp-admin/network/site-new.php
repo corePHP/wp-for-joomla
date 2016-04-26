@@ -121,7 +121,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 	$id = wpmu_create_blog( $newdomain, $path, $title, $user_id, $meta, $current_site->id );
 	$wpdb->show_errors();
 	if ( ! is_wp_error( $id ) ) {
-				/ rc_corephp - Edied if statement for the primary_blog update
+				// rc_corephp - Edied if statement for the primary_blog update
 		$_primary_blog = get_user_option( 'primary_blog', $user_id );
 		/* rc_corephp -BUR */
 		if ( !is_super_admin( $user_id ) && ( ( 42 != $user_id && 1 == $_primary_blog ) || !$_primary_blog ) )
