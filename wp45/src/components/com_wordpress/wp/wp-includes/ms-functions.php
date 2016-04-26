@@ -1130,8 +1130,13 @@ function wpmu_create_blog( $domain, $path, $title, $user_id, $meta = array(), $s
 	add_option( 'WPLANG', get_site_option( 'WPLANG' ) );
 	update_option( 'blog_public', (int) $meta['public'] );
 
-	if ( ! is_super_admin( $user_id ) && ! get_user_meta( $user_id, 'primary_blog', true ) )
+	/* rc_corephp modified if statement to allow override of primary_blog if their blogid is 1 */
+	$_primary_blog = get_user_meta( $user_id, 'primary_blog', true );
+	if ( ! is_super_admin( $user_id ) && ( ( 1 == $_primary_blog ) || !$_primary_blog ) ) {
+
+	//if ( ! is_super_admin( $user_id ) && ! get_user_meta( $user_id, 'primary_blog', true ) )
 		update_user_meta( $user_id, 'primary_blog', $blog_id );
+	}
 
 	restore_current_blog();
 	/**

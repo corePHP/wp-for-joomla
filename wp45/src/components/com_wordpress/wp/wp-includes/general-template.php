@@ -212,6 +212,13 @@ function get_search_form( $echo = true ) {
 	 */
 	$format = apply_filters( 'search_form_format', $format );
 
+	/* rc_corephp Had to add some variables */
+		global $component_real_name;
+	
+		if ( ( $itemid = j_get_itemid() ) ) {
+			$itemid = '<input type="hidden" value="'.$itemid.'" name="Itemid" /><input type="hidden" value="'.$component_real_name.'" name="option" />';
+		}
+
 	$search_form_template = locate_template( 'searchform.php' );
 	if ( '' != $search_form_template ) {
 		ob_start();
@@ -539,7 +546,9 @@ function wp_register( $before = '<li>', $after = '</li>', $echo = true ) {
 		else
 			$link = '';
 	} elseif ( current_user_can( 'read' ) ) {
-		$link = $before . '<a href="' . admin_url() . '">' . __('Site Admin') . '</a>' . $after;
+		/* rc_corephp - Changed __('Site Admin') to __('Blog Admin') */
+		$link = $before . '<a href="' . admin_url() . '">' . __('Blog Admin') . '</a>' . $after;
+		//$link = $before . '<a href="' . admin_url() . '">' . __('Site Admin') . '</a>' . $after;
 	} else {
 		$link = '';
 	}

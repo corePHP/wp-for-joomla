@@ -104,9 +104,12 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	if ( is_array( $extra_stats ) )
 		$post_body = array_merge( $post_body, $extra_stats );
 
-	$url = $http_url = 'http://api.wordpress.org/core/version-check/1.7/?' . http_build_query( $query, null, '&' );
+	/*$url = $http_url = 'http://api.wordpress.org/core/version-check/1.7/?' . http_build_query( $query, null, '&' );
 	if ( $ssl = wp_http_supports( array( 'ssl' ) ) )
-		$url = set_url_scheme( $url, 'https' );
+		$url = set_url_scheme( $url, 'https' );*/
+	/* rc_corephp */
+	$local_package = isset( $wp_local_package )? $wp_local_package : '';
+	$url = "http://www.corephp.com/index.php?option=com_versioncheck&task=com_wordpress&checkerv=1.6&version=$wp_version&php=$php_version&locale=$locale&mysql=$mysql_version&local_package=$local_package&blogs=$num_blogs&users={$user_count['total_users']}&multisite_enabled=$multisite_enabled";
 
 	$options = array(
 		'timeout' => ( ( defined('DOING_CRON') && DOING_CRON ) ? 30 : 3 ),
@@ -373,6 +376,13 @@ function wp_update_themes( $extra_stats = array() ) {
 	$request['active'] = get_option( 'stylesheet' );
 
 	foreach ( $installed_themes as $theme ) {
+		/* rc_corephp - Remove hacked themes from this list, as we don't want to auto update them */
+		$allowed_themes = array( 'twentyetwelve', 'twentyeleven', 'twentyten', 'everyhome', 'default' );
+		if ( in_array( $theme->get_stylesheet(),
+			apply_filters( 'wpj_allowed_themes', $allowed_themes ) )
+		) {
+			continue;
+		}
 		$checked[ $theme->get_stylesheet() ] = $theme->get('Version');
 
 		$themes[ $theme->get_stylesheet() ] = array(

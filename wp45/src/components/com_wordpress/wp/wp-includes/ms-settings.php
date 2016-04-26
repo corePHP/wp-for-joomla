@@ -146,6 +146,10 @@ if ( !isset( $current_site ) || !isset( $current_blog ) ) {
 	}
 
 	// No site has been found, bail.
+	/*
+	 * rc_corephp
+	 *
+	 */
 	if ( empty( $current_blog ) ) {
 		// We're going to redirect to the network URL, with some possible modifications.
 		$scheme = is_ssl() ? 'https' : 'http';

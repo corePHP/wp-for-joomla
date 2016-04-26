@@ -300,7 +300,9 @@ function get_author_posts_url( $author_id, $author_nicename = '' ) {
 
 	if ( empty($link) ) {
 		$file = home_url( '/' );
-		$link = $file . '?author=' . $auth_ID;
+		/* rc_corephp - proper url var */
+        $link = $file . '&author=' . $auth_ID;
+		//$link = $file . '?author=' . $auth_ID;
 	} else {
 		if ( '' == $author_nicename ) {
 			$user = get_userdata($author_id);
@@ -320,8 +322,11 @@ function get_author_posts_url( $author_id, $author_nicename = '' ) {
 	 * @param int    $author_id       The author's id.
 	 * @param string $author_nicename The author's nice name.
 	 */
+	/* rc_corephp
+	 * w/apply_filters: bernard.local/joomla_3.2.x-Wordpress&option=com_wordpress&Itemid=103&author=350
+	 * wo/appy_filters: bernard.local/joomla_3.2.x-Wordpress/?option=com_wordpress&Itemid=103&author=350
 	$link = apply_filters( 'author_link', $link, $author_id, $author_nicename );
-
+*/
 	return $link;
 }
 

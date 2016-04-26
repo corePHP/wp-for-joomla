@@ -37,6 +37,10 @@ function wp_unregister_GLOBALS() {
 
 	// Variables that shouldn't be unset
 	$no_unset = array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES', 'table_prefix' );
+	
+	/* rc_corephp - Adding Joomla's globals to the list */
+	$no_unset = array_merge( $no_unset,
+		array( '__default', 'option', 'HTTP_SESSION_VARS', '_SESSION', 'version', '_JREQUEST', '_JERROR_STACK', '_JERROR_LEVELS', '_JERROR_HANDLERS', 'mainframe', '_MAMBOTS', 'Itemid', 'jaxFuncNames'));
 
 	$input = array_merge( $_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset( $_SESSION ) && is_array( $_SESSION ) ? $_SESSION : array() );
 	foreach ( $input as $k => $v )
@@ -619,8 +623,11 @@ function wp_magic_quotes() {
 	$_COOKIE = add_magic_quotes( $_COOKIE );
 	$_SERVER = add_magic_quotes( $_SERVER );
 
+	/* rc_corephp - SMH -bur
 	// Force REQUEST to be GET + POST.
 	$_REQUEST = array_merge( $_GET, $_POST );
+	*/
+	$_REQUEST = array_merge( $_REQUEST, $_GET, $_POST );
 }
 
 /**

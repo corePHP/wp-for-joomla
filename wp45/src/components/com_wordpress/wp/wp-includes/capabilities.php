@@ -604,6 +604,12 @@ function is_super_admin( $user_id = false ) {
 		$user = wp_get_current_user();
 	else
 		$user = get_userdata( $user_id );
+		
+	/* rc_corephp - Fix to make all Joomla administrators super admins is wordpress */
+	$juser = JFactory::getUser( ( $user_id ? $user_id : null ) );
+	if ( $juser->authorise('core.admin') ) {
+		return true;
+	}
 
 	if ( ! $user || ! $user->exists() )
 		return false;

@@ -113,9 +113,10 @@ function get_option( $option, $default = false ) {
 		}
 	}
 
+	// Commented out rc_corephp
 	// If home is not set use siteurl.
-	if ( 'home' == $option && '' == $value )
-		return get_option( 'siteurl' );
+	//if ( 'home' == $option && '' == $value )
+	//	return get_option( 'siteurl' );
 
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );
