@@ -74,7 +74,6 @@ $_title = substr( $wp_head_contents,
 	strpos( $wp_head_contents, $title_start ) + 7,
 	strpos( $wp_head_contents, $title_end )
 		- strpos( $wp_head_contents, $title_start ) - 7);
-$_title = html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' );
 $_title_compare = $_title;
 
 // Title override
@@ -88,13 +87,13 @@ if ( !empty( $title_override ) ) {
 if ( class_exists('All_in_One_SEO_Pack') ) {
 	$_temp_title = $document->getTitle();
 	if ( !$_temp_title ) {
-		$document->setTitle( $_title );
+		$document->setTitle( html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' ) );
 	} else {
 		$document->setTitle( str_replace( array( '&#8216;', '&#8217;', '&#8211;', '&#039;' ),
-			array( '\'', '\'', ' ', "'" ), $_temp_title ) );
+			array( '\'', '\'', ' ', "'" ), html_entity_decode( $_temp_title, ENT_QUOTES, 'UTF-8' ) ) );
 	}
 } else {
-	$document->setTitle( $_title );
+	$document->setTitle( html_entity_decode( $_title, ENT_QUOTES, 'UTF-8' ) );
 }
 
 $wp_head_contents = str_replace( $title_start . $_title_compare . $title_end, '', $wp_head_contents );
