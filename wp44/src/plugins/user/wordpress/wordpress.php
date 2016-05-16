@@ -76,7 +76,7 @@ class plgUserWordPress extends JPlugin
 	 */
 	function onUserAfterSave($user, $isnew, $success, $msg)
 	{
-		global $mainframe;
+		$mainframe = JFactory::getApplication();
 
 		$this->load_wp();
 
@@ -90,7 +90,7 @@ class plgUserWordPress extends JPlugin
 	 */
 	function onUserAfterDelete($user, $succes, $msg)
 	{
-		global $mainframe;
+		$mainframe = JFactory::getApplication();
 
 		if (!$this->load_wp())
 		{
@@ -122,7 +122,7 @@ class plgUserWordPress extends JPlugin
 	 */
 	function onUserLogin($user, $options = array())
 	{
-		global $mainframe;
+		$mainframe = JFactory::getApplication();
 
 		jimport('joomla.user.helper');
 
