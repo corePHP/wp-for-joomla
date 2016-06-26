@@ -680,6 +680,12 @@ class WP {
 			}
 		}
 
+		/* rc_corephp - Fix for pagination not working in everyhome template */
+		if ( is_paged() && is_multisite() && 'everyhome' == get_option( 'template' ) ) {
+			return;
+		}
+		/* end rc_corephp */
+
 		// We will 404 for paged queries, as no posts were found.
 		if ( ! is_paged() ) {
 
