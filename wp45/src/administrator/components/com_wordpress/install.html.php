@@ -9,7 +9,7 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 * to the GNU General Public License, and as distributed it includes or
 * is derivative of works licensed under the GNU General Public License or
 * other free or open source software licenses.
-* 
+*
 * This version of WordPress has originally been modified by corePHP to work
 * within the Joomla 1.5.x environment.
 * For any support visit: http://www.corephp.com/wordpress/support
@@ -34,7 +34,7 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 	You can now <a href="index.php?option=com_wordpress">Start Blogging!</a><br />
 	If you have any questions, you can read through our documentation.<br />
 	You can also watch <a href="http://vimeo.com/corephp/albums" target="_blank">video tutorials</a>.<br />
-	And if for some reason you are still stuck, submit a <a href="https://www.corephp.com/members/submitticket.php" target="_blank">support ticket</a>.<br /><br />
+	And if for some reason you are still stuck, submit a <a href="https://support.corephp.com" target="_blank">support ticket</a>.<br /><br />
 	P.S. Don't forget to enable and install the two Joomla plugins that came with the package.<br />
 	P.P.S Also, create a menu item for the world to see your blog!
 </div>
