@@ -3,25 +3,35 @@
 /wp25/build/packages/
 /wp38/build/packages/
 /wp41/build/packages/
+/wp44/build/packages/
+/wp45/build/packages/
 
 /wp15/src/blogs/
 /wp16/src/blogs/
 /wp25/src/blogs/
 /wp41/src/blogs/
+/wp44/src/blogs/
+/wp45/src/blogs/
 
 /wp15/src/.htaccess
 /wp16/src/.htaccess
 /wp25/src/.htaccess
 /wp38/src/.htaccess
 /wp41/src/.htaccess
+/wp44/src/.htaccess
+/wp45/src/.htaccess
 
 /wp25/build/export.tar.gz
 /wp38/build/export.tar.gz
 /wp41/build/export.tar.gz
+/wp44/build/export.tar.gz
+/wp45/build/export.tar.gz
 
 /wp25/build/export/
 /wp38/build/export/
 /wp41/build/export/
+/wp44/build/export/
+/wp45/build/export/
 
 .DS_Store
 .project
