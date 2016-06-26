@@ -4,7 +4,7 @@ Theme URI: http://www.corephp.com/
 Author: the WordPress team
 Author URI: http://wordpress.org/
 Description: The 2012 theme for WordPress is a fully responsive theme that looks great on any device. Features include a front page template with its own widgets, an optional display font, styling for post formats on both index and single views, and an optional no-sidebar page template. Make it yours with a custom menu, header image, and background.
-Version: 1.3
+Version: 999
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: light, gray, white, one-column, two-columns, right-sidebar, fluid-layout, responsive-layout, custom-background, custom-header, custom-menu, editor-style, featured-images, flexible-header, full-width-template, microformats, post-formats, rtl-language-support, sticky-post, theme-options, translation-ready
@@ -375,7 +375,7 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 #wp-page .author-avatar img,
 #wp-page img.wp-post-image {
 	/* Add fancy borders to all WordPress-added images but not things like badges and icons and the like */
-	/* rc_corephp 
+	/* rc_corephp
 	border-radius: 3px;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);*/
 }
@@ -557,7 +557,7 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 /* Header */
 #wp-page .site-header {
 	padding: 24px 0;
-	/* rc_corephp 
+	/* rc_corephp
 	padding: 1.714285714rem 0;*/
 	padding: 1.5rem 0;
 }
@@ -597,7 +597,7 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 /* Navigation Menu */
 #wp-page .main-navigation {
 	margin-top: 24px;
-	/* rc_corephp 
+	/* rc_corephp
 	margin-top: 1.714285714rem;*/
 	margin-top: 1.5rem;
 	text-align: center;
@@ -1040,7 +1040,7 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 #wp-page .archive-header,
 #wp-page .page-header {
 	margin-bottom: 48px;
-	/* rc_corephp start 
+	/* rc_corephp start
 	margin-bottom: 3.428571429rem;
 	padding-bottom: 1.571428571rem;*/
 	margin-bottom: 1.5rem;
@@ -1686,7 +1686,7 @@ http://blog.typekit.com/2011/11/09/type-study-sizing-the-legible-letter/
 		background-color: #e6e6e6;
 	}
 	/* rc_corephp
-	
+
 	body .site {
 		padding: 0 40px;
 		padding: 0 2.857142857rem;
