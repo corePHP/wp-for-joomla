@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="WordPress for Joomla 4.5 default="build" basedir=".">
+<project name="WordPress for Joomla 4.5" default="build" basedir=".">
 	<property name="branch" value="HEAD" />
 	<property name="joomla_version" value="j2.5_j3.x" />
 	<property name="joomla.root" value="build/export/src" />
