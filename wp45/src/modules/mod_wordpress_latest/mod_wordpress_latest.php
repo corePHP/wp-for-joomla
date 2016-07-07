@@ -43,7 +43,7 @@ $showCategories    = $params->get( 'showCategories', 1 );
 
 // Add head styles
 if ( $showAvatar ) {
-	$document = &JFactory::getDocument();
+	$document = JFactory::getDocument();
 	$head = 'img.avatar {
 		padding: 4px;
 		margin: 0 0 2px 7px;
@@ -114,7 +114,7 @@ if (!function_exists('caption_shortcode')) {
 			if (  $show_post_meta ) { ?>
 				<div class="wp-latest-date-readmore">
 					<div class="entry-meta">
-						<?php twentyten_posted_on(); ?>
+						<?php twentytwelve_posted_on(); ?>
 					</div><!-- .entry-meta -->
 				</div>
 			<?php }
@@ -252,5 +252,3 @@ echo '</div>';
 </div>
 <?php
 wpj_loader::unload();
-
-?>
