@@ -30,8 +30,8 @@ class plgCommunityWordpress extends CApplications
 		JPlugin::loadLanguage( 'plg_wpmu_latestpost', JPATH_ADMINISTRATOR );
 	
 		// Get the document object
-		$document = & JFactory::getDocument();
-		$my       = & CFactory::getUser();
+		$document = JFactory::getDocument();
+		$my       = CFactory::getUser();
 		$user     = CFactory::getRequestUser();
 
 		// Test if Wordpress exists
@@ -61,7 +61,7 @@ class plgCommunityWordpress extends CApplications
 
 			$isOwner = ($my->id == $userId ) ? true : false;
 
-			$cache =& JFactory::getCache('plgCommunityWordpress');
+			$cache = JFactory::getCache('plgCommunityWordpress');
 			$cache->setCaching($this->params->get('cache', 0));
 			$callback = array('plgCommunityWordpress', '_getHTML');
 			$contents = $cache->call($callback, $data_exist, $blog_id, $userId, $userName, $isOwner, $this->params);
@@ -89,9 +89,9 @@ class plgCommunityWordpress extends CApplications
 			
 			$count = 0;
 			JPluginHelper::importPlugin('content');
-			$dispatcher	=& JDispatcher::getInstance();
+			$dispatcher	= JDispatcher::getInstance();
 
-			$db		=& JFactory::getDBO();
+			$db		= JFactory::getDBO();
 			$name	= get_blog_option( $blog_id, 'blogname' );
 			echo '<h1>Blog: '.$name.'</h1>';
 
@@ -212,7 +212,7 @@ class plgCommunityWordpress extends CApplications
 
 	function &_getEntries()
 	{		
-		$db			=& JFactory::getDBO();
+		$db			= JFactory::getDBO();
 		$userId 	= $this->_user->id;
 
 		$order_by 	= $this->params->get('order_by', 'post_date_gmt');
