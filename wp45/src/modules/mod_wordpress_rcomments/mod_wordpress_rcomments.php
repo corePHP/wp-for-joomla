@@ -61,4 +61,3 @@ $number = $params->get( 'number', 5 );
 </div>
 <?php
 wpj_loader::unload();
-?>
