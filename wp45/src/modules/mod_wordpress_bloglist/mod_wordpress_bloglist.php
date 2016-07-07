@@ -21,7 +21,7 @@ global $component_name, $current_user, $wpdb, $mainframe;
 
 $limit          = $params->get( 'limit', 5 );
 $show_all_blogs = $params->get( 'show_all_blogs', 0 );
-$document       = &JFactory::getDocument();
+$document       = JFactory::getDocument();
 
 if ( $show_all_blogs ) {
 	$blogs = $wpdb->get_results( $wpdb->prepare("SELECT blog_id, domain, path FROM $wpdb->blogs WHERE site_id = %d AND public = '1' AND archived = '0' AND mature = '0' AND spam = '0' AND deleted = '0' ORDER BY blog_id ASC", $wpdb->siteid ) , ARRAY_A );
