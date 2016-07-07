@@ -116,7 +116,7 @@ foreach ( (array) $rows as $post ) {
 		<?php if ( $show_post_meta ) { ?>
 			<div class="wp-latest-date-readmore">
 				<div class="entry-meta">
-					<?php twentyten_posted_on(); ?>
+					<?php twentytwelve_posted_on(); ?>
 				</div><!-- .entry-meta -->
 			</div>
 		<?php } ?>
@@ -201,5 +201,3 @@ switch_to_blog( $start_blog_id );
 </div>
 <?php
 wpj_loader::unload();
-
-?>
