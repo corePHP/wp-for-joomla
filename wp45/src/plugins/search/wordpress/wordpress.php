@@ -48,8 +48,8 @@ class plgSearchWordPress extends JPlugin
 	{
 		global $mainframe;
 
-		$db		=& JFactory::getDBO();
-		$user	=& JFactory::getUser();
+		$db		= JFactory::getDBO();
+		$user	= JFactory::getUser();
 
 		// Load WordPress
 		require_once( JPATH_ROOT .DS. 'components' .DS. 'com_wordpress' .DS. 'wordpress_loader.php' );
