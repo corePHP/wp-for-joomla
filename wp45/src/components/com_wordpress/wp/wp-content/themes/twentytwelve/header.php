@@ -116,6 +116,13 @@ if(!is_home()){
 	/* */
 		$pathway->addItem(wp_title('', false, 'right'), '');
 }
+
+// Fixes for Yoast
+if( class_exists( 'WPSEO_Options' ) ) {
+	$document->setMetaData('description', '');
+	$document->setMetaData('keywords', '');
+
+}
 ?>
 
 <div id="wp-page" class="hfeed site">
