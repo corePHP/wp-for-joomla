@@ -231,6 +231,7 @@ printf( __( 'If you like, you may enter custom structures for your category and 
 
 <?php submit_button(); ?>
   </form>
+   <?php /* rc_corephp - handled through Joomla -BUR * / ?>
 <?php if ( !is_multisite() ) { ?>
 <?php if ( $iis7_permalinks ) :
 	if ( isset($_POST['submit']) && $permalink_structure && ! $using_index_permalinks && ! $writable ) :
@@ -262,7 +263,7 @@ printf( __( 'If you like, you may enter custom structures for your category and 
 	<?php endif; ?>
 <?php endif; ?>
 <?php } // multisite ?>
-
+<?php /* */ ?>
 </div>
 
 <?php require( ABSPATH . 'wp-admin/admin-footer.php' ); ?>

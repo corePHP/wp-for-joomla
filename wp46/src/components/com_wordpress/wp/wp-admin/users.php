@@ -483,12 +483,13 @@ if ( ! empty($messages) ) {
 <h1>
 <?php
 echo esc_html( $title );
+/* rc_corephp Never allow users to be created through WordPress! * /
 if ( current_user_can( 'create_users' ) ) { ?>
 	<a href="<?php echo admin_url( 'user-new.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add New', 'user' ); ?></a>
 <?php } elseif ( is_multisite() && current_user_can( 'promote_users' ) ) { ?>
 	<a href="<?php echo admin_url( 'user-new.php' ); ?>" class="page-title-action"><?php echo esc_html_x( 'Add Existing', 'user' ); ?></a>
 <?php }
-
+/* */
 if ( strlen( $usersearch ) ) {
 	/* translators: %s: search keywords */
 	printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;' ) . '</span>', esc_html( $usersearch ) );

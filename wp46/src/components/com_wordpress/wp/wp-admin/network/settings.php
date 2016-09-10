@@ -131,15 +131,17 @@ if ( isset( $_GET['updated'] ) ) {
 				$reg = get_site_option( 'registration' );
 				?>
 				<td>
+				<?php /* rc_corephp - This is not available in Joomla * / ?>
 					<fieldset>
 					<legend class="screen-reader-text"><?php _e( 'New registrations settings' ) ?></legend>
 					<label><input name="registration" type="radio" id="registration1" value="none"<?php checked( $reg, 'none') ?> /> <?php _e( 'Registration is disabled.' ); ?></label><br />
-					<label><input name="registration" type="radio" id="registration2" value="user"<?php checked( $reg, 'user') ?> /> <?php _e( 'User accounts may be registered.' ); ?></label><br />
+					<label><input name="registration" type="radio" id="registration2" value="user"<?php checked( $reg, 'user') ?> /> <?php _e( 'User accounts may be registered.' ); ?></label><br /><?php /* */ ?>
 					<label><input name="registration" type="radio" id="registration3" value="blog"<?php checked( $reg, 'blog') ?> /> <?php _e( 'Logged in users may register new sites.' ); ?></label><br />
+					<?php /* rc_corephp - This is not available in Joomla * / ?>
 					<label><input name="registration" type="radio" id="registration4" value="all"<?php checked( $reg, 'all') ?> /> <?php _e( 'Both sites and user accounts can be registered.' ); ?></label>
 					<?php if ( is_subdomain_install() ) {
 						echo '<p class="description">';
-						/* translators: 1: NOBLOGREDIRECT 2: wp-config.php */
+						// translators: 1: NOBLOGREDIRECT 2: wp-config.php 
 						printf( __( 'If registration is disabled, please set %1$s in %2$s to a URL you will redirect visitors to if they visit a non-existent site.' ),
 							'<code>NOBLOGREDIRECT</code>',
 							'<code>wp-config.php</code>'
@@ -166,6 +168,7 @@ if ( isset( $_GET['updated'] ) ) {
 				<td>
 					<label><input name="add_new_users" type="checkbox" id="add_new_users" value="1"<?php checked( get_site_option( 'add_new_users' ) ) ?> /> <?php _e( 'Allow site administrators to add new users to their site via the "Users &rarr; Add New" page.' ); ?></label>
 				</td>
+				<?php /* */ ?>
 			</tr>
 
 			<tr>

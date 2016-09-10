@@ -264,6 +264,14 @@ if ( post_type_supports($post_type, 'page-attributes') )
 
 if ( $thumbnail_support && current_user_can( 'upload_files' ) )
 	add_meta_box('postimagediv', esc_html( $post_type_object->labels->featured_image ), 'post_thumbnail_meta_box', null, 'side', 'low');
+	
+	
+if ( $theme_support || $audio_post_support || $video_post_support ) {
+    /* rc_corephp -BUR add conditional */
+    if ( get_site_option( 'j_tt_show_header_image', 1 ) ){
+	   add_meta_box('postimagediv', __('Featured Image'), 'post_thumbnail_meta_box', null, 'side', 'low');
+    }
+}
 
 if ( post_type_supports($post_type, 'excerpt') )
 	add_meta_box('postexcerpt', __('Excerpt'), 'post_excerpt_meta_box', null, 'normal', 'core');
