@@ -16,6 +16,10 @@
  * @return bool True if subdomain configuration is enabled, false otherwise.
  */
 function is_subdomain_install() {
+
+/* rc_corephp - Our install is always directories, never subdomains, these checks are useless */
+	return false;
+	
 	if ( defined('SUBDOMAIN_INSTALL') )
 		return SUBDOMAIN_INSTALL;
 
