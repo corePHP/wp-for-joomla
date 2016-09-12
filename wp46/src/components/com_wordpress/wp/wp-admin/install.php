@@ -91,6 +91,12 @@ function display_header( $body_classes = '' ) {
  */
 function display_setup_form( $error = null ) {
 	global $wpdb;
+	
+	/* rc_corephp */
+	$user_table = ( $wpdb->get_var("SHOW TABLES LIKE '$wpdb->users'") != null );
+	/* rc_corephp - Get Joomla user instance */
+	$juser = JFactory::getUser();
+
 
 	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
 	$user_table = ( $wpdb->get_var( $sql ) != null );
@@ -104,6 +110,11 @@ function display_setup_form( $error = null ) {
 	$weblog_title = isset( $_POST['weblog_title'] ) ? trim( wp_unslash( $_POST['weblog_title'] ) ) : '';
 	$user_name = isset($_POST['user_name']) ? trim( wp_unslash( $_POST['user_name'] ) ) : '';
 	$admin_email  = isset( $_POST['admin_email']  ) ? trim( wp_unslash( $_POST['admin_email'] ) ) : '';
+	
+	/* rc_corephp - Set admin email to current user email, if email not set */
+	if ( '' == $admin_email ) {
+		$admin_email = $juser->get( 'email' );
+	}
 
 	if ( ! is_null( $error ) ) {
 ?>
@@ -116,6 +127,7 @@ function display_setup_form( $error = null ) {
 			<th scope="row"><label for="weblog_title"><?php _e( 'Site Title' ); ?></label></th>
 			<td><input name="weblog_title" type="text" id="weblog_title" size="25" value="<?php echo esc_attr( $weblog_title ); ?>" /></td>
 		</tr>
+		<?php /* rc_corephp - We don't want to display the username or password fields * / ?>
 		<tr>
 			<th scope="row"><label for="user_login"><?php _e('Username'); ?></label></th>
 			<td>
@@ -149,7 +161,7 @@ function display_setup_form( $error = null ) {
 				</div>
 				<p><span class="description important hide-if-no-js">
 				<strong><?php _e( 'Important:' ); ?></strong>
-				<?php /* translators: The non-breaking space prevents 1Password from thinking the text "log in" should trigger a password save prompt. */ ?>
+				<?php // translators: The non-breaking space prevents 1Password from thinking the text "log in" should trigger a password save prompt.  ?>
 				<?php _e( 'You will need this password to log&nbsp;in. Please store it in a secure location.' ); ?></span></p>
 			</td>
 		</tr>
@@ -173,6 +185,7 @@ function display_setup_form( $error = null ) {
 			</td>
 		</tr>
 		<?php endif; ?>
+		<?php /* */ ?>
 		<tr>
 			<th scope="row"><label for="admin_email"><?php _e( 'Your Email' ); ?></label></th>
 			<td><input name="admin_email" type="email" id="admin_email" size="25" value="<?php echo esc_attr( $admin_email ); ?>" />
@@ -207,6 +220,58 @@ function display_setup_form( $error = null ) {
 </form>
 <?php
 } // end display_setup_form()
+
+/* rc_corephp - Created Joomla login form function */
+/**
+ * Function to display Joomlas login form
+ *
+ * @return bool False if bad login or not logged in, true if login success
+ */
+function joomla_login_form( $msg = '' )
+{
+	$error = false;
+	if ( isset( $_POST['wp_login'] ) ) {
+		global $mainframe;
+		$credentials = array( 'username' => $_POST['username'], 'password' => $_POST['passwd'] );
+		$juser = $mainframe->login( $credentials, array( 'silent' => true ) );
+
+		if ( !$juser ) {
+			$error = '<strong>'. JText::_( 'E_LOGIN_AUTHENTICATE') . '</strong>';
+		} else {
+			return true;
+		}
+	}
+	display_header();
+
+	$uri    = JFactory::getURI();
+	$url    = $uri->toString( array( 'path', 'query', 'fragment' ) );
+	?>
+<h1><?php _e( 'Welcome' ); ?></h1>
+<?php if ( $error ) { ?>
+	<p><?php echo $error; ?></p>
+<?php } ?>
+<?php if ( $msg ) { ?>
+	<p><?php echo $msg; ?></p>
+<?php } ?>
+<p><?php echo 'Please login with your Joomla username/password before completing the WordPress install.'; ?></p>
+<form id="form-login" name="login" method="post" action="<?php echo $url; ?>">
+	<fieldset class="input">
+		<p id="form-login-username">
+			<label for="modlgn_username"><?php echo JText::_('Username') ?></label><br />
+			<input id="modlgn_username" type="text" name="username" class="inputbox" alt="username" size="18" />
+		</p>
+		<p id="form-login-password">
+			<label for="modlgn_passwd"><?php echo JText::_('Password') ?></label><br />
+			<input id="modlgn_passwd" type="password" name="passwd" class="inputbox" size="18" alt="password" />
+		</p>
+	<input type="submit" name="Submit" class="button" value="<?php echo JText::_('LOGIN') ?>" />
+	</fieldset>
+	<input type="hidden" name="wp_login" value="1" />
+	<?php echo JHTML::_( 'form.token' ); ?>
+</form>
+	<?php
+	return false;
+}
 
 // Let's check to make sure WP isn't already installed.
 if ( is_blog_installed() ) {
@@ -296,6 +361,15 @@ switch($step) {
 		// Deliberately fall through if we can't reach the translations API.
 
 	case 1: // Step 1, direct link or from language chooser.
+	
+			/* rc_corephp - Check to see if user is logged into the front-end of Joomla */
+		$juser = JFactory::getUser();
+		if ( !$juser->get( 'id' ) ) {
+			if ( !joomla_login_form() ) {
+				break;
+			}
+		}
+		
 		if ( ! empty( $language ) ) {
 			$loaded_language = wp_download_language_pack( $language );
 			if ( $loaded_language ) {
@@ -318,6 +392,13 @@ switch($step) {
 		display_setup_form();
 		break;
 	case 2:
+		/* rc_corephp - Check again that the Joomla user is still logged in */
+		$juser = JFactory::getUser();
+		if ( !$juser->get( 'id' ) ) {
+			joomla_login_form( 'It seems you are logged out of Joomla, please login again.' );
+			break;
+		}
+		
 		if ( ! empty( $language ) && load_default_textdomain( $language ) ) {
 			$loaded_language = $language;
 			$GLOBALS['wp_locale'] = new WP_Locale();
@@ -341,6 +422,7 @@ switch($step) {
 
 		// Check email address.
 		$error = false;
+		/* rc_corephp - Commenting these check, we are only going by the current logged in user * /
 		if ( empty( $user_name ) ) {
 			// TODO: poka-yoke
 			display_setup_form( __( 'Please provide a valid username.' ) );
@@ -361,7 +443,7 @@ switch($step) {
 			display_setup_form( __( 'Sorry, that isn&#8217;t a valid email address. Email addresses look like <code>username@example.com</code>.' ) );
 			$error = true;
 		}
-
+/* */
 		if ( $error === false ) {
 			$wpdb->show_errors();
 			$result = wp_install( $weblog_title, $user_name, $admin_email, $public, '', wp_slash( $admin_password ), $loaded_language );
@@ -370,6 +452,7 @@ switch($step) {
 <h1><?php _e( 'Success!' ); ?></h1>
 
 <p><?php _e( 'WordPress has been installed. Thank you, and enjoy!' ); ?></p>
+<?php /* rc_corephp - We don't need this, our user knows their un/pw * / ?>
 
 <table class="form-table install-success">
 	<tr>
@@ -386,10 +469,15 @@ switch($step) {
 		</td>
 	</tr>
 </table>
-
+<?php /* */ ?>
 <p class="step"><a href="<?php echo esc_url( wp_login_url() ); ?>" class="button button-large"><?php _e( 'Log In' ); ?></a></p>
 
 <?php
+// rc_corephp Set default template to twentytwelve
+$db = JFactory::getDbo();
+$query = "UPDATE #__wp_options SET option_value='twentytwelve' WHERE option_name='stylesheet' || option_name='template'";
+$db->setQuery($query);
+$db->execute();
 		}
 		break;
 }

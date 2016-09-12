@@ -9,6 +9,9 @@
 /** WordPress Administration Bootstrap */
 require_once( dirname( __FILE__ ) . '/admin.php' );
 
+/* rc_corephp - We never want a user to be created through WordPress */
+wp_redirect( 'users.php' );
+
 if ( is_multisite() ) {
 	if ( ! current_user_can( 'create_users' ) && ! current_user_can( 'promote_users' ) ) {
 		wp_die(

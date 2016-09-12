@@ -72,12 +72,14 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		}
 	}
 
+	/* rc_corephp - Commented out as we are using user_id and not email * /
+
 	if ( empty( $domain ) )
 		wp_die( __( 'Missing or invalid site address.' ) );
 
 	if ( isset( $blog['email'] ) && '' === trim( $blog['email'] ) ) {
 		wp_die( __( 'Missing email address.' ) );
-	}
+	}/* */
 
 	$email = sanitize_email( $blog['email'] );
 	if ( ! is_email( $email ) ) {
@@ -93,6 +95,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 	}
 
 	$password = 'N/A';
+	/* rc_corephp - Commented out as we are using user_id and not email * /
 	$user_id = email_exists($email);
 	if ( !$user_id ) { // Create a new user with a random password
 		/**
@@ -101,7 +104,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		 * @since 4.5.0
 		 *
 		 * @param string $email Email of the non-existent user.
-		 */
+		 
 		do_action( 'pre_network_site_new_created_user', $email );
 
 		$user_id = username_exists( $domain );
@@ -120,15 +123,30 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		  * @since 4.4.0
 		  *
 		  * @param int $user_id ID of the newly created user.
-		  */
+		  
 		do_action( 'network_site_new_created_user', $user_id );
+	}/* */
+	
+	/* rc_corephp - Added function to get user_id or create wp user if it doesn't exist */
+	$_user = get_userdata( $blog['user_id'] );
+	if ( !isset( $_user->ID ) || !$_user->ID ) {
+		$juser = JFactory::getUser( $blog['user_id'] );
+		$user_id = j_create_wp_user( $juser );
+	} else {
+		$user_id = $_user->ID;
 	}
 
 	$wpdb->hide_errors();
 	$id = wpmu_create_blog( $newdomain, $path, $title, $user_id, $meta, $current_site->id );
 	$wpdb->show_errors();
 	if ( ! is_wp_error( $id ) ) {
-		if ( ! is_super_admin( $user_id ) && !get_user_option( 'primary_blog', $user_id ) ) {
+		// rc_corephp - Edied if statement for the primary_blog update
+		$_primary_blog = get_user_option( 'primary_blog', $user_id );
+		
+		/* rc_corephp -BUR */
+		if ( !is_super_admin( $user_id ) && ( ( 42 != $user_id && 1 == $_primary_blog ) || !$_primary_blog ) )
+		{
+		/* rc_corephp -BUR if ( !is_super_admin( $user_id ) && !get_user_option( 'primary_blog', $user_id ) ) */
 			update_user_option( $user_id, 'primary_blog', $id, true );
 		}
 
@@ -189,7 +207,18 @@ require( ABSPATH . 'wp-admin/admin-header.php' );
 if ( ! empty( $messages ) ) {
 	foreach ( $messages as $msg )
 		echo '<div id="message" class="updated notice is-dismissible"><p>' . $msg . '</p></div>';
-} ?>
+} 
+/* rc_corephp - Replacing Admin Email field with a drop down list of all Joomla user */
+// Get all users
+$db    =& JFactory::getDBO();
+$query = "SELECT id, name, username FROM `#__users` ORDER BY `id`";
+$db->setQuery( $query );
+$ulist = $db->loadObjectList();
+$htmlulist = '';
+foreach($ulist as $user){
+	$htmlulist .= "<option value='{$user->id}'>(ID: {$user->id}) {$user->name} [{$user->username}]</option>\n";
+}
+?>
 <form method="post" action="<?php echo network_admin_url( 'site-new.php?action=add-site' ); ?>" novalidate="novalidate">
 <?php wp_nonce_field( 'add-blog', '_wpnonce_add-blog' ) ?>
 	<table class="form-table">
@@ -208,6 +237,11 @@ if ( ! empty( $messages ) ) {
 		<tr class="form-field form-required">
 			<th scope="row"><label for="site-title"><?php _e( 'Site Title' ) ?></label></th>
 			<td><input name="blog[title]" type="text" class="regular-text" id="site-title" /></td>
+		</tr>
+		<?php /* rc_corephp - Display users */ ?>
+		<tr class="form-field form-required">
+			<th scope="row"><?php _e('User') ?></th>
+			<td><select name="blog[user_id]"><option value=""> - <?php _e('Select User'); ?> - </option><?php echo $htmlulist; ?></select></td>
 		</tr>
 		<?php
 		$languages    = get_available_languages();
@@ -238,12 +272,15 @@ if ( ! empty( $messages ) ) {
 				</td>
 			</tr>
 		<?php endif; // Languages. ?>
+		<?php /* rc_corephp - Comment old code out * / ?>
 		<tr class="form-field form-required">
 			<th scope="row"><label for="admin-email"><?php _e( 'Admin Email' ) ?></label></th>
 			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" /></td>
-		</tr>
+		</tr><?php /* */ ?>
 		<tr class="form-field">
-			<td colspan="2"><?php _e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and password will be mailed to this email address.' ) ?></td>
+			<td colspan="2">
+			Select the user to be the administrator of this blog. New users must be created through Joomla first.<?php // rc_corephp - We don't need this 
+			//_e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and password will be mailed to this email address.' ) ?></td>
 		</tr>
 	</table>
 

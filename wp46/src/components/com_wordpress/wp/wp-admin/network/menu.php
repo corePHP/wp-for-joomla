@@ -56,7 +56,8 @@ if ( defined( 'MULTISITE' ) && defined( 'WP_ALLOW_MULTISITE' ) && WP_ALLOW_MULTI
 	$submenu['settings.php'][10] = array( __('Network Setup'), 'manage_network_options', 'setup.php' );
 }
 unset($update_data);
-
+/* rc_corephp - Added this new page - For users to update their WordPress install */
+$submenu[ 'upgrade.php' ][35] = array( __('Joomla Update'), 'joomla_manage_network', 'joomla-upgrade.php' );
 $menu[99] = array( '', 'exist', 'separator-last', '', 'wp-menu-separator' );
 
 require_once(ABSPATH . 'wp-admin/includes/menu.php');

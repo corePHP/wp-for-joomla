@@ -66,6 +66,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <p class="description" id="tagline-description"><?php _e( 'In a few words, explain what this site is about.' ) ?></p></td>
 </tr>
 <?php if ( !is_multisite() ) { ?>
+<?php /* rc_corephp - Commenting this out as these variables are dynamic * / ?>
 <tr>
 <th scope="row"><label for="siteurl"><?php _e('WordPress Address (URL)') ?></label></th>
 <td><input name="siteurl" type="url" id="siteurl" value="<?php form_option( 'siteurl' ); ?>"<?php disabled( defined( 'WP_SITEURL' ) ); ?> class="regular-text code<?php if ( defined( 'WP_SITEURL' ) ) echo ' disabled' ?>" /></td>
@@ -77,11 +78,13 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <p class="description" id="home-description"><?php _e( 'Enter the address here if you <a href="https://codex.wordpress.org/Giving_WordPress_Its_Own_Directory">want your site home page to be different from your WordPress installation directory.</a>' ); ?></p></td>
 <?php endif; ?>
 </tr>
+<?php /* */ ?>
 <tr>
 <th scope="row"><label for="admin_email"><?php _e('Email Address') ?> </label></th>
 <td><input name="admin_email" type="email" id="admin_email" aria-describedby="admin-email-description" value="<?php form_option( 'admin_email' ); ?>" class="regular-text ltr" />
 <p class="description" id="admin-email-description"><?php _e( 'This address is used for admin purposes, like new user notification.' ) ?></p></td>
 </tr>
+<?php /* rc_corephp - Commenting this out as this is handled through Joomla * / ?>
 <tr>
 <th scope="row"><?php _e('Membership') ?></th>
 <td> <fieldset><legend class="screen-reader-text"><span><?php _e('Membership') ?></span></legend><label for="users_can_register">
@@ -89,6 +92,7 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <?php _e('Anyone can register') ?></label>
 </fieldset></td>
 </tr>
+<?php /* */ ?>
 <tr>
 <th scope="row"><label for="default_role"><?php _e('New User Default Role') ?></label></th>
 <td>
