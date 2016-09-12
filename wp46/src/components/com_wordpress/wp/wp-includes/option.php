@@ -113,9 +113,97 @@ function get_option( $option, $default = false ) {
 		}
 	}
 
+	// Commented out rc_corephp
 	// If home is not set use siteurl.
-	if ( 'home' == $option && '' == $value )
-		return get_option( 'siteurl' );
+	// if ( 'home' == $option && '' == $value )
+		// return get_option( 'siteurl' );
+	
+			// If we are not in multi-site then dynamic URLs
+	if ( ( !is_multisite() ) || ( 1 == @$wpdb->blogid ) ) {
+		// If home is requested - pull static path - Added rc_corephp
+		if ( 'home' == $option ) {
+			// Check to see if we are in the process of installing multisite
+			$tmp_multisite = false;
+			if ( defined( 'WP_ALLOW_MULTISITE' )
+				&& file_exists( ABSPATH . '..' .DS. 'configuration.php' )
+			) {
+				$tmp_multisite = true;
+			}
+
+			// If we are in multi-site then create the same link as siteurl
+			if ( is_multisite() || $tmp_multisite ) {
+				if ( !$home_link ) {
+					$wp_component_path = DS. 'components' .DS. 'com_wordpress' .DS. 'wp';
+					if ( false === strpos( ABSPATH, $wp_component_path ) ) {
+						$wp_component_path = '';
+					}
+					$home_link = untrailingslashit( j_get_root_uri() )
+						. str_replace( DS, '/', $wp_component_path );
+				}
+			}
+
+			// If non multisite
+			if ( !$home_link ) {
+				if ( '' != get_option( 'permalink_structure' ) ) {
+					if (  is_admin()
+						|| ( defined( '_WP_INCLUDED_J' ) && constant( '_WP_INCLUDED_J' ) )
+					) {
+						global $mainframe;
+
+						$link = j_get_root_uri();
+
+						if ( ( $itemid = j_get_itemid() ) ) {
+							$menu = $mainframe->getMenu();
+							$item = $menu->getItem( $itemid );
+							// fixed issue with WP sites on homepage - rc_corephp
+							$_is_home = ( 1 == $item->home );
+							// Avoid addint the slug of the menu if we are using sh404sef and
+							// if the blog is set up as the homepage because the slug is on the
+							// permalink structured
+							if ( ( 1 != $item->home
+								|| !JPluginHelper::importPlugin( 'system', 'shsef' ) )
+								&& !$_is_home
+							) {
+								$link .= $item->alias;
+							}
+						} else {
+							$link .= 'component/wordpress';
+						}
+
+						$home_link = $link;
+					} else {
+						$itemid = j_get_itemid();
+						if ( $itemid ) {
+							$itemid = '&Itemid=' . $itemid;
+						}
+						$home_link = untrailingslashit( j_get_root_uri() )
+							. str_replace( JURI::root( true ), '',
+								JRoute::_( 'index.php?option=com_wordpress' . $itemid ) );
+					}
+				} else {
+					$home_link = untrailingslashit( j_get_root_uri() );
+				}
+			}
+
+			$home_link = untrailingslashit( $home_link );
+			return $home_link;
+		}
+
+		// This needs to be coming from some configuration option
+		if ( 'siteurl' == $option ) {
+			if ( !$siteurl_link ) {
+				$wp_component_path = DS. 'components' .DS. 'com_wordpress' .DS. 'wp';
+				if ( false === strpos( ABSPATH, $wp_component_path ) ) {
+					$wp_component_path = '';
+				}
+				$siteurl_link = untrailingslashit( j_get_root_uri() )
+					. str_replace( DS, '/', $wp_component_path );
+			}
+
+			return $siteurl_link;
+		}
+	}
+	// end rc_corephp
 
 	if ( in_array( $option, array('siteurl', 'home', 'category_base', 'tag_base') ) )
 		$value = untrailingslashit( $value );

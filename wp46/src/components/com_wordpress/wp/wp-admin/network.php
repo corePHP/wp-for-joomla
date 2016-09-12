@@ -614,7 +614,7 @@ EOF;
 	}
 }
 
-<?php
+/*rc-corephp - removed extra php tag */
 if ( $_POST ) {
 
 	check_admin_referer( 'install-network-1' );

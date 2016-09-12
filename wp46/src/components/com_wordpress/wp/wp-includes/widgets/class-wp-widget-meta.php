@@ -58,6 +58,8 @@ class WP_Widget_Meta extends WP_Widget {
 			<li><a href="<?php echo esc_url( get_bloginfo( 'rss2_url' ) ); ?>"><?php _e('Entries <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
 			<li><a href="<?php echo esc_url( get_bloginfo( 'comments_rss2_url' ) ); ?>"><?php _e('Comments <abbr title="Really Simple Syndication">RSS</abbr>'); ?></a></li>
 			<?php
+			/* rc_corephp
+			- Commenting this out as there is already a link to WordPress in the footer. * /
 			/**
 			 * Filters the "Powered by WordPress" text in the Meta widget.
 			 *
@@ -65,11 +67,11 @@ class WP_Widget_Meta extends WP_Widget {
 			 *
 			 * @param string $title_text Default title text for the WordPress.org link.
 			 */
-			echo apply_filters( 'widget_meta_poweredby', sprintf( '<li><a href="%s" title="%s">%s</a></li>',
+			/*echo apply_filters( 'widget_meta_poweredby', sprintf( '<li><a href="%s" title="%s">%s</a></li>',
 				esc_url( __( 'https://wordpress.org/' ) ),
 				esc_attr__( 'Powered by WordPress, state-of-the-art semantic personal publishing platform.' ),
 				_x( 'WordPress.org', 'meta widget link text' )
-			) );
+			) );*/
 
 			wp_meta();
 			?>
