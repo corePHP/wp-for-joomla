@@ -406,9 +406,9 @@ function wpj_admin_hook()
 	// 	$role = get_option( 'default_role' );
 	// }
 
-	if ( $juser->authorise( 'core.manage', '' ) ) {
+	//if ( $juser->authorise( 'core.manage', '' ) ) {
 		add_action( 'admin_bar_menu', 'wp_admin_bar_back_to_joomla', 10 );
-	}
+	//}
 	function wp_admin_bar_back_to_joomla( $wp_admin_bar )
 	{
 		$wp_admin_bar->add_menu( array(
