@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="2.5" method="upgrade">
+	<name>COM_WORDPRESS</name>
+	<creationDate>Apr 2015</creationDate>
+	<author>'corePHP'</author>
+	<authorEmail>support@corephp.com</authorEmail>
+	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
+	<authorUrl>www.corephp.com</authorUrl>
+	<version>4.5.0.0</version>
+	<description>COM_WORDPRESS_DESCRIPTION</description>
+
+	<scriptfile>script.php</scriptfile>
+
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+
+	<files folder="site">
+		<folder></folder>
+  	</files>
+
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.com_wordpress.ini</language>
+    </languages>
+
+	<administration>
+		<menu img="components/com_wordpress/images/wordpress16.gif">COM_WORDPRESS_MENU</menu>
+
+		<files folder="admin">
+			<folder></folder>
+		</files>
+
+	    <languages folder="admin">
+	        <language tag="en-GB">language/en-GB/en-GB.com_wordpress.sys.ini</language>
+	    </languages>
+	</administration>
+</extension>

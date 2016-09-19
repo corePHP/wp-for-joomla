@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_WORDPRESS_CATEGORY" >
+		<help key="JHELP_MENUS_MENU_ITEM_ARTICLE_CATEGORY_LIST" />
+		<message>
+			<![CDATA[COM_CONTENT_CATEGORY_VIEW_BLOG_DESC]]>
+		</message>
+	</layout>
+	<config addfieldpath="/administrator/components/com_wordpress/models/fields">
+		<fields name="request">
+			<fieldset name="request">
+				<field type="spacer" name="myspacer" label="COM_WORDPRESS_MUST_HAVE_MENU" />
+				<field name="category" type="wpcategory" description="JGLOBAL_CHOOSE_CATEGORY_DESC" label="JGLOBAL_CHOOSE_CATEGORY_LABEL" required="true" />
+			</fieldset>
+		</fields>
+	</config>
+</metadata>
