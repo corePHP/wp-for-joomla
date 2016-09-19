@@ -30,11 +30,82 @@ if ( is_multisite() ) {
 	}
 }
 
-require_once( dirname( __FILE__ ) . '/includes/network.php' );
+//require_once( dirname( __FILE__ ) . '/includes/network.php' );
 
 // We need to create references to ms global tables to enable Network.
 foreach ( $wpdb->tables( 'ms_global' ) as $table => $prefixed_table ) {
 	$wpdb->$table = $prefixed_table;
+}
+
+/**
+ * Check for an existing network.
+ *
+ * @since 3.0.0
+ * @return Whether a network exists.
+ */
+function network_domain_check() {
+	global $wpdb;
+
+	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->site ) );
+	if ( $wpdb->get_var( $sql ) ) {
+		return $wpdb->get_var( "SELECT domain FROM $wpdb->site ORDER BY id ASC LIMIT 1" );
+	}
+	return false;
+}
+
+/**
+ * Allow subdomain install
+ *
+ * @since 3.0.0
+ * @return bool Whether subdomain install is allowed
+ */
+function allow_subdomain_install() {
+	$domain = preg_replace( '|https?://([^/]+)|', '$1', get_option( 'home' ) );
+	if( parse_url( get_option( 'home' ), PHP_URL_PATH ) || 'localhost' == $domain || preg_match( '|^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$|', $domain ) )
+		return false;
+
+	return true;
+}
+/**
+ * Allow subdirectory install.
+ *
+ * @since 3.0.0
+ * @return bool Whether subdirectory install is allowed
+ */
+function allow_subdirectory_install() {
+	global $wpdb;
+        /**
+         * Filter whether to enable the subdirectory install feature in Multisite.
+         *
+         * @since 3.0.0
+         *
+         * @param bool true Whether to enable the subdirectory install feature in Multisite. Default is false.
+         */
+	if ( apply_filters( 'allow_subdirectory_install', false ) )
+		return true;
+
+	if ( defined( 'ALLOW_SUBDIRECTORY_INSTALL' ) && ALLOW_SUBDIRECTORY_INSTALL )
+		return true;
+
+	$post = $wpdb->get_row( "SELECT ID FROM $wpdb->posts WHERE post_date < DATE_SUB(NOW(), INTERVAL 1 MONTH) AND post_status = 'publish'" );
+	if ( empty( $post ) )
+		return true;
+
+	return false;
+}
+/**
+ * Get base domain of network.
+ *
+ * @since 3.0.0
+ * @return string Base domain.
+ */
+function get_clean_basedomain() {
+	if ( $existing_domain = network_domain_check() )
+		return $existing_domain;
+	$domain = preg_replace( '|https?://|', '', get_option( 'siteurl' ) );
+	if ( $slash = strpos( $domain, '/' ) )
+		$domain = substr( $domain, 0, $slash );
+	return $domain;
 }
 
 if ( ! network_domain_check() && ( ! defined( 'WP_ALLOW_MULTISITE' ) || ! WP_ALLOW_MULTISITE ) ) {
