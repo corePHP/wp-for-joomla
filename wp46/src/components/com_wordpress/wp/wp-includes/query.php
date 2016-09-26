@@ -1608,7 +1608,9 @@ class WP_Query {
 		if($qv['cat']=="")
 		{
 			$menu = JSite::getMenu();
-			$menuItem = $menu->getItem($menu->getActive()->tree[0]);
+			$app = JFactory::getApplication();
+			$menuItem = $menu->getItem($app->getMenu()->getActive()->id);
+			
 			if(isset($menuItem->query['category']) && $menuItem->query['layout'] == "category")
 			{
 				$idObj = get_category_by_slug($menuItem->query['category']); 
