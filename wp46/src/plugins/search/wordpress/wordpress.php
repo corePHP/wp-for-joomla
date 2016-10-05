@@ -52,7 +52,7 @@ class plgSearchWordPress extends JPlugin
 		$user	= JFactory::getUser();
 
 		// Load WordPress
-		require_once( JPATH_ROOT .DS. 'components' .DS. 'com_wordpress' .DS. 'wordpress_loader.php' );
+		require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
 		wpj_loader::load();
 
 		$searchText = $text;
