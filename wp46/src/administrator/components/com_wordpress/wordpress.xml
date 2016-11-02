@@ -16,7 +16,11 @@
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
 		</sql>
 	</install>
-
+	
+	<updateservers>
+    	<server type="extension" priority="1" name="Wp For Joomla Updates">http://update.corephp.com/update.xml</server>
+ 	</updateservers>
+	
 	<files folder="site">
 		<folder></folder>
   	</files>
