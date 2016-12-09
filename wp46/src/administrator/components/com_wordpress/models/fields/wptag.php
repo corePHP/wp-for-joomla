@@ -10,6 +10,7 @@ class JFormFieldWPTag extends JFormFieldList
 	public function getOptions()
 	{
 	    $db = JFactory::getDBO();
+		$options = array();
 	    $query = $db->getQuery(true);
 	    $query->select('t.slug');
 	    $query->select('t.name');
@@ -19,9 +20,11 @@ class JFormFieldWPTag extends JFormFieldList
 	    $db->setQuery($query);
 	    $optionList = $db->loadAssocList();
 
-	    foreach ( $optionList as $option ) {
-    	    $options[] = JHtml::_( 'select.option', $option['slug'], $option['name'] );
-	    }
+		if( !is_null( $optionList ) ) {
+		    foreach ( $optionList as $option ) {
+	    	    $options[] = JHtml::_( 'select.option', $option['slug'], $option['name'] );
+		    }
+		}
 
         return $options;
 	}

@@ -18,9 +18,8 @@ class JFormFieldWPAuthor extends JFormFieldList
 	    $query->group("u.ID");
 	    $db->setQuery($query);
 	    $optionList = $db->loadAssocList();
-
 	    foreach ( $optionList as $option ) {
-    	    $options[] = JHtml::_( 'select.option', $option['user_login'], $option['user_nickname'] );
+			$options[] = JHtml::_( 'select.option', $option['user_login'], $option['user_nicename'] );
 	    }
 
         return $options;
