@@ -79,12 +79,13 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 
 	if ( isset( $blog['email'] ) && '' === trim( $blog['email'] ) ) {
 		wp_die( __( 'Missing email address.' ) );
-	}/* */
+	}
 
 	$email = sanitize_email( $blog['email'] );
 	if ( ! is_email( $email ) ) {
 		wp_die( __( 'Invalid email address.' ) );
 	}
+    /* */
 
 	if ( is_subdomain_install() ) {
 		$newdomain = $domain . '.' . preg_replace( '|^www\.|', '', $current_site->domain );
@@ -104,7 +105,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		 * @since 4.5.0
 		 *
 		 * @param string $email Email of the non-existent user.
-		 
+
 		do_action( 'pre_network_site_new_created_user', $email );
 
 		$user_id = username_exists( $domain );
@@ -123,10 +124,10 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 		  * @since 4.4.0
 		  *
 		  * @param int $user_id ID of the newly created user.
-		  
+
 		do_action( 'network_site_new_created_user', $user_id );
 	}/* */
-	
+
 	/* rc_corephp - Added function to get user_id or create wp user if it doesn't exist */
 	$_user = get_userdata( $blog['user_id'] );
 	if ( !isset( $_user->ID ) || !$_user->ID ) {
@@ -142,7 +143,7 @@ if ( isset($_REQUEST['action']) && 'add-site' == $_REQUEST['action'] ) {
 	if ( ! is_wp_error( $id ) ) {
 		// rc_corephp - Edied if statement for the primary_blog update
 		$_primary_blog = get_user_option( 'primary_blog', $user_id );
-		
+
 		/* rc_corephp -BUR */
 		if ( !is_super_admin( $user_id ) && ( ( 42 != $user_id && 1 == $_primary_blog ) || !$_primary_blog ) )
 		{
@@ -207,7 +208,7 @@ require( ABSPATH . 'wp-admin/admin-header.php' );
 if ( ! empty( $messages ) ) {
 	foreach ( $messages as $msg )
 		echo '<div id="message" class="updated notice is-dismissible"><p>' . $msg . '</p></div>';
-} 
+}
 /* rc_corephp - Replacing Admin Email field with a drop down list of all Joomla user */
 // Get all users
 $db    =& JFactory::getDBO();
@@ -279,7 +280,7 @@ foreach($ulist as $user){
 		</tr><?php /* */ ?>
 		<tr class="form-field">
 			<td colspan="2">
-			Select the user to be the administrator of this blog. New users must be created through Joomla first.<?php // rc_corephp - We don't need this 
+			Select the user to be the administrator of this blog. New users must be created through Joomla first.<?php // rc_corephp - We don't need this
 			//_e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and password will be mailed to this email address.' ) ?></td>
 		</tr>
 	</table>
