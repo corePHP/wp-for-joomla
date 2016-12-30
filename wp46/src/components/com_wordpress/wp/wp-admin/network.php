@@ -158,9 +158,9 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <?php
 /**
  * rc_corephp - Function will allow user to move WordPress content directory to a specified dir
- * 
+ *
  * This is done before the installation of the multisites
- * 
+ *
  * @return void
  **/
 function network_step1_5()
@@ -258,6 +258,73 @@ function network_step1_5()
 
 	// Once everything is good to go, lets store the WordPress blog path to the db
 	update_option( 'wpj_multisite_path', trim( str_replace( JPATH_ROOT, '', $wp_dir ), DS ) );
+
+    $clean_domain = trim( get_clean_basedomain(), DS );
+
+    // Now lets insert some stuff in to the DB
+    $site = new stdClass();
+    $site->domain = $clean_domain;
+    $site->path   = '/' . $wp_new_folder_name . '/';
+
+    // Insert the object into the user profile table.
+    $result = JFactory::getDbo()->insertObject('#__wp_site', $site);
+
+    $blogs = new stdClass();
+    $blogs->site_id = 1;
+    $blogs->domain  = $clean_domain;
+    $blogs->path    = '/' . $wp_new_folder_name . '/';
+
+    // Insert the object into the user profile table.
+    $result = JFactory::getDbo()->insertObject('#__wp_blogs', $blogs);
+
+    // Now lets update files
+    $config = JFile::read( $wp_dir . DS . 'wp-config.php' );
+
+    $string = "/* That's all, stop editing! Happy blogging. */";
+    $string .= "\r\n";
+    $string .= 'define(\'MULTISITE\', true);';
+    $string .= "\r\n";
+    $string .= 'define(\'SUBDOMAIN_INSTALL\', false );';
+    $string .= "\r\n";
+    $string .= 'define(\'DOMAIN_CURRENT_SITE\', \'' . $clean_domain . '\');';
+    $string .= "\r\n";
+    $string .= "define('PATH_CURRENT_SITE', '/" . $wp_new_folder_name . "/' );";
+    $string .= "\r\n";
+    $string .= 'define(\'SITE_ID_CURRENT_SITE\', 1);';
+    $string .= "\r\n";
+    $string .= 'define(\'BLOG_ID_CURRENT_SITE\', 1);';
+
+    $new_config = str_replace( "/* That's all, stop editing! Happy blogging. */", $string, $config );
+
+    // Lets write our file now that we have replaced our strings
+    JFile::write( $wp_dir . DS . 'wp-config.php', $new_config );
+
+    $htaccess = 'RewriteEngine On';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteBase /' . $wp_new_folder_name . '/';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule ^index\.php$ - [L]';
+    $htaccess .= "\r\n";
+    $htaccess .= "\r\n";
+    $htaccess .= '# add a trailing slash to /wp-admin';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]';
+    $htaccess .= "\r\n";
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteCond %{REQUEST_FILENAME} -f [OR]';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteCond %{REQUEST_FILENAME} -d';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule ^ - [L]';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule ^([_0-9a-zA-Z-]+/)?(wp-(content|admin|includes).*) $2 [L]';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule ^([_0-9a-zA-Z-]+/)?(.*\.php)$ #2 [L]';
+    $htaccess .= "\r\n";
+    $htaccess .= 'RewriteRule . index.php [L]';
+
+    // Lets write this file
+    JFile::write( $wp_dir . DS . '.htaccess', $htaccess );
 
 	if ( rtrim( $wp_cur_dir, DS ) != rtrim( $wp_dir, DS ) ) {
 		$dir = str_replace( JPATH_ROOT, '', $wp_dir );
@@ -710,8 +777,8 @@ if ( $_POST ) {
 		network_step2();
 	}
 } elseif ( is_multisite() || network_domain_check() ) {
-	
-	
+
+
 	/* rc_corephp - Added the following lines to redirect user if they are re-enabling multisite */
 	global $wpdb, $mainframe;
 	$domain = network_domain_check();
