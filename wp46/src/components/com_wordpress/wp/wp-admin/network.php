@@ -270,9 +270,11 @@ function network_step1_5()
     $result = JFactory::getDbo()->insertObject('#__wp_site', $site);
 
     $blogs = new stdClass();
-    $blogs->site_id = 1;
-    $blogs->domain  = $clean_domain;
-    $blogs->path    = '/' . $wp_new_folder_name . '/';
+    $blogs->site_id      = 1;
+    $blogs->domain       = $clean_domain;
+    $blogs->path         = '/' . $wp_new_folder_name . '/';
+    $blogs->registered   = current_time('mysql', true);
+    $blogs->last_updated = current_time('mysql', true);
 
     // Insert the object into the user profile table.
     $result = JFactory::getDbo()->insertObject('#__wp_blogs', $blogs);
