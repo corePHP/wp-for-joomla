@@ -259,6 +259,14 @@ function network_step1_5()
 	// Once everything is good to go, lets store the WordPress blog path to the db
 	update_option( 'wpj_multisite_path', trim( str_replace( JPATH_ROOT, '', $wp_dir ), DS ) );
 
+    // Set the template to everyhome - search for template and stylesheet and update value to everyhome
+    // Update allowed themes to a:1:{s:9:"everyhome";i:1;}
+    // Update the permalink structure for permalink_structure to /%postname%/
+    update_option( 'template', 'everyhome' );
+    update_option( 'stylesheet', 'everyhome' );
+    update_option( 'themes', 'a:1:{s:9:"everyhome";i:1;}' );
+    update_option( 'permalink_structure', '/%postname%/' );
+
     $clean_domain = trim( get_clean_basedomain(), DS );
 
     // Now lets insert some stuff in to the DB
