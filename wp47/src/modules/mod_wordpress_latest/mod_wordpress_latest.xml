@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension
+    type="module"
+    version="1.6"
+    client="site"
+    method="upgrade">
+    <name>WordPress Latest Posts</name>
+    <creationDate>November 06, 2009</creationDate>
+    <author>Rafael Corral</author>
+    <copyright>(C) 2009-2010 'corePHP'</copyright>
+    <authorEmail>wp@corephp.com</authorEmail>
+    <authorUrl>www.corephp.com</authorUrl>
+    <license>GNU/GPL</license>
+    <version>3.0</version>
+    <description>Show latest WordPress posts</description>
+    <files>
+        <filename
+            module="mod_wordpress_latest">mod_wordpress_latest.php</filename>
+        <filename>helper.php</filename>
+        <folder>fields</folder>
+    </files>
+    <config>
+        <fields
+            name="params">
+            <fieldset
+                name="basic"
+                addfieldpath="/modules/mod_wordpress_latest/fields">
+                <field
+                    name="moduleclass_sfx"
+                    type="text"
+                    default=""
+                    label="Module Class Suffix"
+                    description="A suffix to be applied to the css class of the module (table.moduletable), this allows individual module styling" />
+                <field
+                    name="@spacer"
+                    type="spacer"
+                    default=""
+                    label=""
+                    description="" />
+                <field
+                    name="titleMaxLength"
+                    type="text"
+                    default="20"
+                    label="Max length of title"
+                    description="Display title up to a maximum length, followed by (...)" />
+                <field
+                    name="numLatestEntries"
+                    type="text"
+                    default="5"
+                    label="Number of latest posts"
+                    description="Number of latest entries to show." />
+                <field
+                    name="introMaxLength"
+                    type="text"
+                    default="120"
+                    label="Max length of post"
+                    description="Display introtext up to a maximum length, followed by (...)" />
+                <field
+                    name="wrapIntro"
+                    type="text"
+                    default="0"
+                    label="Wrap post text at"
+                    description="Wraps the introtext at specified length" />
+                <field
+                    name="showReadmore"
+                    type="radio"
+                    default="1"
+                    label="Show read more link"
+                    description="Do you want to show the reead more link to the post?">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+                <field
+                    name="readmoreText"
+                    type="text"
+                    default=""
+                    label="Read more link text"
+                    description="Display read more text. ie Click here to read more..." />
+                <field
+                    name="show_post_meta"
+                    type="list"
+                    default="1"
+                    label="Show Post Meta"
+                    description="Display date and author">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+                <field
+                    name="showAvatar"
+                    type="list"
+                    default="0"
+                    label="Show Author Avatar:"
+                    description="Show / Hide Author's avatar. Use this only if you are using JomSocial or Community Builder">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+                <field
+                    name="display_images"
+                    type="radio"
+                    default="0"
+                    label="Display images"
+                    description="This option won't strip images out of the post content. This will still strip images that have captions.">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+                <field
+                    name="images_count"
+                    type="text"
+                    default="1"
+                    label="Amount of images"
+                    description="This will allow you to display an x number amount of images." />
+                <field
+                    name="resize_images"
+                    type="radio"
+                    default="0"
+                    label="Resize images"
+                    description="If the display images is enabled this option will resize images to the size specified below.">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+                <field
+                    name="resize_width"
+                    type="text"
+                    default="80"
+                    label="Resize width"
+                    description="Width of resized image" />
+                <field
+                    name="resize_height"
+                    type="text"
+                    default="80"
+                    label="Resize height"
+                    description="Height of resized image" />
+                <field
+                    name="filter_categories"
+                    type="categories"
+                    default="0"
+                    label="Filter categories"
+                    description="Filter posts to display only posts from specific categories" />
+                <field
+                    name="showCategories"
+                    type="radio"
+                    default="1"
+                    label="Show Categories"
+                    description="Show list of categories in a sidebar">
+                    <option
+                        value="1">Yes</option>
+                    <option
+                        value="0">No</option>
+                </field>
+            </fieldset>
+            <fieldset
+                name="advanced">
+                <field
+                    name="cache"
+                    type="list"
+                    default="0"
+                    label="Caching"
+                    description="Select whether to cache the content of this module">
+                    <option
+                        value="1">Use global</option>
+                    <option
+                        value="0">No caching</option>
+                </field>
+                <field
+                    name="cache_time"
+                    type="text"
+                    default="900"
+                    label="Cache Time"
+                    description="The time before the module is recached" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

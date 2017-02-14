@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<extension version="3.1" type="plugin" group="finder" method="upgrade">
+
+
+	<name>Smart Search - WordPress</name>
+
+
+	<author>corePHP</author>
+
+
+	<creationDate>February 2014</creationDate>
+
+
+	<copyright>(C) 2005 - 2014 Open Source Matters. All rights reserved.</copyright>
+
+
+	<license>GNU General Public License version 2 or later; see	LICENSE.txt</license>
+
+
+	<authorEmail>admin@joomla.org</authorEmail>
+
+
+	<authorUrl>www.joomla.org</authorUrl>
+
+
+	<version>3.0.0</version>
+
+
+	<description> This plugin indexes WordPress Posts. </description>
+
+	<files>
+
+
+		<file plugin="wordpress">wordpress.php</file>
+
+
+    	<filename>index.html</filename>
+
+
+	</files>
+
+</extension>
+
+
