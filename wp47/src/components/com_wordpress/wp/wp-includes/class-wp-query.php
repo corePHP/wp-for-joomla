@@ -778,6 +778,22 @@ class WP_Query {
 		$qv['m'] = is_scalar( $qv['m'] ) ? preg_replace( '|[^0-9]|', '', $qv['m'] ) : '';
 		$qv['paged'] = absint($qv['paged']);
 		$qv['cat'] = preg_replace( '|[^0-9,-]|', '', $qv['cat'] ); // comma separated list of positive or negative integers
+		
+		/* rc_corephp  start */
+		if($qv['cat']=="")
+		{
+			$menu = JSite::getMenu();
+			$app = JFactory::getApplication();
+			$menuItem = $menu->getItem($app->getMenu()->getActive()->id);
+			
+			if(isset($menuItem->query['category']) && $menuItem->query['layout'] == "category")
+			{
+				$idObj = get_category_by_slug($menuItem->query['category']); 
+  				$qv['cat'] = $idObj->term_id;
+			}
+		}
+		/* rc_corephp  end*/
+		
 		$qv['author'] = preg_replace( '|[^0-9,-]|', '', $qv['author'] ); // comma separated list of positive or negative integers
 		$qv['pagename'] = trim( $qv['pagename'] );
 		$qv['name'] = trim( $qv['name'] );
