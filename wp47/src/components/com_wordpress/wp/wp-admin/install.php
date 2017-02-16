@@ -94,7 +94,7 @@ function display_setup_form( $error = null ) {
 	/* rc_corephp */
 	$user_table = ( $wpdb->get_var("SHOW TABLES LIKE '$wpdb->users'") != null );
 	/* rc_corephp - Get Joomla user instance */
-	$juser = JFactory::getUser()
+	$juser = JFactory::getUser();
 
 	$sql = $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->esc_like( $wpdb->users ) );
 	$user_table = ( $wpdb->get_var( $sql ) != null );

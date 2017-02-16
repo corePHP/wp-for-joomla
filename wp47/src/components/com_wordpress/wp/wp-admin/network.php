@@ -160,7 +160,6 @@ include( ABSPATH . 'wp-admin/admin-header.php' );
 <h1><?php echo esc_html( $title ); ?></h1>
 
 <?php
-<?php
 /**
  * rc_corephp - Function will allow user to move WordPress content directory to a specified dir
  *
@@ -353,7 +352,7 @@ function network_step1_5()
 
 	return false;
 }
-/**
+/** rc_corephp added function override function of wo-admin/includes/network.php
  * Prints step 1 for Network installation process.
  *
  * @todo Realistically, step 1 should be a welcome screen explaining what a Network is and such. Navigating to Tools > Network
