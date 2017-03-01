@@ -223,7 +223,8 @@ function get_permalink( $post = 0, $leavename = false ) {
 		$permalink = home_url( str_replace($rewritecode, $rewritereplace, $permalink) );
 		$permalink = user_trailingslashit($permalink, 'single');
 	} else { // if they're not using the fancy permalink option
-		$permalink = home_url('?p=' . $post->ID);
+		/* rc_corephp non-sef link not working */
+		$permalink = home_url('?option=com_wordpress&p=' . $post->ID);
 	}
 
 	/**
@@ -429,7 +430,8 @@ function _get_page_link( $post = false, $leavename = false, $sample = false ) {
 		$link = home_url($link);
 		$link = user_trailingslashit($link, 'page');
 	} else {
-		$link = home_url( '?page_id=' . $post->ID );
+		/* rc_corephp non-sef link not working */
+		$link = home_url( '?option=com_wordpress&page_id=' . $post->ID );
 	}
 
 	/**
@@ -557,7 +559,8 @@ function get_month_link($year, $month) {
 		$monthlink = str_replace('%monthnum%', zeroise(intval($month), 2), $monthlink);
 		$monthlink = home_url( user_trailingslashit( $monthlink, 'month' ) );
 	} else {
-		$monthlink = home_url( '?m=' . $year . zeroise( $month, 2 ) );
+		/* rc_corephp non-sef link not working */
+		$monthlink = home_url( '?option=com_wordpress&m=' . $year . zeroise( $month, 2 ) );
 	}
 
 	/**
@@ -672,7 +675,8 @@ function get_feed_link( $feed = '' ) {
 		if ( false !== strpos($feed, 'comments_') )
 			$feed = str_replace('comments_', 'comments-', $feed);
 
-		$output = home_url("?feed={$feed}");
+		/* rc_corephp None Sef link  issue fixed*/
+		$output = home_url("?option=com_wordpress&feed={$feed}");
 	}
 
 	/**
