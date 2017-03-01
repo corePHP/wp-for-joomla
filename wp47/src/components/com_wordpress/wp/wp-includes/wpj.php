@@ -1409,7 +1409,7 @@ function j_set_itemid()
 			$uri = JURI::getInstance();
 
 			$uri->setVar( 'Itemid', $wpitemid );
-			$mainframe->redirect( $uri->toString( array( 'path', 'query', 'fragment' ) ) );
+			// $mainframe->redirect( $uri->toString( array( 'path', 'query', 'fragment' ) ) );  // rc_corephp redirection issue fixed
 		}
 	}
 

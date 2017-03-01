@@ -237,10 +237,10 @@ function get_search_form( $echo = true ) {
 			$form = '<form role="search" method="get" id="searchform" class="searchform" action="' . esc_url( home_url( '/' ) ) . '">
 				<div>
 					<label class="screen-reader-text" for="s">' . _x( 'Search for:', 'label' ) . '</label>
-					<input type="text" value="' . get_search_query() . '" name="s" id="s" />
+					<input type="text" value="' . get_search_query() . '" name="s" id="s" /><input type="hidden" value="com_wordpress" name="option"  />
 					<input type="submit" id="searchsubmit" value="'. esc_attr_x( 'Search', 'submit button' ) .'" />
 				</div>
-			</form>';
+			</form>';/* rc_corephp - None Sef link  issue fixed  added hidden field option */
 		}
 	}
 

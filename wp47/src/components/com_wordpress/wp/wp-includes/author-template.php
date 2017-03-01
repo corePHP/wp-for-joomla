@@ -306,8 +306,8 @@ function get_author_posts_url( $author_id, $author_nicename = '' ) {
 	if ( empty($link) ) {
 		$file = home_url( '/' );
 		//$link = $file . '?author=' . $auth_ID;
-		/* rc_corephp - proper url var */
-        $link = $file . '&author=' . $auth_ID;
+		/* rc_corephp - proper url var, None Sef link  issue fixed */
+        $link = $file . '?option=com_wordpress&author=' . $auth_ID;
 	} else {
 		if ( '' == $author_nicename ) {
 			$user = get_userdata($author_id);

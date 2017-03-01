@@ -3859,7 +3859,7 @@ function get_term_link( $term, $taxonomy = '' ) {
 
 	if ( empty($termlink) ) {
 		if ( 'category' == $taxonomy )
-			$termlink = '?cat=' . $term->term_id;
+			$termlink = '?option=com_wordpress&cat=' . $term->term_id;//rc_corephp None Sef link  issue fixed
 		elseif ( $t->query_var )
 			$termlink = "?$t->query_var=$slug";
 		else
