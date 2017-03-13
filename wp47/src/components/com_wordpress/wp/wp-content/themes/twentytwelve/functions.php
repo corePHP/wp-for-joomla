@@ -269,6 +269,34 @@ function twentytwelve_widgets_init() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>',
 	) );
+	
+	$module_wrap          = '<div class="module clearfix" style="margin-bottom:10px;"><div class="mod-wrap1"><div class="mod-wrap2"><div class="mod-wrap3">';
+	$module_title_wrap    = '<div class="module-title-wrap">';
+	$module_title_class   = 'module-title';
+	$module_inner_title_wrap = '';
+	$end_module_inner_title_wrap = '';
+	$module_content_wrap  = '</div><div class="module-content">';
+	$end_module_wrap      = '</div></div></div></div></div>';
+
+	// Joomla Sidebar 1, located in module. Contains 3 modules by default.
+	register_sidebar( array(
+		'name' => 'Joomla Module Widget Area 1',
+		'id' => 'joomla-primary-widget-area',
+		'description' => 'This is the widget area for mod_wordpress_sidebar1',
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">' . $module_wrap,
+		'after_widget' => $end_module_wrap . '</li>',
+		'before_title' => $module_title_wrap . '<h' . $h_tag_level . ' class="widget-title ' . $module_title_class . '">' . $module_inner_title_wrap,
+		'after_title' => $end_module_inner_title_wrap . '</h' . $h_tag_level . '>' . $module_content_wrap
+	) );
+	register_sidebar( array(
+		'name' => 'Joomla Module Widget Area 2',
+		'id' => 'joomla-secondary-widget-area',
+		'description' => 'This is the widget area for mod_wordpress_sidebar2',
+		'before_widget' => '<li id="%1$s" class="widget-container %2$s">' . $module_wrap,
+		'after_widget' => $end_module_wrap . '</li>',
+		'before_title' => $module_title_wrap . '<h' . $h_tag_level . ' class="widget-title ' . $module_title_class . '">',
+		'after_title' => '</h' . $h_tag_level . '>' . $module_content_wrap
+	) );
 }
 add_action( 'widgets_init', 'twentytwelve_widgets_init' );
 
