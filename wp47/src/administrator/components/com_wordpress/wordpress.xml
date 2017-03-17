@@ -6,7 +6,7 @@
 	<authorEmail>support@corephp.com</authorEmail>
 	<copyright>This component is released under the GNU/GPL version 2 License. Read license.txt for more information.</copyright>
 	<authorUrl>www.corephp.com</authorUrl>
-	<version>4.6.1.0</version>
+	<version>4.7.0.0</version>
 	<description>COM_WORDPRESS_DESCRIPTION</description>
 
 	<scriptfile>script.php</scriptfile>
@@ -16,11 +16,11 @@
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
 		</sql>
 	</install>
-	
+
 	<updateservers>
-    	<server type="extension" priority="1" name="Wp For Joomla Updates">http://update.corephp.com/update.xml</server>
+    	<server type="extension" priority="1" name="WordPress For Joomla! Updates">http://update.corephp.com/update.xml</server>
  	</updateservers>
-	
+
 	<files folder="site">
 		<folder></folder>
   	</files>
