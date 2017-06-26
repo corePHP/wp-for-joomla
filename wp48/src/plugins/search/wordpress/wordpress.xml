@@ -14,9 +14,9 @@
 		<filename plugin="wordpress">wordpress.php</filename>
 	</files>
 
-	<languages folder="language">
+<!--	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.plg_search_wordpress.ini</language>
-	</languages>
+	</languages> -->
 
 	<config>
 		<fields name="params">
@@ -30,11 +30,11 @@
 				<field name="search_pages" type="radio" default="0" label="Search Pages?" description="Search Pages?">
 					<option value="0">No</option>
 					<option value="1">Yes</option>
-				</field>		
+				</field>
 				<field name="search_unpublished" type="radio" default="0" label="Unpublished Blogs" description="Search Unpublished Blogs?">
 					<option value="0">No</option>
 					<option value="1">Yes</option>
-				</field>	
+				</field>
 			</fieldset>
 		</fields>
 	</config>
