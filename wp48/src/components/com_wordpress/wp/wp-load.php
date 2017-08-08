@@ -17,7 +17,7 @@ if ( !defined( '_JEXEC' ) ) {
 		$path = explode('components/com_wordpress',dirname($_SERVER['SCRIPT_FILENAME'])); // single
 		define('JPATH_BASE', $path[0].'/'); 
 	} elseif (!is_link($_SERVER['SCRIPT_FILENAME'])) {
-		define( 'JPATH_BASE', realpath( dirname(__FILE__) . '/../../../' ) .'/' ); // multi no sym
+		define( 'JPATH_BASE', realpath( dirname(__FILE__) . '/../' ) .'/' ); // multi no sym
 	} elseif ( !defined('JWP_BASE') && FALSE !== strpos($_SERVER['SCRIPT_FILENAME'],'wp-admin') ){
 		$path = explode('wp-admin',$_SERVER['SCRIPT_FILENAME']);
 		$path = array_pop($path);
