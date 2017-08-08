@@ -285,7 +285,7 @@ foreach($ulist as $user){
 			<td><input name="blog[email]" type="email" class="regular-text wp-suggest-user" id="admin-email" data-autocomplete-type="search" data-autocomplete-field="user_email" /></td>
 		</tr><?php /* */ ?>
 		<tr class="form-field">
-			<td colspan="2"><?php 
+			<td colspan="2">
 			Select the user to be the administrator of this blog. New users must be created through Joomla first.<?php // rc_corephp - We don't need this
 			//_e( 'A new user will be created if the above email address is not in the database.' ) ?><br /><?php _e( 'The username and password will be mailed to this email address.' ) ?></td>
 		</tr>
