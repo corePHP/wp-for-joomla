@@ -415,7 +415,7 @@ function wpj_admin_hook()
 			'parent' => 'user-actions',
 			'id'     => 'joomla',
 			'title'  => 'Back to Joomla!',
-			'href'   => trailingslashit( j_get_root_uri( true ) ) . 'administrator',
+			'href'   => trailingslashit( get_option( 'jhome_url' ) ) . 'administrator',
 		) );
 	}
 
