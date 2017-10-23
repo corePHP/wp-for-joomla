@@ -784,9 +784,8 @@ class WP_Query {
 		/* rc_corephp  start */
 		if($qv['cat']=="")
 		{
-			$menu = JSite::getMenu();
 			$app = JFactory::getApplication();
-			$menuItem = $menu->getItem($app->getMenu()->getActive()->id);
+			$menuItem = $app->getMenu()->getActive();
 			
 			if(isset($menuItem->query['category']) && $menuItem->query['layout'] == "category")
 			{
