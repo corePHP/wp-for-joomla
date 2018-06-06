@@ -276,7 +276,7 @@ function twentytwelve_widgets_init() {
 	$module_inner_title_wrap = '';
 	$end_module_inner_title_wrap = '';
 	$module_content_wrap  = '</div><div class="module-content">';
-	$end_module_wrap      = '</div></div></div></div></div>';
+	$end_module_wrap      = '</div></div></div></div>';
 
 	// Joomla Sidebar 1, located in module. Contains 3 modules by default.
 	register_sidebar( array(
