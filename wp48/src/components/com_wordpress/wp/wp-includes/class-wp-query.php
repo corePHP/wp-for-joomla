@@ -625,6 +625,21 @@ class WP_Query {
 			if ( !isset($array[$key]) )
 				$array[$key] = array();
 		}
+
+		// rc_corephp start
+		
+		$app = JFactory::getApplication();
+		$currentMenuItem = $app->getMenu()->getActive();
+		$params = $currentMenuItem->query;
+
+
+		if($params['view'] == 'bloglink'  && $params['layout'] == 'tag')
+		{
+			$array['tag'] =  $params['tag'];
+		}
+		
+		 // rc_corephp end
+
 		return $array;
 	}
 
