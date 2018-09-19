@@ -107,9 +107,22 @@ $allowed_themes = array(
 	'everyhome',
 	'default'
 );
-if (!in_array(get_stylesheet(), apply_filters('wpj_allowed_themes', $allowed_themes)))
+function contains($needle, $haystack)
 {
-	die();
+    $needle = explode('-', $needle);
+    $needle = $needle[0];
+    if( in_array($needle,$haystack) ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+if( !contains( get_stylesheet(), $allowed_themes ) ) {
+    if ( !in_array( get_stylesheet(), apply_filters('wpj_allowed_themes', $allowed_themes) ) )
+    {
+        die();
+    }
 }
 
 // Return back to the cwd if not multisite
