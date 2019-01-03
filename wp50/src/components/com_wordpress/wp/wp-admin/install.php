@@ -479,7 +479,7 @@ switch($step) {
 
 <p class="step"><a href="<?php echo esc_url( wp_login_url() ); ?>" class="button button-large"><?php _e( 'Log In' ); ?></a></p>
 
-<?
+
 	<?php
 // rc_corephp Set default template to twentytwelve
 $db = JFactory::getDbo();
