@@ -2194,7 +2194,7 @@ function get_pagenum_link($pagenum = 1, $escape = true ) {
 
 		$request = preg_replace( "|$wp_rewrite->pagination_base/\d+/?$|", '', $request);
 		$request = preg_replace( '|^' . preg_quote( $wp_rewrite->index, '|' ) . '|i', '', $request);
-		$request = ltrim($request, 
+		$request = ltrim($request, '/');
 		
 		/* rc_corephp */
 		$enabled = JPluginHelper::isEnabled('system', 'wordpress');
