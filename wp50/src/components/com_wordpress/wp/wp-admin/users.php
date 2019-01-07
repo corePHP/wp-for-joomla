@@ -488,7 +488,7 @@ if ( ! empty($messages) ) {
 echo esc_html( $title );
 ?></h1>
 
-<?
+<?php
 /* rc_corephp Never allow users to be created through WordPress! * /
 
 if ( current_user_can( 'create_users' ) ) { ?>
