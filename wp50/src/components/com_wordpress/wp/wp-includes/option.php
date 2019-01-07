@@ -195,7 +195,8 @@ function get_option( $option, $default = false ) {
 								JRoute::_( 'index.php?option=com_wordpress' . $itemid ) );
 					}
 				} else {
-					$home_link = untrailingslashit( j_get_root_uri() );
+					//$home_link = untrailingslashit( j_get_root_uri() );
+					$home_link = untrailingslashit( get_option( 'siteurl' ));
 				}
 			}
 
