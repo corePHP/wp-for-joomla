@@ -14,12 +14,7 @@
  * @package WordPress
  */
 
-register_shutdown_function(
-    function () {
-        $error = error_get_last();
-        var_dump($error);
-    }
-);
+
 
 
 global $JOOMLA_CONFIG;
