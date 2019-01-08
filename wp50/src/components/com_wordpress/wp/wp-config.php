@@ -14,6 +14,9 @@
  * @package WordPress
  */
 
+
+
+
 global $JOOMLA_CONFIG;
 
 // System configuration
