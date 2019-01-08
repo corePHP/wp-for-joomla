@@ -196,7 +196,18 @@ function get_option( $option, $default = false ) {
 					}
 				} else {
 					//$home_link = untrailingslashit( j_get_root_uri() );
-					$home_link = untrailingslashit( get_option( 'siteurl' ));
+					$current_url = add_query_arg( NULL, NULL );	
+					
+					
+					if((strstr($_SERVER['REQUEST_URI'], 'wp-admin/post-new.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/post.php') ) )
+					{
+						
+						$home_link = untrailingslashit( get_option( 'siteurl' ));
+					}
+					else
+					{
+						$home_link = untrailingslashit( j_get_root_uri() );
+					}
 				}
 			}
 
