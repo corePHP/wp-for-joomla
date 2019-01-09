@@ -1324,6 +1324,39 @@ function j_create_wp_user( $juser )
 function j_get_itemid( $echo = false )
 {
 	global $mainframe;
+	
+	// Meta data setup
+	$menu           =& JSite::getMenu();
+	$activeMenu     = $menu->getActive();
+	$component = $activeMenu->query['option'];
+	$metaDescription = $activeMenu->params->get('menu-meta_description');
+	$metaKeywords = $activeMenu->params->get('menu-meta_keywords');
+	$robots = $activeMenu->params->get('robots');
+	$page_title = $activeMenu->params->get('page_title');
+	$show_page_heading = $activeMenu->params->get('show_page_heading');
+	$page_heading = $activeMenu->params->get('page_heading');
+	$document = JFactory::getDocument();
+
+	if ($page_title)
+	{
+		$document->setTitle($page_title);
+	}
+
+
+	if ($metaDescription)
+	{
+		$document->setDescription($metaDescription);
+	}
+
+	if ($metaKeywords)
+	{
+		$document->setMetadata('keywords', $metaKeywords);
+	}
+
+	if ($robots)
+	{
+		$document->setMetadata('robots', $robots);
+	}
 
 	$itemid = '';
 	if ( !( $itemid = get_option( 'Itemid' ) ) && !$mainframe->isAdmin() && is_admin() ) {
