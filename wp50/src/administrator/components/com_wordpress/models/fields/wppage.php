@@ -15,6 +15,7 @@ class JFormFieldwppage extends JFormFieldList
 	    $query->select('t.post_title');
 	    $query->from('#__wp_posts AS t');
 	    $query->where("post_type='page'");
+		 $query->where("post_status='publish'");
 	    $db->setQuery($query);
 	    $optionList = $db->loadAssocList();
 

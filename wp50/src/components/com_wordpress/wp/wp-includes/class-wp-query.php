@@ -585,6 +585,11 @@ class WP_Query {
 			$array['tag'] =  $params['tag'];
 		}
 		
+		if($params['view'] == 'bloglink'  && $params['layout'] == 'page')
+		{
+			$array['page_id'] =  $params['page_id'];
+		}
+		
 		 // rc_corephp end
 
 		return $array;
