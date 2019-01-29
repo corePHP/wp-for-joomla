@@ -1329,33 +1329,37 @@ function j_get_itemid( $echo = false )
 	$menu           =& JSite::getMenu();
 	$activeMenu     = $menu->getActive();
 	$component = $activeMenu->query['option'];
-	$metaDescription = $activeMenu->params->get('menu-meta_description');
-	$metaKeywords = $activeMenu->params->get('menu-meta_keywords');
-	$robots = $activeMenu->params->get('robots');
-	$page_title = $activeMenu->params->get('page_title');
-	$show_page_heading = $activeMenu->params->get('show_page_heading');
-	$page_heading = $activeMenu->params->get('page_heading');
-	$document = JFactory::getDocument();
+	
+	if (isset($activeMenu->id))
+	{ 
+		$metaDescription = $activeMenu->params->get('menu-meta_description');
+		$metaKeywords = $activeMenu->params->get('menu-meta_keywords');
+		$robots = $activeMenu->params->get('robots');
+		$page_title = $activeMenu->params->get('page_title');
+		$show_page_heading = $activeMenu->params->get('show_page_heading');
+		$page_heading = $activeMenu->params->get('page_heading');
+		$document = JFactory::getDocument();
 
-	if ($page_title)
-	{
-		$document->setTitle($page_title);
-	}
+		if ($page_title)
+		{
+			$document->setTitle($page_title);
+		}
 
 
-	if ($metaDescription)
-	{
-		$document->setDescription($metaDescription);
-	}
+		if ($metaDescription)
+		{
+			$document->setDescription($metaDescription);
+		}
 
-	if ($metaKeywords)
-	{
-		$document->setMetadata('keywords', $metaKeywords);
-	}
+		if ($metaKeywords)
+		{
+			$document->setMetadata('keywords', $metaKeywords);
+		}
 
-	if ($robots)
-	{
-		$document->setMetadata('robots', $robots);
+		if ($robots)
+		{
+			$document->setMetadata('robots', $robots);
+		}
 	}
 
 	$itemid = '';
