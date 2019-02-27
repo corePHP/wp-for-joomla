@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="community" method="upgrade">
+	<name>WordPress Toolbar</name>
+	<author>'corePHP'</author>
+	<creationDate>Sept. 5th 2010</creationDate>
+	<copyright>Copyright (c) 2010 by 'corePHP', LLC. All rights reserved</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>support@corephp.com</authorEmail>
+	<authorUrl>http://www.corephp.com</authorUrl>
+	<version>1.0.1</version>
+	<isapplication>false</isapplication>
+	<isbrowsable>false</isbrowsable>
+	<description>WordPress Toolbar for JomSocial</description>
+	<files>
+		<filename plugin="wordpresstoolbar">wordpresstoolbar.php</filename>
+	</files>
+</extension>
