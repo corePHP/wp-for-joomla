@@ -140,5 +140,5 @@ elseif ( @file_exists( dirname( ABSPATH ) . '/wp-config.php' ) && ! @file_exists
 	) . '</p>';
 	$die .= '<p><a href="' . $path . '" class="button button-large">' . __( 'Create a Configuration File' ) . '</a>';
 
-	wp_die( $die, __( 'WordPress &rsaquo; Error' ) ); */
-}
+	wp_die( $die, __( 'WordPress &rsaquo; Error' ) ); 
+}*/
