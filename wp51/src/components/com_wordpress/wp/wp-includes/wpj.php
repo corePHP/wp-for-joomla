@@ -1326,7 +1326,7 @@ function j_get_itemid( $echo = false )
 	global $mainframe;
 	
 	// Meta data setup
-	$menu           =& JSite::getMenu();
+	$menu           =JFactory::getApplication()->getMenu();
 	$activeMenu     = $menu->getActive();
 	$component = $activeMenu->query['option'];
 	
