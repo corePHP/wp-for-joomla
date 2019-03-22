@@ -15,6 +15,7 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 */
 
 require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
+require_once( JPATH_ROOT . '/components/com_wordpress/wp/wp-includes/ms-blogs.php');
 wpj_loader::load();
 
 global $component_name, $current_user, $wpdb, $mainframe;
