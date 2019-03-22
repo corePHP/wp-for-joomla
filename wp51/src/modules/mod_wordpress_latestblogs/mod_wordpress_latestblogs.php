@@ -15,6 +15,7 @@ if ( ! (  defined( '_JEXEC' ) ) ) { die( 'Direct Access to this location is not 
 */
 
 require_once( JPATH_ROOT . '/components/com_wordpress/wordpress_loader.php' );
+require_once( JPATH_ROOT . '/components/com_wordpress/wp/wp-includes/ms-blogs.php');
 wpj_loader::load();
 ?>
 <div class="wp_mod">
@@ -57,145 +58,147 @@ $start_blog_id = $blog_id;
 $counter       = 0;
 $start         = 0;
 $blogs         = get_last_updated( '', 0, $limit );
-$query         = '';
-foreach ( (array) $blogs as $blog ) {
-	$blogid		= $blog['blog_id'];
-	$path		= $blog['path'];
-	if ( 1 == $blog['blog_id'] && constant( 'WPJ_DB_PREFIX' ) == 'wp_' ) {
-		$table   = $wpdb->base_prefix . 'posts';
-		$options = $wpdb->base_prefix . 'options';
-	} else {
-		$table   = $wpdb->base_prefix . $blog['blog_id'] . '_posts';
-		$options = $wpdb->base_prefix . $blog['blog_id'] . '_options';
+if(count($blogs) > 0) 
+{
+	$query         = '';
+	foreach ( (array) $blogs as $blog ) {
+		$blogid		= $blog['blog_id'];
+		$path		= $blog['path'];
+		if ( 1 == $blog['blog_id'] && constant( 'WPJ_DB_PREFIX' ) == 'wp_' ) {
+			$table   = $wpdb->base_prefix . 'posts';
+			$options = $wpdb->base_prefix . 'options';
+		} else {
+			$table   = $wpdb->base_prefix . $blog['blog_id'] . '_posts';
+			$options = $wpdb->base_prefix . $blog['blog_id'] . '_options';
+		}
+
+		$query .= "(
+			SELECT '$blogid' AS blog_id, '$path' AS path, $table.ID, $table.post_author, $table.post_date, $table.post_date_gmt, $table.post_content, $table.post_title, $table.post_excerpt, $table.post_status, $table.comment_status, $table.ping_status, $table.post_password, $table.post_name, $table.to_ping, $table.pinged, $table.post_modified, $table.post_modified_gmt, $table.post_content_filtered, $table.post_parent, $table.guid, $table.menu_order, $table.post_type, $table.post_mime_type, $table.comment_count
+				FROM $table
+					WHERE 1=1 AND
+					$table.post_type = 'post' AND
+					($table.post_status = 'publish') AND
+					$table.post_password = ''
+						ORDER BY $table.post_date DESC
+			) UNION ";
 	}
+	$query = substr( $query, 0, -6 );
+	$query = "SELECT * FROM ($query) AS data ORDER BY post_date DESC LIMIT $start, $limit";
+	$db->setQuery( $query );
+	$rows = $db->loadObjectList();
 
-	$query .= "(
-		SELECT '$blogid' AS blog_id, '$path' AS path, $table.ID, $table.post_author, $table.post_date, $table.post_date_gmt, $table.post_content, $table.post_title, $table.post_excerpt, $table.post_status, $table.comment_status, $table.ping_status, $table.post_password, $table.post_name, $table.to_ping, $table.pinged, $table.post_modified, $table.post_modified_gmt, $table.post_content_filtered, $table.post_parent, $table.guid, $table.menu_order, $table.post_type, $table.post_mime_type, $table.comment_count
-			FROM $table
-				WHERE 1=1 AND
-				$table.post_type = 'post' AND
-				($table.post_status = 'publish') AND
-				$table.post_password = ''
-					ORDER BY $table.post_date DESC
-		) UNION ";
-}
-$query = substr( $query, 0, -6 );
-$query = "SELECT * FROM ($query) AS data ORDER BY post_date DESC LIMIT $start, $limit";
-$db->setQuery( $query );
-$rows = $db->loadObjectList();
+	foreach ( (array) $rows as $post ) {
+		switch_to_blog( $post->blog_id );
 
-foreach ( (array) $rows as $post ) {
-	switch_to_blog( $post->blog_id );
+		$id = $post->ID;
+		$authordata = get_userdata( $post->post_author );
+		$pages[0] = $post->post_content;
 
-	$id = $post->ID;
-	$authordata = get_userdata( $post->post_author );
-	$pages[0] = $post->post_content;
-
-	?>
-	<div id="blog-<?php echo $post->blog_id; ?>-post-<?php the_ID(); ?>" class="post_entry module_post_entry">
-		<?php
-		if ( $showAvatar ) {
-			echo getSocialAvatar( $post->post_author, 32 );
-		}
 		?>
-		<h4 class="entry-title"><a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>"><?php
-			if ( $title = get_the_title() ) {
-				$titlelength = strlen( $title );
+		<div id="blog-<?php echo $post->blog_id; ?>-post-<?php the_ID(); ?>" class="post_entry module_post_entry">
+			<?php
+			if ( $showAvatar ) {
+				echo getSocialAvatar( $post->post_author, 32 );
+			}
+			?>
+			<h4 class="entry-title"><a href="<?php the_permalink() ?>" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>"><?php
+				if ( $title = get_the_title() ) {
+					$titlelength = strlen( $title );
 
-				if ( $titlelength > $titleMaxLength ) {
-					$title = substr( $title, 0, $titleMaxLength );
+					if ( $titlelength > $titleMaxLength ) {
+						$title = substr( $title, 0, $titleMaxLength );
+					}
+
+					echo $title;
+
+					if ( $titlelength > $titleMaxLength ) {
+						echo ' ...';
+					}
+				} else { the_ID(); } ?></a></h4>
+
+			<?php if ( $show_post_meta ) { ?>
+				<div class="wp-latest-date-readmore">
+					<div class="entry-meta">
+						<?php twentytwelve_posted_on(); ?>
+					</div><!-- .entry-meta -->
+				</div>
+			<?php } ?>
+
+			<?php
+			if ( $introMaxLength ) {
+				$text = $post->post_content;
+
+				/* Strip unwanted tags */
+				$allowable_tags = '';
+				// Allow to display images
+				if ( $display_images ) {
+					$allowable_tags = '<img>';
+				}
+				$text = strip_tags( $text, $allowable_tags );
+				$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
+				$text = preg_replace( '[(\[caption)+.+(\[/caption\])]', '', $text );
+
+				if ( $display_images && $resize_images ) {
+					$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
+					$matches   = '';
+					$imageName = '';
+					$imgsmall  = '';
+					$imgbig    = '';
+					$matches   = "";
+
+					preg_match_all( $pattern, $text, $matches );
+
+					// Remove all unessesary images
+					for ( $i = $images_count; $i < count( $matches[0] ); $i++ ) {
+						$text = str_replace( $matches[0][$i], '', $text );
+						unset( $matches[0][$i] );
+					}
+
+					// Replace new images
+					for ( $i = 0;$i < count( $matches[0] ); $i++ ) {
+						$patterns = array( '/width="([0-9]+)"/', '/height="([0-9]+)"/' );
+						$replacements = array( "width=\"{$resize_width}\"",
+							"height=\"{$resize_height}\"" );
+						$img = preg_replace( $patterns, $replacements, $matches[0][$i] );
+						$text = str_replace( $matches[0][$i], $img, $text );
+					}
 				}
 
-				echo $title;
+				// Is text too long? Probably...
+				$toolong = ( strlen( $text ) > $introMaxLength );
 
-				if ( $titlelength > $titleMaxLength ) {
-					echo ' ...';
-				}
-			} else { the_ID(); } ?></a></h4>
-
-		<?php if ( $show_post_meta ) { ?>
-			<div class="wp-latest-date-readmore">
-				<div class="entry-meta">
-					<?php twentytwelve_posted_on(); ?>
-				</div><!-- .entry-meta -->
-			</div>
-		<?php } ?>
-
-		<?php
-		if ( $introMaxLength ) {
-			$text = $post->post_content;
-
-			/* Strip unwanted tags */
-			$allowable_tags = '';
-			// Allow to display images
-			if ( $display_images ) {
-				$allowable_tags = '<img>';
-			}
-			$text = strip_tags( $text, $allowable_tags );
-			$text = preg_replace( '#\s*<[^>]+>?\s*$#', '', $text );
-			$text = preg_replace( '[(\[caption)+.+(\[/caption\])]', '', $text );
-
-			if ( $display_images && $resize_images ) {
-				$pattern   = "/<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>/";
-				$matches   = '';
-				$imageName = '';
-				$imgsmall  = '';
-				$imgbig    = '';
-				$matches   = "";
-
-				preg_match_all( $pattern, $text, $matches );
-
-				// Remove all unessesary images
-				for ( $i = $images_count; $i < count( $matches[0] ); $i++ ) {
-					$text = str_replace( $matches[0][$i], '', $text );
-					unset( $matches[0][$i] );
+				// Trim text
+				if ( $toolong ) {
+					$text  = substr( $text, 0, $introMaxLength );
 				}
 
-				// Replace new images
-				for ( $i = 0;$i < count( $matches[0] ); $i++ ) {
-					$patterns = array( '/width="([0-9]+)"/', '/height="([0-9]+)"/' );
-					$replacements = array( "width=\"{$resize_width}\"",
-					 	"height=\"{$resize_height}\"" );
-					$img = preg_replace( $patterns, $replacements, $matches[0][$i] );
-					$text = str_replace( $matches[0][$i], $img, $text );
+				// Wrap text
+				if ( $wrapIntroText ) {
+					$text   = wordwrap( $text, $wrapIntroText, '<br />' );
+				}
+
+				if ( $toolong ) {
+					$text .= ' ...';
+				}
+
+				echo '<div class="wp-latest-introtext entry-content entry">'.$text.'</div>';
+
+				// Only show readmore if the text is too long
+				if ( $toolong && $showReadmore ) { ?>
+					<span class="wp-latest-readmore">
+						<a href="<?php the_permalink() ?>"><?php echo $readmoreText; ?></a>
+					</span>
+					<?php
 				}
 			}
+			?>
 
-			// Is text too long? Probably...
-			$toolong = ( strlen( $text ) > $introMaxLength );
+		</div><!-- #post-## -->
 
-			// Trim text
-			if ( $toolong ) {
-		    	$text  = substr( $text, 0, $introMaxLength );
-			}
-
-			// Wrap text
-			if ( $wrapIntroText ) {
-				$text   = wordwrap( $text, $wrapIntroText, '<br />' );
-			}
-
-			if ( $toolong ) {
-				$text .= ' ...';
-			}
-
-			echo '<div class="wp-latest-introtext entry-content entry">'.$text.'</div>';
-
-			// Only show readmore if the text is too long
-			if ( $toolong && $showReadmore ) { ?>
-				<span class="wp-latest-readmore">
-					<a href="<?php the_permalink() ?>"><?php echo $readmoreText; ?></a>
-				</span>
-				<?php
-			}
-		}
-		?>
-
-	</div><!-- #post-## -->
-
-<?php
-$counter++;
+	<?php
+	$counter++;
+	}
 }
-
 switch_to_blog( $start_blog_id );
 ?>
 </div>
