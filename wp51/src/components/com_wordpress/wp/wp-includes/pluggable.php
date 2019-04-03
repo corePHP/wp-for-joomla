@@ -1024,7 +1024,7 @@ if ( ! function_exists( 'is_user_logged_in' ) ) :
 		do_action( 'wp_login', @$user->username );
 	}
 
-		return $user->exists();
+		return true;
 	}
 endif;
 
