@@ -1402,7 +1402,7 @@ function wp_dashboard_primary() {
 			 * @param string $link The widget's primary link URL.
 			 */
 			//'link'         => apply_filters( 'dashboard_primary_link', __( 'https://wordpress.org/news/' ) ),
-			link'         => apply_filters( 'dashboard_primary_link', __( 'http://www.corephp.com/blog/' ) ), // rc_corephp
+			'link'         => apply_filters( 'dashboard_primary_link', __( 'http://www.corephp.com/blog/' ) ), // rc_corephp
 
 			/**
 			 * Filters the primary feed URL for the 'WordPress Events and News' dashboard widget.

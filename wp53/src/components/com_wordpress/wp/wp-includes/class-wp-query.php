@@ -794,7 +794,7 @@ class WP_Query {
   				$qv['cat'] = $idObj->term_id;
 			}
 		}
-		/* rc_corephp  end*
+		/* rc_corephp  end*/
 		
 		$qv['author']   = preg_replace( '|[^0-9,-]|', '', $qv['author'] ); // comma separated list of positive or negative integers
 		$qv['pagename'] = trim( $qv['pagename'] );
