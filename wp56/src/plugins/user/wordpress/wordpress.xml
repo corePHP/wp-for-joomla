@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="user" method="upgrade">
+	<name>User - Wordpress</name>
+	<author>'corePHP'</author>
+	<creationDate>Feb 2011</creationDate>
+	<copyright>Copyright (C) 2010 'corePHP' LLC, www.corephp.com. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>support@corephp.com</authorEmail>
+	<authorUrl>www.corephp.com</authorUrl>
+	<version>1.0</version>
+	<description>A WordPress user synchronization plugin</description>
+
+	<files>
+		<filename plugin="wordpress">wordpress.php</filename>
+	</files>
+
+	<config />
+</extension>
